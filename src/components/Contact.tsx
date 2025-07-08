@@ -54,7 +54,7 @@ const Contact = () => {
       // Send email using EmailJS - now using the same template as ContactPage
       const result = await emailjs.sendForm(
         import.meta.env.VITE_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID',
-        import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID || 'YOUR_CONTACT_TEMPLATE_ID',
+        import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID || 'template_orw5xze',
         formRef.current!,
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY'
       );
@@ -219,6 +219,7 @@ const Contact = () => {
                     className="flex-1 px-4 py-3 bg-gray-50 border border-gray-300 rounded-r-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
                   />
                 </div>
+                <input type="hidden" name="user_phone" value={formData.phone} />
               </div>
               
               <div className="mb-6">

@@ -39,7 +39,7 @@ const Contact = () => {
       // Send email using EmailJS
       const result = await emailjs.sendForm(
         import.meta.env.VITE_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID',
-        import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID || 'YOUR_CONTACT_TEMPLATE_ID',
+        import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID || 'template_orw5xze',
         formRef.current!,
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY'
       );
@@ -163,6 +163,7 @@ const Contact = () => {
                       className="flex-1 px-4 py-3 border border-gray-300 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-sm"
                     />
                   </div>
+                  <input type="hidden" name="user_phone" value={formData.phone} />
                   <p className="text-xs text-gray-500 mt-1">
                     (+63) 965 639 4996 • efraimjamestalucod88@gmail.com
                   </p>
