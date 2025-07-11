@@ -146,7 +146,7 @@ const Projects = () => {
 
   return (
     <section ref={sectionRef} id="projects" className="py-20 relative bg-gray-50">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6 sm:px-8 lg:px-12">
         <div className={`text-center mb-16 transition-all duration-1000 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
@@ -159,7 +159,7 @@ const Projects = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mx-4 sm:mx-6 lg:mx-8">
           {displayedProjects.map((project, index) => (
             <div 
               key={`project-${index}`}
@@ -224,7 +224,7 @@ const Projects = () => {
           ))}
         </div>
 
-        <div className={`text-center mt-12 transition-all duration-1000 delay-500 ${
+        <div className={`text-center mt-12 transition-all duration-1000 delay-500 px-6 sm:px-8 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
           <button 

@@ -65,8 +65,8 @@ const Contact = () => {
       <Header />
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-16 lg:py-24 pt-32 lg:pt-40">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 max-w-7xl mx-auto">
+      <div className="container mx-auto px-6 sm:px-8 lg:px-12 py-16 lg:py-24 pt-32 lg:pt-40">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Left Side - Contact Form */}
           <div className="order-2 lg:order-1">
             <div className="bg-white rounded-3xl p-6 md:p-10 shadow-lg">
@@ -318,7 +318,7 @@ const Contact = () => {
         </div>
 
         {/* Contact Information */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <Mail className="w-8 h-8 mx-auto mb-4 text-gray-600" />
             <h3 className="font-semibold text-gray-900 mb-2 text-sm tracking-wide">EMAIL</h3>

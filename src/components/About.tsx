@@ -66,7 +66,7 @@ const About = () => {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-200/10 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
         {/* Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center space-x-2 bg-white/60 backdrop-blur-md border border-emerald-200/50 rounded-full px-6 py-3 mb-8 shadow-lg">
@@ -80,7 +80,7 @@ const About = () => {
         </div>
 
         {/* Static Journey Section */}
-        <div className="relative bg-white/70 backdrop-blur-md border border-white/20 rounded-3xl p-10 shadow-xl">
+        <div className="relative bg-white/70 backdrop-blur-md border border-white/20 rounded-3xl p-8 sm:p-10 lg:p-12 shadow-xl mx-4 sm:mx-6 lg:mx-8">
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 via-transparent to-blue-50/30 rounded-3xl"></div>
           
           <div className="grid lg:grid-cols-2 gap-12 items-start relative z-10">

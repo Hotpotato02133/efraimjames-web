@@ -97,7 +97,7 @@ const Contact = () => {
 
   return (
     <section ref={sectionRef} id="contact" className="py-20 relative bg-gray-50">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6 sm:px-8 lg:px-12">
         <div className={`text-center mb-16 transition-all duration-1000 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
@@ -110,7 +110,7 @@ const Contact = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Contact Information */}
           <div className={`transition-all duration-1000 delay-200 ${
             isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'

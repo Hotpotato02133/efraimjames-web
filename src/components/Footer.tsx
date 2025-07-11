@@ -31,8 +31,8 @@ const Footer = () => {
 
   return (
     <footer className="bg-white border-t border-gray-200">
-      <div className="container mx-auto px-6 py-12">
-        <div className="grid md:grid-cols-3 gap-8 mb-8">
+      <div className="container mx-auto px-6 sm:px-8 lg:px-12 py-12">
+        <div className="grid md:grid-cols-3 gap-8 mb-8 mx-4 sm:mx-6 lg:mx-8">
           {/* Brand */}
           <div>
             <div className="flex items-center space-x-3 mb-4">
@@ -100,7 +100,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <div className="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center mx-4 sm:mx-6 lg:mx-8">
           <p className="text-gray-600 text-sm flex items-center">
             © 2025 Efraim James Portfolio.{' '}
             {' '}
