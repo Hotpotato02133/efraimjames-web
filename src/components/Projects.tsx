@@ -1,6 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ExternalLink, Smartphone, Monitor, Palette, Globe, ChevronDown, ChevronUp } from 'lucide-react';
 
+// Import images as modules
+import service1c from '../assets/service-1c.jpg';
+import service2b from '../assets/service-2b.png';
+import service1b from '../assets/service-1b.jpg';
+import service2a from '../assets/service-2a.png';
+import service1a from '../assets/service-1a.jpg';
+import service2c from '../assets/service-2c.png';
+import service3a from '../assets/service-3a.jpg';
+import service4a from '../assets/service-4a.jpg';
+import service3b from '../assets/service-3b.jpg';
+import service4b from '../assets/service-4b.jpg';
+import service4d from '../assets/service-4d.jpg';
+
 const Projects = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [showAllProjects, setShowAllProjects] = useState(false);
@@ -27,7 +40,7 @@ const Projects = () => {
     {
       title: 'Veloura E-commerce',
       description: 'A modern e-commerce platform with elegant design and seamless user experience for online shopping.',
-      image: '/src/assets/service-1c.jpg',
+      image: service1c, // Use imported image
       tags: ['Web Design', 'E-commerce', 'Figma', 'UI/UX'],
       category: 'Web Design',
       icon: Palette,
@@ -36,7 +49,7 @@ const Projects = () => {
     {
       title: 'ORO Dashboard with Roo AI',
       description: 'An intelligent dashboard featuring AI integration for enhanced data visualization and user interaction.',
-      image: '/src/assets/service-2b.png',
+      image: service2b, // Use imported image
       tags: ['React', 'AI Integration', 'Dashboard', 'TypeScript'],
       category: 'Frontend Development',
       icon: Monitor,
@@ -45,7 +58,7 @@ const Projects = () => {
     {
       title: 'Buenas Coffee',
       description: 'A warm and inviting landing page design for a coffee shop with rich visuals and modern aesthetics.',
-      image: '/src/assets/service-1b.jpg',
+      image: service1b, // Use imported image
       tags: ['Landing Page', 'Web Design', 'Branding', 'UI/UX'],
       category: 'Web Design',
       icon: Palette,
@@ -54,7 +67,7 @@ const Projects = () => {
     {
       title: 'Car Rental PH',
       description: 'A comprehensive car rental platform with booking system and vehicle management features.',
-      image: '/src/assets/service-2a.png',
+      image: service2a, // Use imported image
       tags: ['React', 'Booking System', 'Responsive', 'JavaScript'],
       category: 'Frontend Development',
       icon: Monitor,
@@ -63,7 +76,7 @@ const Projects = () => {
     {
       title: 'Hyde Landing Page',
       description: 'An innovative online learning platform interface with clean design and intuitive user experience.',
-      image: '/src/assets/service-1a.jpg',
+      image: service1a, // Use imported image
       tags: ['UI Design', 'Education', 'Landing Page', 'UX'],
       category: 'Web Design',
       icon: Palette,
@@ -72,7 +85,7 @@ const Projects = () => {
     {
       title: 'ORO Landing Page',
       description: 'A sleek and modern landing page with compelling design elements and clear call-to-actions.',
-      image: '/src/assets/service-2c.png',
+      image: service2c, // Use imported image
       tags: ['React', 'Landing Page', 'Modern Design', 'Responsive'],
       category: 'Frontend Development',
       icon: Monitor,
@@ -81,7 +94,7 @@ const Projects = () => {
     {
       title: 'OFBank Mobile',
       description: 'A comprehensive mobile banking app redesign focusing on user experience and financial accessibility.',
-      image: '/src/assets/service-3a.jpg',
+      image: service3a, // Use imported image
       tags: ['Mobile App', 'Banking', 'UI/UX', 'Redesign'],
       category: 'UI/UX Design',
       icon: Smartphone,
@@ -90,7 +103,7 @@ const Projects = () => {
     {
       title: 'Logo Design',
       description: 'Professional brand identity and logo design services with creative and memorable visual solutions.',
-      image: '/src/assets/service-4a.jpg',
+      image: service4a, // Use imported image
       tags: ['Branding', 'Logo Design', 'Identity', 'Creative'],
       category: 'Graphic Design',
       icon: Palette,
@@ -99,7 +112,7 @@ const Projects = () => {
     {
       title: 'Travelista',
       description: 'A travel platform UI design with immersive visuals and user-friendly navigation for travel enthusiasts.',
-      image: '/src/assets/service-3b.jpg',
+      image: service3b, // Use imported image
       tags: ['Travel', 'UI Design', 'Web Design', 'UX'],
       category: 'UI/UX Design',
       icon: Globe,
@@ -108,7 +121,7 @@ const Projects = () => {
     {
       title: 'Poster Design',
       description: 'Eye-catching poster designs for various campaigns and events with strong visual impact.',
-      image: '/src/assets/service-4b.jpg',
+      image: service4b, // Use imported image
       tags: ['Poster', 'Print Design', 'Marketing', 'Visual Design'],
       category: 'Graphic Design',
       icon: Palette,
@@ -117,7 +130,7 @@ const Projects = () => {
     {
       title: 'Banner Design',
       description: 'Professional banner designs for digital marketing campaigns with compelling visual elements.',
-      image: '/src/assets/service-4d.jpg',
+      image: service4d, // Use imported image
       tags: ['Banner', 'Digital Marketing', 'Advertising', 'Design'],
       category: 'Graphic Design',
       icon: Palette,
@@ -164,6 +177,7 @@ const Projects = () => {
                   src={project.image} 
                   alt={project.title}
                   className="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-2">
