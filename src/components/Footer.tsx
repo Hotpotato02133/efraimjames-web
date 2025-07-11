@@ -1,7 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Github, Linkedin, Twitter, Instagram, Heart } from 'lucide-react';
 
 const Footer = () => {
+  const navigate = useNavigate();
+
   const socialLinks = [
     { icon: Github, href: '#', label: 'GitHub' },
     { icon: Linkedin, href: '#', label: 'LinkedIn' },
@@ -19,7 +22,7 @@ const Footer = () => {
   const handleNavClick = (href: string) => {
     if (href.startsWith('/')) {
       // Navigate to page
-      window.location.href = href;
+      navigate(href);
     } else {
       // Scroll to section
       const element = document.querySelector(href);
@@ -90,7 +93,7 @@ const Footer = () => {
             </div>
             <div className="mt-4">
               <button
-                onClick={() => handleNavClick('/contact')}
+                onClick={() => navigate('/contact')}
                 className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
               >
                 Let's talk

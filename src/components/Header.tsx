@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X, Mail } from 'lucide-react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,8 +25,8 @@ const Header = () => {
 
   const handleNavClick = (href: string) => {
     // If we're on contact page and trying to navigate to a section, go to home first
-    if (window.location.pathname === '/contact' && href.startsWith('#')) {
-      window.location.href = '/' + href;
+    if (location.pathname === '/contact' && href.startsWith('#')) {
+      navigate('/' + href);
     } else {
       const element = document.querySelector(href);
       if (element) {
@@ -34,12 +37,12 @@ const Header = () => {
   };
 
   const handleContactClick = () => {
-    window.location.href = '/contact';
+    navigate('/contact');
     setIsMenuOpen(false);
   };
 
   const handleLogoClick = () => {
-    window.location.href = '/';
+    navigate('/');
   };
 
   return (
@@ -93,7 +96,7 @@ const Header = () => {
           {/* Mobile/Tablet - Only Hamburger Menu */}
           <div className="lg:hidden">
             <button
-              className="text-gray-900 hover:text-green-600 transition-colors duration-300 p-2 rounded-lg"
+              className="text-white hover:text-green-400 transition-colors duration-300 p-2 rounded-lg"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
