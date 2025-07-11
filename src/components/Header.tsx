@@ -96,7 +96,11 @@ const Header = () => {
           {/* Mobile/Tablet - Only Hamburger Menu */}
           <div className="lg:hidden">
             <button
-              className="text-white hover:text-green-400 transition-colors duration-300 p-2 rounded-lg"
+              className={`transition-colors duration-300 p-2 rounded-lg ${
+                isScrolled 
+                  ? 'text-gray-900 hover:text-green-600' 
+                  : 'text-white hover:text-green-400'
+              }`}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
