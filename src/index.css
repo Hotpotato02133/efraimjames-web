@@ -29,22 +29,87 @@ body {
   min-height: 100vh;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - Industry standard design */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1e293b;
+  background: #f1f5f9;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #06b6d4, #3b82f6);
-  border-radius: 4px;
+  background: #cbd5e1;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #0891b2, #2563eb);
+  background: #94a3b8;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #64748b;
+}
+
+::-webkit-scrollbar-corner {
+  background: #f1f5f9;
+}
+
+/* Responsive scrollbar for mobile */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #9ca3af;
+    border-radius: 2px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
+  }
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+@media (max-width: 768px) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #9ca3af #f1f5f9;
+  }
+}
+
+/* Improve scroll behavior */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* Better iOS scrolling */
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Prevent horizontal scrolling issues on mobile */
+.container {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Better touch scrolling for mobile */
+@supports (-webkit-overflow-scrolling: touch) {
+  html {
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 /* Custom animations */
