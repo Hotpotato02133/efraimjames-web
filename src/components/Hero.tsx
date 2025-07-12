@@ -89,7 +89,7 @@ const Hero = () => {
         <div className="absolute bottom-40 right-1/3 w-1.5 h-1.5 bg-green-400/35 rounded-full animate-ping delay-900"></div>
       </div>
 
-      <div className="container mx-auto px-6 sm:px-8 lg:px-12 text-center relative z-10 max-w-5xl w-full">
+      <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 text-center relative z-10 max-w-5xl w-full">
         {/* Top badge */}
         <div className={`transition-all duration-1000 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
@@ -106,7 +106,7 @@ const Hero = () => {
         <div className={`transition-all duration-1000 delay-200 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
-          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight px-4 sm:px-6">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight px-2 sm:px-0">
             <span className="bg-gradient-to-r from-white via-emerald-200 to-green-300 bg-clip-text text-transparent block">
               Simplify Your
             </span>
@@ -115,7 +115,7 @@ const Hero = () => {
             </span>
           </h1>
           
-          <div className="max-w-2xl mx-auto mb-6 sm:mb-8 px-6 sm:px-8">
+          <div className="max-w-2xl mx-auto mb-6 sm:mb-8 px-2 sm:px-0">
             <p className="text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed font-light">
               Empower your business with <span className="font-semibold text-emerald-400">innovative web solutions</span>, 
               seamless user experiences, and cutting-edge design—so your brand can focus on what truly matters.
@@ -124,7 +124,7 @@ const Hero = () => {
         </div>
 
         {/* CTA Buttons */}
-        <div className={`flex flex-row gap-2 sm:gap-3 justify-center items-center mb-8 sm:mb-12 transition-all duration-1000 delay-400 px-6 sm:px-8 ${
+        <div className={`flex flex-row gap-2 sm:gap-3 justify-center items-center mb-8 sm:mb-12 transition-all duration-1000 delay-400 px-2 sm:px-0 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
           <button
@@ -157,7 +157,7 @@ const Hero = () => {
         <div className={`transition-all duration-1000 delay-800 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
-          <div className="mb-4 sm:mb-6 px-6 sm:px-8">
+          <div className="mb-4 sm:mb-6 px-2 sm:px-0">
             <p className="text-xs text-gray-400 font-medium tracking-wider uppercase mb-2">
               Powered by Industry-Leading Technologies
             </p>
@@ -165,7 +165,7 @@ const Hero = () => {
           </div>
           
           {/* Enhanced marquee with glowing effects */}
-          <div className="overflow-hidden px-4 sm:px-6">
+          <div className="overflow-hidden px-2 sm:px-0">
             <InfiniteMarquee speed={40} direction="left" className="pb-4">
               {techStack.map((tech, index) => {
                 const IconComponent = tech.icon;

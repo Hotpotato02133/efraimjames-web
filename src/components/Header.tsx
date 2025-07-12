@@ -51,7 +51,7 @@ const Header = () => {
         ? 'bg-white/95 backdrop-blur-lg border-b border-green-200 shadow-sm' 
         : 'bg-transparent'
     }`}>
-      <nav className="container mx-auto px-6 sm:px-8 lg:px-12 py-3 sm:py-4">
+      <nav className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4">
         <div className="flex items-center justify-between mx-4 sm:mx-6 lg:mx-8">
           {/* Logo and Brand - Left */}
           <button 
@@ -112,7 +112,7 @@ const Header = () => {
         <div className={`lg:hidden transition-all duration-300 overflow-hidden ${
           isMenuOpen ? 'max-h-96 opacity-100 mt-4' : 'max-h-0 opacity-0'
         }`}>
-          <div className="py-4 space-y-2 bg-white/95 backdrop-blur-lg rounded-xl border border-green-200 shadow-lg mx-6 sm:mx-8 lg:mx-10">
+          <div className="py-4 space-y-2 bg-white/95 backdrop-blur-lg rounded-xl border border-green-200 shadow-lg mx-2 sm:mx-0">
             {navItems.map((item) => (
               <button
                 key={item.href}
