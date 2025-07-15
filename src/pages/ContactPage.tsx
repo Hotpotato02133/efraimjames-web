@@ -73,13 +73,13 @@ const Contact = () => {
               {/* Header */}
               <div className="mb-8">
                 <div className="inline-flex items-center px-4 py-2 bg-gray-100 rounded-full text-sm font-medium text-gray-600 mb-4">
-                  ○ CONTACT US
+                   CONTACT ME
                 </div>
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
                   Get in touch
                 </h1>
                 <p className="text-gray-600 text-sm md:text-base">
-                  Our friendly team would love to hear from you.
+                  I would love to hear from you.
                 </p>
               </div>
 
