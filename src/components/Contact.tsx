@@ -307,7 +307,7 @@ const Contact = () => {
                     ? "bg-green-600 text-white"
                     : isLoading
                     ? "bg-gray-400 text-white cursor-not-allowed"
-                    : "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white transform hover:scale-105 hover:shadow-lg hover:shadow-green-500/25"
+                    : "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white hover:shadow-lg hover:shadow-green-500/25"
                 }`}
               >
                 {isSubmitted ? (

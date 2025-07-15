@@ -86,7 +86,7 @@ const Header = () => {
           <div className="hidden lg:block">
             <button
               onClick={handleContactClick}
-              className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white px-4 xl:px-6 py-2.5 xl:py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-green-500/25 flex items-center space-x-2 text-sm xl:text-base"
+              className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white px-4 xl:px-6 py-2.5 xl:py-3 rounded-full font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-green-500/25 flex items-center space-x-2 text-sm xl:text-base"
             >
               <Mail className="w-4 h-4" />
               <span>Contact Me</span>

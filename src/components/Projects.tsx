@@ -13,6 +13,8 @@ import service4a from '../assets/service-4a.jpg';
 import service3b from '../assets/service-3b.jpg';
 import service4b from '../assets/service-4b.jpg';
 import service4d from '../assets/service-4d.jpg';
+import fluxProject from '../assets/Flux.jpg';
+import broadheaderProject from '../assets/Broadheader.jpg';
 
 const Projects = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -37,6 +39,24 @@ const Projects = () => {
   }, []);
 
   const projects = [
+    {
+      title: 'Flux - Online Trading Platform',
+      description: 'A cutting-edge blockchain trading platform with advanced charting, real-time data, and intuitive user interface designed for modern traders.',
+      image: fluxProject,
+      tags: ['UI/UX Design', 'Blockchain', 'Trading Platform', 'Figma', 'Web3'],
+      category: 'UI/UX Design',
+      icon: Monitor,
+      link: 'https://fluxcoin.tech/' // Replace with actual link when available
+    },
+    {
+      title: 'Broadheader - Website Builder Platform',
+      description: 'A comprehensive website builder platform with drag-and-drop functionality, helping businesses create professional websites with ease.',
+      image: broadheaderProject,
+      tags: ['Full Stack', 'Website Builder', 'React', 'UI/UX', 'Development'],
+      category: 'Full Stack Development',
+      icon: Globe,
+      link: 'https://web.broadheader.com/' // Replace with actual link when available
+    },
     {
       title: 'Veloura E-commerce',
       description: 'A modern e-commerce platform with elegant design and seamless user experience for online shopping.',
@@ -229,7 +249,7 @@ const Projects = () => {
         }`}>
           <button 
             onClick={toggleShowAllProjects}
-            className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-green-500/25 inline-flex items-center space-x-2"
+            className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-green-500/25 inline-flex items-center space-x-2"
           >
             <span>{showAllProjects ? 'Show Less Projects' : 'View All Projects'}</span>
             {showAllProjects ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}

@@ -106,19 +106,18 @@ const Hero = () => {
         <div className={`transition-all duration-1000 delay-200 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
-          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight px-2 sm:px-0">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight px-2 sm:px-0">
             <span className="bg-gradient-to-r from-white via-emerald-200 to-green-300 bg-clip-text text-transparent block">
-              Simplify Your
+              Frontend Developer,
             </span>
             <span className="bg-gradient-to-r from-emerald-300 via-green-200 to-white bg-clip-text text-transparent block">
-              Digital Experience
+              Web & Graphic Designer
             </span>
           </h1>
           
-          <div className="max-w-2xl mx-auto mb-6 sm:mb-8 px-2 sm:px-0">
-            <p className="text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed font-light">
-              Empower your business with <span className="font-semibold text-emerald-400">innovative web solutions</span>, 
-              seamless user experiences, and cutting-edge design—so your brand can focus on what truly matters.
+          <div className="max-w-3xl mx-auto mb-6 sm:mb-8 px-2 sm:px-0">
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-300/90 leading-relaxed font-light italic">
+              With over 2 years plus of professional experience in crafting responsive user interfaces that drive meaningful digital experiences.
             </p>
           </div>
         </div>
@@ -129,12 +128,12 @@ const Hero = () => {
         }`}>
           <button
             onClick={handleScrollToProjects}
-            className="group bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white px-4 sm:px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-emerald-500/25 flex items-center space-x-2 text-xs sm:text-base flex-1 sm:flex-none max-w-[140px] sm:max-w-none justify-center"
+            className="group bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white px-4 sm:px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/25 flex items-center space-x-2 text-xs sm:text-base flex-1 sm:flex-none max-w-[140px] sm:max-w-none justify-center"
           >
             <span>Learn More</span>
             <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform duration-300" />
           </button>
-          <button className="group bg-gray-800/50 backdrop-blur-sm border-2 border-gray-700 text-gray-200 hover:border-emerald-400 hover:bg-emerald-900/20 px-4 sm:px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 text-xs sm:text-base flex-1 sm:flex-none max-w-[140px] sm:max-w-none justify-center">
+          <button className="group bg-gray-800/50 backdrop-blur-sm border-2 border-gray-700 text-gray-200 hover:border-emerald-400 hover:bg-emerald-900/20 px-4 sm:px-6 py-3 rounded-full font-semibold transition-all duration-300 flex items-center space-x-2 text-xs sm:text-base flex-1 sm:flex-none max-w-[140px] sm:max-w-none justify-center">
             <Download className="w-3 h-3 sm:w-4 sm:h-4" />
             <span className="hidden xs:inline">Download Resume</span>
             <span className="xs:hidden">Resume</span>
