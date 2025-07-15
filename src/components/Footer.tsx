@@ -1,15 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Github, Linkedin, Twitter, Instagram, Heart } from 'lucide-react';
+import { Github, Linkedin, Palette } from 'lucide-react';
 
 const Footer = () => {
   const navigate = useNavigate();
 
   const socialLinks = [
-    { icon: Github, href: '#', label: 'GitHub' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
-    { icon: Twitter, href: '#', label: 'Twitter' },
-    { icon: Instagram, href: '#', label: 'Instagram' },
+    { icon: Github, href: 'https://github.com/Hotpotato02133', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/efraim-james-talucod-065959244/', label: 'LinkedIn' },
+    { icon: Palette, href: 'https://www.behance.net/efraimjames', label: 'Behance' },
   ];
 
   const quickLinks = [
