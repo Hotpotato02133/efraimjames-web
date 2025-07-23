@@ -88,7 +88,7 @@ const Footer = () => {
             <div className="space-y-2 text-gray-600">
               <p>efraimjamestalucod88@gmail.com</p>
               <p>+63 (965) 639-4996</p>
-              <p>Recodo, Zamboanga City, Philippines, 7000</p>
+              <p>Zamboanga City, Philippines, 7000</p>
             </div>
             <div className="mt-4">
               <button

@@ -108,7 +108,7 @@ const About = () => {
               </div>
 
               <div className="flex flex-wrap gap-3">
-                {['Design Systems', 'UI/UX', 'Frontend Development', 'Brand Identity'].map((skill, index) => (
+                {['UI/UX', 'Frontend Development', 'Brand Identity', 'Graphic Design'].map((skill, index) => (
                   <span 
                     key={index} 
                     className="px-4 py-2 bg-gradient-to-r from-emerald-100 to-green-100 text-emerald-700 rounded-full text-sm font-medium border border-emerald-200/50"
