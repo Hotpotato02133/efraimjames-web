@@ -36,20 +36,30 @@ const Hero = () => {
     }
   };
 
-  // Resume download function
-  const handleDownloadResume = () => {
+  // Resume download function with mobile support
+  const handleDownloadResume = async () => {
     try {
+      // Fetch the PDF as a blob
+      const response = await fetch('/CV-EFRAIM-JAMES-TALUCOD.pdf');
+      const blob = await response.blob();
+      
+      // Create a blob URL
+      const blobUrl = window.URL.createObjectURL(blob);
+      
+      // Create a temporary link and trigger download
       const link = document.createElement('a');
-      link.href = '/src/assets/Efraim_Talucod_Resume_2025.pdf';
-      link.download = 'Efraim_Talucod_Resume_2025.pdf';
-      link.target = '_blank';
+      link.href = blobUrl;
+      link.download = 'CV-EFRAIM-JAMES-TALUCOD.pdf';
       document.body.appendChild(link);
       link.click();
+      
+      // Clean up
       document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
-      console.error('Error downloading resume:', error);
+      console.error('Download failed:', error);
       // Fallback: open in new tab
-      window.open('/src/assets/Efraim_Talucod_Resume_2025.pdf', '_blank');
+      window.open('/CV-EFRAIM-JAMES-TALUCOD.pdf', '_blank');
     }
   };
 

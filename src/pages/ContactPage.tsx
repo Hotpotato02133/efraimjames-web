@@ -3,6 +3,7 @@ import { Mail, Phone, MapPin, CheckCircle } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import emailjs from '@emailjs/browser';
+import contactPageImg from '../assets/contact-page-img.png';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -233,7 +234,7 @@ const Contact = () => {
               <div className="relative rounded-3xl overflow-hidden min-h-[400px] lg:min-h-[600px] shadow-2xl group">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10"></div>
                 <img 
-                  src="https://images.unsplash.com/photo-1516387938699-a93567ec168e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2671&q=80" 
+                  src={contactPageImg}
                   alt="Minimalist workspace with laptop and plants" 
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
