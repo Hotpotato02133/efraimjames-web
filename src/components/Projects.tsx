@@ -20,7 +20,7 @@ const Projects = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 tracking-tight"
+            className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-gray-900 via-emerald-700 to-green-700 bg-clip-text text-transparent px-2"
           >
             Featured Projects
           </motion.h2>
@@ -29,7 +29,7 @@ const Projects = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-lg text-slate-600 leading-relaxed"
+            className="text-lg md:text-xl text-slate-600 leading-relaxed"
           >
             A curated selection of my work in web applications, UI/UX design, and digital experiences. 
             Each project represents a commitment to quality and innovation.

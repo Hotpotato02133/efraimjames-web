@@ -6,7 +6,7 @@ import About from './components/About';
 import Projects from './components/Projects';
 import Skills from './components/Skills';
 import Contact from './components/Contact';
-import InfiniteMarquee from './components/InfiniteMarquee';
+import LetsTalkMarquee from './components/LetsTalkMarquee';
 import Footer from './components/Footer';
 import ContactPage from './pages/ContactPage';
 import ProjectDetails from './pages/ProjectDetails';
@@ -39,18 +39,7 @@ function App() {
                 <Hero />
                 <Skills />
                 <Projects />
-                
-                <div className="py-8 bg-stone-50">
-                  <InfiniteMarquee speed={40} direction="left">
-                     {[...Array(6)].map((_, i) => (
-                        <div key={i} className="flex items-center mx-8">
-                           <span className="text-6xl sm:text-8xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-slate-200 to-slate-300 uppercase opacity-60 hover:opacity-80 transition-opacity duration-300">
-                              Let's Talk +++
-                           </span>
-                        </div>
-                     ))}
-                  </InfiniteMarquee>
-                </div>
+                <LetsTalkMarquee />
                 <About />
                 <Contact />
               </main>
