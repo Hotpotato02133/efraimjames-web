@@ -119,9 +119,9 @@ const Hero = () => {
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-           <h1 className="text-6xl sm:text-6xl md:text-6xl lg:text-9xl font-medium tracking-[-1px] md:tracking-[-2px] lg:tracking-[-4px] text-slate-900 leading-[1.1] mb-6">
+           <h1 className="text-7xl sm:text-6xl md:text-6xl lg:text-9xl font-bold sm:font-medium tracking-[-1px] md:tracking-[-2px] lg:tracking-[-4px] text-slate-900 leading-[1.1] mb-6">
               Web Designer
-              <span className="block mt-2 font-medium font-jakarta italic bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent tracking-[-1px] md:tracking-[-2px] lg:tracking-[-4px]">
+              <span className="block mt-2 font-bold sm:font-medium font-jakarta italic bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent tracking-[-1px] md:tracking-[-2px] lg:tracking-[-4px]">
                     & Developer
               </span>
           </h1>
