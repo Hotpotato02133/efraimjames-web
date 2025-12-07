@@ -230,74 +230,13 @@ const Contact = () => {
           <div className="order-1 lg:order-2">
             <div className="relative">
               {/* Main Image Container */}
-              <div className="relative bg-gradient-to-br from-blue-50 to-green-50 rounded-3xl p-8 md:p-12 overflow-hidden min-h-[400px] lg:min-h-[600px]">
-                {/* Plant in pot */}
-                <div className="absolute top-8 left-8">
-                  <div className="w-16 h-20 bg-orange-200 rounded-full relative">
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                      <div className="w-8 h-8 bg-green-600 rounded-full"></div>
-                      <div className="w-6 h-6 bg-green-500 rounded-full ml-4 -mt-2"></div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Laptop */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                  <div className="bg-gray-800 rounded-lg p-2 shadow-2xl w-48 h-32 transform rotate-12">
-                    <div className="bg-white rounded-md p-3 h-full flex flex-col">
-                      <div className="flex items-center space-x-1 mb-2">
-                        <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                        <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                        <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      </div>
-                      <div className="space-y-1 flex-1">
-                        <div className="h-1.5 bg-gray-200 rounded w-3/4"></div>
-                        <div className="h-1.5 bg-gray-200 rounded w-1/2"></div>
-                        <div className="h-1.5 bg-blue-200 rounded w-2/3"></div>
-                        <div className="h-1.5 bg-gray-200 rounded w-5/6"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Books Stack */}
-                <div className="absolute bottom-12 left-8">
-                  <div className="space-y-1">
-                    <div className="w-12 h-2 bg-pink-300 rounded-sm transform -rotate-3"></div>
-                    <div className="w-14 h-2 bg-blue-300 rounded-sm transform rotate-2"></div>
-                    <div className="w-10 h-2 bg-green-300 rounded-sm transform -rotate-1"></div>
-                  </div>
-                </div>
-
-                {/* Plant pot on shelf */}
-                <div className="absolute top-16 right-8">
-                  <div className="w-12 h-16 bg-orange-300 rounded-lg">
-                    <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                      <div className="w-6 h-6 bg-green-700 rounded-full"></div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Pencil holder */}
-                <div className="absolute bottom-20 right-12">
-                  <div className="w-8 h-12 bg-white rounded-lg shadow-md border border-gray-200">
-                    <div className="absolute -top-1 left-1 w-1 h-6 bg-yellow-400 rounded-full"></div>
-                    <div className="absolute -top-1 right-1 w-1 h-4 bg-red-400 rounded-full"></div>
-                  </div>
-                </div>
-
-                {/* Social icons */}
-                <div className="absolute top-4 right-4 flex space-x-2">
-                  <div className="w-6 h-6 bg-blue-500 rounded flex items-center justify-center">
-                    <span className="text-white text-xs">f</span>
-                  </div>
-                  <div className="w-6 h-6 bg-pink-500 rounded flex items-center justify-center">
-                    <span className="text-white text-xs">in</span>
-                  </div>
-                  <div className="w-6 h-6 bg-red-500 rounded flex items-center justify-center">
-                    <span className="text-white text-xs">@</span>
-                  </div>
-                </div>
+              <div className="relative rounded-3xl overflow-hidden min-h-[400px] lg:min-h-[600px] shadow-2xl group">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10"></div>
+                <img 
+                  src="https://images.unsplash.com/photo-1516387938699-a93567ec168e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2671&q=80" 
+                  alt="Minimalist workspace with laptop and plants" 
+                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
               </div>
 
               {/* Stats Card */}

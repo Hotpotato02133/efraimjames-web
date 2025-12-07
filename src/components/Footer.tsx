@@ -93,7 +93,7 @@ const Footer = () => {
             <div className="mt-4">
               <button
                 onClick={() => navigate('/contact')}
-                className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-green-500/25"
+                className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white px-6 py-2 rounded-full font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-green-500/25"
               >
                 Let's talk
               </button>
@@ -102,22 +102,11 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center mx-4 sm:mx-6 lg:mx-8">
+        <div className="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-center items-center mx-4 sm:mx-6 lg:mx-8">
           <p className="text-gray-600 text-sm flex items-center">
             © 2025 Efraim James Portfolio.{' '}
             {' '}
           </p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="#" className="text-gray-600 hover:text-green-600 text-sm transition-colors duration-300">
-              Privacy Policy
-            </a>
-            <a href="#" className="text-gray-600 hover:text-green-600 text-sm transition-colors duration-300">
-              Terms of Service
-            </a>
-            <a href="#" className="text-gray-600 hover:text-green-600 text-sm transition-colors duration-300">
-              Cookies
-            </a>
-          </div>
         </div>
       </div>
     </footer>

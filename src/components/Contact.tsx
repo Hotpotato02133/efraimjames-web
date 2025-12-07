@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Mail, Phone, MapPin, Send, CheckCircle } from "lucide-react";
 import emailjs from "@emailjs/browser";
+import contactBg from "../assets/contact-bg.png";
 
 const Contact = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -107,7 +108,13 @@ const Contact = () => {
     <section
       ref={sectionRef}
       id="contact"
-      className="py-16 sm:py-20 relative bg-gray-50"
+      className="py-16 sm:py-20 relative"
+      style={{
+        backgroundImage: `url(${contactBg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
     >
       <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
         <div

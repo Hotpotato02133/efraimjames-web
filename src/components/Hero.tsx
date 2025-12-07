@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { ArrowDown, Download, ArrowRight } from "lucide-react";
 import {
   FaReact,
-  FaNodeJs,
   FaGitAlt,
   FaFigma,
   FaJs,
@@ -15,17 +14,12 @@ import {
   SiNextdotjs,
   SiTailwindcss,
   SiFramer,
-  SiExpress,
-  SiMongodb,
-  SiPostgresql,
-  SiAdobephotoshop,
-  SiAdobeillustrator,
-  SiAdobexd,
   SiSupabase,
   SiMysql,
   SiCanva,
 } from "react-icons/si";
 import InfiniteMarquee from "./InfiniteMarquee";
+import heroBg from "../assets/hero-bg.png";
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -59,183 +53,147 @@ const Hero = () => {
     }
   };
 
-  // Tech stack with logos
+  // Tech stack with logos - Optimized for white background
   const techStack = [
-    { name: "React", icon: FaReact, color: "text-blue-400" },
-    { name: "Figma", icon: FaFigma, color: "text-purple-400" },
-    { name: "TypeScript", icon: SiTypescript, color: "text-blue-500" },
-    { name: "Next.js", icon: SiNextdotjs, color: "text-white" },
-    { name: "Tailwind CSS", icon: SiTailwindcss, color: "text-cyan-400" },
-    { name: "Framer Motion", icon: SiFramer, color: "text-pink-400" },
-    { name: "Supabase", icon: SiSupabase, color: "text-green-400" },
-    { name: "MySQL", icon: SiMysql, color: "text-blue-400" },
-    { name: "Canva", icon: SiCanva, color: "text-blue-400" },
-    { name: "Git", icon: FaGitAlt, color: "text-orange-400" },
-    { name: "JavaScript", icon: FaJs, color: "text-yellow-400" },
-    { name: "HTML5", icon: FaHtml5, color: "text-orange-400" },
-    { name: "CSS3", icon: FaCss3Alt, color: "text-blue-400" },
-    { name: "Sketch", icon: FaSketch, color: "text-purple-400" },
+    { name: "React", icon: FaReact, color: "text-blue-600" },
+    { name: "Figma", icon: FaFigma, color: "text-purple-600" },
+    { name: "TypeScript", icon: SiTypescript, color: "text-blue-700" },
+    { name: "Next.js", icon: SiNextdotjs, color: "text-slate-900" },
+    { name: "Tailwind CSS", icon: SiTailwindcss, color: "text-cyan-600" },
+    { name: "Framer Motion", icon: SiFramer, color: "text-pink-600" },
+    { name: "Supabase", icon: SiSupabase, color: "text-emerald-600" },
+    { name: "MySQL", icon: SiMysql, color: "text-blue-700" },
+    { name: "Canva", icon: SiCanva, color: "text-blue-600" },
+    { name: "Git", icon: FaGitAlt, color: "text-orange-600" },
+    { name: "JavaScript", icon: FaJs, color: "text-yellow-500" },
+    { name: "HTML5", icon: FaHtml5, color: "text-orange-600" },
+    { name: "CSS3", icon: FaCss3Alt, color: "text-blue-600" },
+    { name: "Sketch", icon: FaSketch, color: "text-amber-600" },
   ];
 
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-black via-gray-950 to-zinc-950 transition-all duration-500 pt-16 sm:pt-20 pb-4 sm:pb-8"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-32 md:pt-48 pb-12 sm:pb-16"
+      style={{
+        backgroundImage: `url(${heroBg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
     >
-      {/* Futuristic background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Main gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-zinc-900/30 via-transparent to-emerald-950/20"></div>
+      {/* Clean background elements - Overlay for better text readability if needed */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Subtle Dot Pattern */}
+        <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-50"></div>
 
-        {/* Animated geometric shapes - adjusted for mobile */}
-        <div className="absolute top-1/4 right-1/4 w-48 sm:w-72 h-48 sm:h-72 bg-gradient-to-r from-emerald-500/15 to-green-400/15 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 left-1/4 w-48 sm:w-72 h-48 sm:h-72 bg-gradient-to-r from-green-400/15 to-emerald-500/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
-
-        {/* Enhanced grid pattern overlay */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%2040%2040%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22%2334d399%22%20fill-opacity%3D%220.05%22%20fill-rule%3D%22evenodd%22%3E%3Cpath%20d%3D%22M0%200h40v40H0z%22/%3E%3Cpath%20d%3D%22M20%200v40M0%2020h40%22%20stroke%3D%22%2334d399%22%20stroke-width%3D%220.8%22%20stroke-opacity%3D%220.15%22/%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
-
-        {/* Enhanced central glow effect - adjusted for mobile */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] sm:w-[600px] lg:w-[900px] h-[400px] sm:h-[600px] lg:h-[900px] bg-gradient-radial from-emerald-500/8 via-green-500/4 to-transparent rounded-full"></div>
-
-        {/* Additional atmospheric layers */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-950/10 to-transparent"></div>
-
-        {/* Enhanced floating particles - adjusted positions for mobile */}
-        <div className="absolute top-20 left-4 sm:left-10 w-2 h-2 bg-emerald-400/40 rounded-full animate-ping"></div>
-        <div className="absolute top-40 right-8 sm:right-20 w-1 h-1 bg-green-400/50 rounded-full animate-ping delay-500"></div>
-        <div className="absolute bottom-32 left-8 sm:left-20 w-1.5 h-1.5 bg-emerald-300/40 rounded-full animate-ping delay-1000"></div>
-        <div className="absolute bottom-20 right-16 sm:right-32 w-1 h-1 bg-green-300/50 rounded-full animate-ping delay-700"></div>
-        <div className="absolute top-60 left-1/3 w-1 h-1 bg-emerald-400/30 rounded-full animate-ping delay-300"></div>
-        <div className="absolute bottom-40 right-1/3 w-1.5 h-1.5 bg-green-400/35 rounded-full animate-ping delay-900"></div>
+        {/* Soft ambient gradients */}
+        <div className="absolute top-0 right-0 w-[30rem] h-[30rem] bg-emerald-50/80 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+        <div className="absolute bottom-0 left-0 w-[30rem] h-[30rem] bg-blue-50/80 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3"></div>
       </div>
 
-      <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 text-center relative z-10 max-w-5xl w-full">
-        {/* Top badge */}
-        <div
-          className={`transition-all duration-1000 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          <div className="inline-flex items-center space-x-2 bg-emerald-500/10 backdrop-blur-sm border border-emerald-500/20 rounded-full px-3 sm:px-5 py-2 mb-4 sm:mb-6 max-w-[90vw]">
-            <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-            <span className="text-emerald-300 font-medium text-xs">
-              ✨ Creative Web Designer & Developer
-            </span>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-6xl w-full">
+        <div className="flex flex-col items-center text-center">
+          
+          {/* Top badge */}
+          <div
+            className={`transition-all duration-1000 transform ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+          >
           </div>
-        </div>
 
-        {/* Main content */}
-        <div
-          className={`transition-all duration-1000 delay-200 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight px-2 sm:px-0">
-            <span className="bg-gradient-to-r from-white via-emerald-200 to-green-300 bg-clip-text text-transparent block">
-              Frontend Developer,
-            </span>
-            <span className="bg-gradient-to-r from-emerald-300 via-green-200 to-white bg-clip-text text-transparent block">
-              Web & Graphic Designer
-            </span>
+          {/* Main Heading */}
+          <div
+            className={`max-w-4xl mx-auto mb-8 transition-all duration-1000 delay-200 ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+          >
+           <h1 className="text-6xl sm:text-6xl md:text-6xl lg:text-9xl font-medium tracking-[-4px] text-slate-900 leading-[1.1] mb-6">
+              Web Designer
+              <span className="block mt-2 font-medium font-jakarta italic bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent tracking-[-4px]">
+                    & Developer
+              </span>
           </h1>
-
-          <div className="max-w-3xl mx-auto mb-6 sm:mb-8 px-2 sm:px-0">
-            <p className="text-lg sm:text-xl md:text-2xl text-gray-300/90 leading-relaxed font-light italic">
-              With over 2 years plus of professional experience in crafting
-              responsive user interfaces that drive meaningful digital
-              experiences.
+            <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed font-medium">
+              Premium Web Design, Development, and SEO services to help your business stand out.
             </p>
           </div>
-        </div>
 
-        {/* CTA Buttons */}
-        <div
-          className={`flex flex-row gap-2 sm:gap-3 justify-center items-center mb-8 sm:mb-12 transition-all duration-1000 delay-400 px-2 sm:px-0 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          <button
-            onClick={handleScrollToProjects}
-            className="group bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white px-4 sm:px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/25 flex items-center space-x-2 text-xs sm:text-base flex-1 sm:flex-none max-w-[140px] sm:max-w-none justify-center"
+          {/* CTA Buttons */}
+          <div
+            className={`flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center items-center mb-16 transition-all duration-1000 delay-400 ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
           >
-            <span>Learn More</span>
-            <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform duration-300" />
-          </button>
-          <button
-            onClick={handleDownloadResume}
-            className="group bg-gray-800/50 backdrop-blur-sm border-2 border-gray-700 text-gray-200 hover:border-emerald-400 hover:bg-emerald-900/20 px-4 sm:px-6 py-3 rounded-full font-semibold transition-all duration-300 flex items-center space-x-2 text-xs sm:text-base flex-1 sm:flex-none max-w-[140px] sm:max-w-none justify-center"
-          >
-            <Download className="w-3 h-3 sm:w-4 sm:h-4" />
-            <span className="hidden xs:inline">Download Resume</span>
-            <span className="xs:hidden">Resume</span>
-          </button>
-        </div>
-
-        {/* Scroll indicator */}
-        <div
-          className={`transition-all duration-1000 delay-600 mb-6 sm:mb-8 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          <button
-            onClick={handleScrollToProjects}
-            className="text-emerald-400 hover:text-emerald-300 transition-colors duration-300 animate-bounce"
-          >
-            <ArrowDown className="w-5 h-5 mx-auto" />
-          </button>
-        </div>
-
-        {/* Enhanced Infinite Marquee Section */}
-        <div
-          className={`transition-all duration-1000 delay-800 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          <div className="mb-4 sm:mb-6 px-2 sm:px-0">
-            <p className="text-xs text-gray-400 font-medium tracking-wider uppercase mb-2">
-              Powered by Industry-Leading Technologies
-            </p>
-            <div className="w-16 sm:w-20 h-0.5 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full mx-auto"></div>
+            <button
+              onClick={handleScrollToProjects}
+              className="group relative px-8 py-4 bg-slate-900 text-white rounded-full font-semibold hover:bg-slate-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 w-full sm:w-auto flex items-center justify-center gap-2"
+            >
+              View My Work
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+            <button
+              onClick={handleDownloadResume}
+              className="group px-8 py-4 bg-white text-slate-700 border border-slate-200 rounded-full font-semibold hover:border-slate-300 hover:bg-slate-50 transition-all duration-300 shadow-sm hover:shadow-md w-full sm:w-auto flex items-center justify-center gap-2"
+            >
+              <Download className="w-4 h-4" />
+              Download Resume
+            </button>
           </div>
 
-          {/* Enhanced marquee with glowing effects */}
-          <div className="overflow-hidden px-2 sm:px-0">
-            <InfiniteMarquee speed={40} direction="left" className="pb-4">
-              {techStack.map((tech, index) => {
-                const IconComponent = tech.icon;
-                return (
-                  <div
-                    key={index}
-                    className="relative group bg-gray-800/60 backdrop-blur-md border border-gray-700/50 rounded-xl px-4 sm:px-6 py-3 sm:py-4 shadow-lg hover:shadow-xl transition-all duration-500 flex items-center space-x-2 sm:space-x-3 min-w-max hover:scale-105 hover:border-emerald-500/30 mx-2"
-                  >
-                    {/* Enhanced glowing border effect */}
-                    <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-emerald-400/0 via-emerald-400/20 to-emerald-400/0 opacity-0 group-hover:opacity-100 transition-all duration-500 blur-sm"></div>
+          {/* Tech Stack Section */}
+          <div
+            className={`w-full transition-all duration-1000 delay-600 ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+          >
+            <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-8">
+              My Tech Stack
+            </p>
+            
+            <div className="relative">
+              {/* Fade edges for marquee */}
+              <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-transparent to-transparent z-10 pointer-events-none"></div>
+              <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-transparent to-transparent z-10 pointer-events-none"></div>
+              
+              <InfiniteMarquee speed={80} direction="left" className="py-4">
+                {techStack.map((tech, index) => {
+                  const IconComponent = tech.icon;
+                  return (
                     <div
-                      className="absolute inset-0 rounded-xl border-2 border-transparent bg-gradient-to-r from-emerald-400/30 via-green-400/30 to-emerald-400/30 opacity-0 group-hover:opacity-100 transition-all duration-500"
-                      style={{
-                        mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                        maskComposite: "xor",
-                      }}
-                    ></div>
-
-                    {/* Content with enhanced styling */}
-                    <div className="relative z-10 flex items-center space-x-2 sm:space-x-3">
-                      <div className="p-1 sm:p-1.5 bg-gray-700 rounded-lg group-hover:bg-gray-600 transition-colors duration-300">
-                        <IconComponent
-                          className={`w-4 h-4 sm:w-5 sm:h-5 ${tech.color} group-hover:scale-110 transition-transform duration-300`}
-                        />
+                      key={index}
+                      className="flex items-center gap-3 px-6 py-3 rounded-xl shadow-sm mx-3 hover:shadow-md transition-all duration-300 group"
+                    >
+                      <div className="p-2 rounded-lg group-hover:bg-emerald-50 transition-colors">
+                        <IconComponent className={`w-6 h-6 ${tech.color}`} />
                       </div>
-                      <span className="text-gray-200 font-semibold text-xs sm:text-sm whitespace-nowrap group-hover:text-white transition-colors duration-300">
+                      <span className="font-semibold text-slate-700">
                         {tech.name}
                       </span>
                     </div>
-                  </div>
-                );
-              })}
-            </InfiniteMarquee>
+                  );
+                })}
+              </InfiniteMarquee>
+            </div>
           </div>
+
         </div>
+      </div>
+
+      {/* Scroll Indicator */}
+      <div
+        className={`absolute bottom-8 left-1/2 -translate-x-1/2 transition-all duration-1000 delay-1000 ${
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+        }`}
+      >
+        <button
+          onClick={handleScrollToProjects}
+          className="p-2 text-slate-400 hover:text-emerald-600 transition-colors animate-bounce"
+          aria-label="Scroll down"
+        >
+          <ArrowDown className="w-6 h-6" />
+        </button>
       </div>
     </section>
   );
