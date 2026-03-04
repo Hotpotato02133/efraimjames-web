@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ArrowDown, Download, ArrowRight } from "lucide-react";
 import {
   FaReact,
-  FaGitAlt,
   FaFigma,
-  FaJs,
   FaHtml5,
   FaCss3Alt,
   FaSketch,
@@ -14,8 +12,6 @@ import {
   SiNextdotjs,
   SiTailwindcss,
   SiFramer,
-  SiSupabase,
-  SiMysql,
   SiCanva,
 } from "react-icons/si";
 import InfiniteMarquee from "./InfiniteMarquee";
@@ -63,22 +59,18 @@ const Hero = () => {
     }
   };
 
-  // Tech stack with logos - Optimized for white background
+  // Toolkit with logos - Optimized for white background
   const techStack = [
-    { name: "React", icon: FaReact, color: "text-blue-600" },
     { name: "Figma", icon: FaFigma, color: "text-purple-600" },
-    { name: "TypeScript", icon: SiTypescript, color: "text-blue-700" },
-    { name: "Next.js", icon: SiNextdotjs, color: "text-slate-900" },
-    { name: "Tailwind CSS", icon: SiTailwindcss, color: "text-cyan-600" },
-    { name: "Framer Motion", icon: SiFramer, color: "text-pink-600" },
-    { name: "Supabase", icon: SiSupabase, color: "text-emerald-600" },
-    { name: "MySQL", icon: SiMysql, color: "text-blue-700" },
+    { name: "Sketch", icon: FaSketch, color: "text-amber-600" },
+    { name: "Framer", icon: SiFramer, color: "text-pink-600" },
     { name: "Canva", icon: SiCanva, color: "text-blue-600" },
-    { name: "Git", icon: FaGitAlt, color: "text-orange-600" },
-    { name: "JavaScript", icon: FaJs, color: "text-yellow-500" },
+    { name: "React", icon: FaReact, color: "text-blue-600" },
+    { name: "Tailwind CSS", icon: SiTailwindcss, color: "text-cyan-600" },
+    { name: "Next.js", icon: SiNextdotjs, color: "text-slate-900" },
+    { name: "TypeScript", icon: SiTypescript, color: "text-blue-700" },
     { name: "HTML5", icon: FaHtml5, color: "text-orange-600" },
     { name: "CSS3", icon: FaCss3Alt, color: "text-blue-600" },
-    { name: "Sketch", icon: FaSketch, color: "text-amber-600" },
   ];
 
   return (
@@ -120,13 +112,13 @@ const Hero = () => {
             }`}
           >
            <h1 className="text-7xl sm:text-6xl md:text-6xl lg:text-9xl font-bold sm:font-medium tracking-[-1px] md:tracking-[-2px] lg:tracking-[-4px] text-slate-900 leading-[1.1] mb-6">
-              Web Designer
-              <span className="block mt-2 font-bold sm:font-medium font-jakarta italic bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent tracking-[-1px] md:tracking-[-2px] lg:tracking-[-4px]">
-                    & Developer
+              UI/UX{" "}
+              <span className="font-bold sm:font-medium font-jakarta italic bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent tracking-[-1px] md:tracking-[-2px] lg:tracking-[-4px]">
+                    Designer
               </span>
           </h1>
             <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed font-medium">
-              Premium Web Design, Development, and SEO services to help your business stand out.
+              Transforming complex problems into elegant, user-centered digital experiences that drive engagement and success.
             </p>
           </div>
 
@@ -159,7 +151,7 @@ const Hero = () => {
             }`}
           >
             <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-8">
-              My Tech Stack
+              My Toolkit
             </p>
             
             <div className="relative">

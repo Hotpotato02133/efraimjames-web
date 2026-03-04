@@ -4,7 +4,8 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
 import Projects from './components/Projects';
-import Skills from './components/Skills';
+import OtherProjects from './components/OtherProjects';
+import WhatICanDo from './components/WhatICanDo';
 import Contact from './components/Contact';
 import LetsTalkMarquee from './components/LetsTalkMarquee';
 import Footer from './components/Footer';
@@ -37,8 +38,9 @@ function App() {
               <Header />
               <main>
                 <Hero />
-                <Skills />
+                <WhatICanDo />
                 <Projects />
+                <OtherProjects />
                 <LetsTalkMarquee />
                 <About />
                 <Contact />

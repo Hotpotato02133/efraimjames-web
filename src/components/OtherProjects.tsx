@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { projects } from '../data/projects';
 
-const Projects = () => {
+const OtherProjects = () => {
+  const [showAllProjects, setShowAllProjects] = useState(false);
   const featuredProjectTitles = ["Broadheader", "OFBank Mobile", "Travelista"];
-  const displayedProjects = projects.filter(p => featuredProjectTitles.includes(p.title));
+  
+  // Exclude featured ones
+  const otherProjects = projects.filter(p => !featuredProjectTitles.includes(p.title));
+  // By default, showing up to 4 other projects
+  const displayedProjects = showAllProjects ? otherProjects : otherProjects.slice(0, 4);
 
   return (
-    <section id="projects" className="py-24 lg:py-32 bg-stone-50 overflow-hidden">
+    <section id="other-projects" className="py-24 lg:py-32 bg-white overflow-hidden">
       <div className="container mx-auto px-4 md:px-6 !overflow-visible">
         
         {/* Header */}
@@ -21,7 +26,7 @@ const Projects = () => {
             transition={{ duration: 0.5 }}
             className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-gray-900 via-emerald-700 to-green-700 bg-clip-text text-transparent px-2"
           >
-            Featured Projects
+            Other Projects
           </motion.h2>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -30,8 +35,7 @@ const Projects = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-lg md:text-xl text-slate-600 leading-relaxed"
           >
-            A curated selection of my work in web applications, UI/UX design, and digital experiences. 
-            Each project represents a commitment to quality and innovation.
+            A collection of side projects and experiments showcasing varied styles, conceptual designs, and creative exploration.
           </motion.p>
         </div>
 
@@ -84,11 +88,27 @@ const Projects = () => {
           </AnimatePresence>
         </div>
 
-        {/* View All Button removed as per user request */}
+        {/* View All Button */}
+        {otherProjects.length > 4 && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="text-center mt-16 md:mt-24"
+          >
+            <button
+              onClick={() => setShowAllProjects(!showAllProjects)}
+              className="inline-flex items-center justify-center px-8 py-3 border border-slate-200 hover:border-emerald-600 text-slate-900 hover:text-emerald-600 rounded-full font-semibold transition-all duration-300 bg-white hover:bg-emerald-50"
+            >
+              {showAllProjects ? 'Show Less Work' : 'View All Projects'}
+            </button>
+          </motion.div>
+        )}
 
       </div>
     </section>
   );
 };
 
-export default Projects;
+export default OtherProjects;

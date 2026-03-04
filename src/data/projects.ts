@@ -9,7 +9,6 @@ import service4a from '../assets/service-4a.jpg';
 import service3b from '../assets/service-3b.jpg';
 import service4b from '../assets/service-4b.jpg';
 import service4d from '../assets/service-4d.jpg';
-import fluxProject from '../assets/Flux.jpg';
 import broadheaderProject from '../assets/Broadheader.jpg';
 
 export interface Project {
@@ -28,30 +27,17 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    id: 'flux-trading',
-    title: 'Flux Trading',
-    description: 'A cutting-edge blockchain trading platform with advanced charting, real-time data, and intuitive user interface designed for modern traders.',
-    fullDescription: 'Flux Trading is a sophisticated blockchain trading platform that combines advanced charting capabilities with real-time market data. The platform features an intuitive user interface designed specifically for modern cryptocurrency traders, offering seamless navigation and powerful analytical tools. The design focuses on clarity and efficiency, enabling users to make informed trading decisions quickly.',
-    image: fluxProject,
-    tags: ['UI/UX Design', 'Blockchain', 'Trading Platform', 'Figma', 'Web3'],
-    category: 'UI/UX Design',
-    link: 'https://fluxcoin.tech/',
-    year: '2024',
-    client: 'Flux Trading Inc.',
-    role: 'UI/UX Designer'
-  },
-  {
     id: 'broadheader',
     title: 'Broadheader',
-    description: 'A comprehensive website builder platform with drag-and-drop functionality, helping businesses create professional websites with ease.',
-    fullDescription: 'Broadheader is a powerful website builder platform that empowers businesses to create professional websites without coding knowledge. Featuring an intuitive drag-and-drop interface, the platform offers a wide range of customizable templates and components. The project involved both frontend and backend development, creating a seamless user experience from design to deployment.',
+    description: 'A comprehensive website builder platform with intuitive drag-and-drop functionality, designed to empower businesses to create professional websites seamlessly.',
+    fullDescription: 'Broadheader is a powerful website builder platform that empowers businesses to create professional websites without coding knowledge. As the lead UI/UX Designer, I crafted an intuitive drag-and-drop interface and an extensive library of customizable templates and components. The design process heavily focused on creating a frictionless user experience, ensuring that complex website building tasks become accessible and visually cohesive for end-users.',
     image: broadheaderProject,
-    tags: ['Full Stack', 'Website Builder', 'React', 'UI/UX', 'Development'],
-    category: 'Full Stack',
-    link: 'https://web.broadheader.com/',
+    tags: ['UI/UX Design', 'Product Design', 'Figma', 'Prototyping', 'User Research'],
+    category: 'UI/UX Design',
+    link: 'https://www.broadheader.com/',
     year: '2024',
     client: 'Broadheader Technologies',
-    role: 'Full Stack Developer'
+    role: 'UI/UX Designer'
   },
   {
     id: 'veloura',
