@@ -6,27 +6,27 @@ const WorkHistory = () => {
   const experiences = [
     {
       id: 1,
-      period: "2022 - Present",
-      role: "Senior Product Designer",
-      company: "Tech Innovators Studio",
-      description: "Leading the design of enterprise-level SaaS products. Established a comprehensive design system that reduced development time by 30%. Mentored junior designers and collaborated closely with engineering teams to ensure pixel-perfect implementation.",
-      skills: ["Design Systems", "Prototyping", "User Research", "Agile"],
+      period: "Nov 2024 - Feb 2026",
+      role: "UI/UX Designer",
+      company: "Broadheader",
+      description: "Led the design and frontend development for diverse projects including trading platforms and booking services. Implemented UI components, integrated REST APIs, and maintained clean code documentation.",
+      skills: ["UI/UX", "Frontend Dev", "React / Vite", "REST APIs"],
     },
     {
       id: 2,
-      period: "2019 - 2022",
-      role: "UI/UX Designer",
-      company: "Creative Digital Agency",
-      description: "Transformed client ideas into engaging digital experiences. Worked on over 40+ projects ranging from e-commerce to corporate websites. Conducted A/B testing that led to a 25% increase in user conversion rates.",
-      skills: ["Wireframing", "Figma", "Interaction Design", "Client Communication"],
+      period: "Aug 2024 - Jan 2025",
+      role: "Web Designer",
+      company: "Business Partner Group",
+      description: "Developed frontend components for key responsive pages. Led UX writing efforts for micro-copy and managed QA processes to ensure optimal user experiences and seamless functionality.",
+      skills: ["Web Design", "UX Writing", "Frontend Dev", "QA"],
     },
     {
       id: 3,
-      period: "2017 - 2019",
+      period: "Oct 2023 - Sep 2024",
       role: "Frontend Developer",
-      company: "Startup Co.",
-      description: "Bridged the gap between design and technical implementation. Built responsive single-page applications and translated static designs into interactive, accessible, and performant web components.",
-      skills: ["React", "CSS/SCSS", "JavaScript", "Responsive Design"],
+      company: "ORO Business Group",
+      description: "Collaborated in an agile environment to build and optimize frontend features. Expanded technical skills in JavaScript design patterns and actively participated in code reviews.",
+      skills: ["JavaScript", "React", "Git", "Agile"],
     }
   ];
 
