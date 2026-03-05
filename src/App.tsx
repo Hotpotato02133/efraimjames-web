@@ -11,6 +11,7 @@ import LetsTalkMarquee from './components/LetsTalkMarquee';
 import Footer from './components/Footer';
 import ContactPage from './pages/ContactPage';
 import ProjectDetails from './pages/ProjectDetails';
+import WorkHistory from './components/WorkHistory';
 
 function App() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -43,6 +44,7 @@ function App() {
                 <OtherProjects />
                 <LetsTalkMarquee />
                 <About />
+                <WorkHistory />
                 <Contact />
               </main>
               <Footer />

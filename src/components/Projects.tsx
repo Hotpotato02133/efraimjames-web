@@ -1,11 +1,11 @@
-import React from 'react';
+
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { projects } from '../data/projects';
 
 const Projects = () => {
-  const featuredProjectTitles = ["Broadheader", "OFBank Mobile", "Travelista"];
+  const featuredProjectTitles = ["Facundo Booking", "Leafly", "Broadheader", "OFBank Mobile"];
   const displayedProjects = projects.filter(p => featuredProjectTitles.includes(p.title));
 
   return (

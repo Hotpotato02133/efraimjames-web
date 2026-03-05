@@ -10,6 +10,8 @@ import service3b from '../assets/service-3b.jpg';
 import service4b from '../assets/service-4b.jpg';
 import service4d from '../assets/service-4d.jpg';
 import broadheaderProject from '../assets/Broadheader.jpg';
+import facundoProject from '../assets/Facundo-cover.png';
+import leaflyProject from '../assets/Leafly-cover.png';
 
 export interface Project {
   id: string;
@@ -26,6 +28,32 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  {
+    id: 'facundo',
+    title: 'Facundo Booking',
+    description: 'A focused booking reservation web app designed for Mr. Facundo, a well-known business owner in the Philippines.',
+    fullDescription: 'Facundo is a specialized booking reservation web application tailored specifically for Mr. Facundo, a prominent business owner in the Philippines. The platform features an exclusive and premium design that reflects the high standards of his services, providing a seamless and user-friendly experience for his loyal clients to book appointments with ease.',
+    image: facundoProject,
+    tags: ['Web App', 'UI/UX Design', 'Booking System', 'Premium Design'],
+    category: 'UI/UX Design',
+    link: '#',
+    year: '2024',
+    client: 'Mr. Facundo',
+    role: 'UI/UX Designer'
+  },
+  {
+    id: 'leafly',
+    title: 'Leafly',
+    description: 'A comprehensive booking platform where businesses can list their services for users to book salon, spa, and barber appointments.',
+    fullDescription: 'Leafly is an all-in-one booking reservation platform designed to connect users with various local wellness and beauty businesses. Salons, spas, and barbershops can easily list their services on the platform, allowing users to browse, compare, and instantly book the services they desire. The project focused on creating an intuitive multi-tenant structure with a clean, inviting aesthetic.',
+    image: leaflyProject,
+    tags: ['Multitenant', 'UI/UX Design', 'Booking Platform', 'Web App'],
+    category: 'UI/UX Design',
+    link: '#',
+    year: '2024',
+    client: 'Leafly Business Module',
+    role: 'UI/UX Designer'
+  },
   {
     id: 'broadheader',
     title: 'Broadheader',

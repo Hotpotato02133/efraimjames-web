@@ -6,7 +6,7 @@ import { projects } from '../data/projects';
 
 const OtherProjects = () => {
   const [showAllProjects, setShowAllProjects] = useState(false);
-  const featuredProjectTitles = ["Broadheader", "OFBank Mobile", "Travelista"];
+  const featuredProjectTitles = ["Facundo Booking", "Leafly", "Broadheader", "OFBank Mobile"];
   
   // Exclude featured ones
   const otherProjects = projects.filter(p => !featuredProjectTitles.includes(p.title));
