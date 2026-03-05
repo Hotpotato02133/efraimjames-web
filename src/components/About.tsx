@@ -1,9 +1,9 @@
-import React from 'react';
+
 import { motion } from 'framer-motion';
 
 const About = () => {
   return (
-    <section id="about" className="py-24 lg:py-32 bg-white">
+    <section id="about" className="py-24 lg:py-32 bg-white overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
         <div className="max-w-3xl mx-auto text-center">
 

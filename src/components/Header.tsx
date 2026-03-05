@@ -11,7 +11,7 @@ const Header = () => {
     { href: '#home', label: 'Home' },
     { href: '#about', label: 'About' },
     { href: '#projects', label: 'Projects' },
-    { href: '#skills', label: 'Skills' },
+    { href: '#what-i-can-do', label: 'What I Can Do' },
   ];
 
   const handleNavClick = (href: string) => {
