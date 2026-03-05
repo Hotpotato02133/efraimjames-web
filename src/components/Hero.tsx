@@ -16,6 +16,7 @@ import {
 } from "react-icons/si";
 import InfiniteMarquee from "./InfiniteMarquee";
 import heroBg from "../assets/hero-bg.png";
+import resumePdf from "../assets/CV-EFRAIM-JAMES-2026.pdf";
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -36,7 +37,7 @@ const Hero = () => {
   const handleDownloadResume = async () => {
     try {
       // Fetch the PDF as a blob
-      const response = await fetch('/CV-EFRAIM-JAMES-TALUCOD.pdf');
+      const response = await fetch(resumePdf);
       const blob = await response.blob();
       
       // Create a blob URL
@@ -45,7 +46,7 @@ const Hero = () => {
       // Create a temporary link and trigger download
       const link = document.createElement('a');
       link.href = blobUrl;
-      link.download = 'CV-EFRAIM-JAMES-TALUCOD.pdf';
+      link.download = 'CV-EFRAIM-JAMES-2026.pdf';
       document.body.appendChild(link);
       link.click();
       
@@ -55,7 +56,7 @@ const Hero = () => {
     } catch (error) {
       console.error('Download failed:', error);
       // Fallback: open in new tab
-      window.open('/CV-EFRAIM-JAMES-TALUCOD.pdf', '_blank');
+      window.open(resumePdf, '_blank');
     }
   };
 
