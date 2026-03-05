@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ExternalLink, Calendar, User, Briefcase } from 'lucide-react';
-import { getProjectById, getRelatedProjects, Project } from '../data/projects';
+import { getProjectById, getRelatedProjects } from '../data/projects';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -151,22 +151,24 @@ const ProjectDetails = () => {
             </motion.div>
 
             {/* CTA Button */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.35 }}
-              className="mb-16"
-            >
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-slate-900 text-white rounded-full font-semibold hover:bg-slate-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
+            {project.link !== '#' && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.35 }}
+                className="mb-16"
               >
-                View Live Project
-                <ExternalLink className="w-4 h-4" />
-              </a>
-            </motion.div>
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-slate-900 text-white rounded-full font-semibold hover:bg-slate-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
+                >
+                  View Live Project
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              </motion.div>
+            )}
 
             {/* Related Projects */}
             {relatedProjects.length > 0 && (
