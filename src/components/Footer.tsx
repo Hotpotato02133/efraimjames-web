@@ -104,7 +104,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-center items-center mx-4 sm:mx-6 lg:mx-8">
           <p className="text-gray-600 text-sm flex items-center">
-            © 2025 Efraim James Portfolio.{' '}
+            © 2026 Efraim James Portfolio.{' '}
             {' '}
           </p>
         </div>
