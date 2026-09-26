@@ -1,57 +1,63 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Layout, UserCheck, Layers, ArrowRight } from "lucide-react";
+import { motion, type Variants } from "framer-motion";
+import { Code2, LayoutDashboard, PenTool, ArrowRight } from "lucide-react";
 
 const WhatICanDo = () => {
   const capabilities = [
     {
-      icon: <Layout className="w-8 h-8" />,
+      icon: <Code2 className="w-8 h-8" />,
       number: "01",
-      title: "UI Design",
+      title: "Frontend Development",
       description:
-        "Crafting visually appealing, pixel-perfect interfaces that align with your brand identity and delight users.",
+        "Building fast, responsive, and maintainable web applications with React, TypeScript, and modern tooling — clean code that scales with your product.",
       skills: [
-        "Visual Design",
-        "Design Systems",
-        "Typography & Color",
-        "Responsive Interfaces",
-        "Interactive Components",
+        "React & Next.js",
+        "TypeScript & JavaScript",
+        "Tailwind CSS & Responsive Layouts",
+        "REST API & Backend Integration",
+        "Performance & Accessibility",
       ],
-      link: "ABOUT UI DESIGN",
+      link: "SEE MY WORK",
+      target: "#projects",
     },
     {
-      icon: <UserCheck className="w-8 h-8" />,
+      icon: <LayoutDashboard className="w-8 h-8" />,
       number: "02",
-      title: "UX Research & Design",
+      title: "Dashboards & Web Apps",
       description:
-        "Understanding user behaviors and needs to create seamless, intuitive, and accessible user journeys.",
+        "Turning complex data and workflows into clear, interactive dashboards, reporting views, and role-based interfaces users actually enjoy.",
       skills: [
-        "User Research",
-        "Information Architecture",
-        "User Personas",
-        "Journey Mapping",
-        "Usability Testing",
+        "Analytics & Reporting Dashboards",
+        "Interactive Charts & Data Views",
+        "Role-Based Views & Route Guards",
+        "Auth, Onboarding & Account Flows",
+        "Reusable Component Patterns",
       ],
-      link: "ABOUT UX DESIGN",
+      link: "SEE MY EXPERIENCE",
+      target: "#work-history",
     },
     {
-      icon: <Layers className="w-8 h-8" />,
+      icon: <PenTool className="w-8 h-8" />,
       number: "03",
-      title: "Prototyping & Wireframing",
+      title: "UI/UX-Driven Implementation",
       description:
-        "Translating concepts into interactive prototypes to visualize ideas and validate them before development.",
+        "Bridging design and code with a UI/UX background — translating Figma designs into pixel-perfect components and shaping interfaces around real user needs.",
       skills: [
-        "Low-fidelity Wireframes",
-        "High-fidelity Prototypes",
-        "Interactive Interactions",
-        "User Flows",
-        "Figma & Component Auto-layout",
+        "Figma to Production Code",
+        "Design Systems & Component Libraries",
+        "Wireframing & Prototyping",
+        "UX Research & Usability Testing",
+        "Functional QA & UI Polish",
       ],
-      link: "ABOUT PROTOTYPING",
+      link: "ABOUT ME",
+      target: "#about",
     },
   ];
 
-  const containerVariants: any = {
+  const handleScrollTo = (target: string) => {
+    document.querySelector(target)?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -61,7 +67,7 @@ const WhatICanDo = () => {
     },
   };
 
-  const itemVariants: any = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
@@ -85,7 +91,7 @@ const WhatICanDo = () => {
             What I Can Do
           </h2>
           <p className="text-lg md:text-xl text-slate-600 leading-relaxed">
-            Specialized UI/UX design services aimed at creating intuitive, engaging, and impactful digital experiences.
+            Frontend development backed by a UI/UX design background — interfaces that look great, work flawlessly, and scale with your product.
           </p>
         </motion.div>
 
@@ -140,7 +146,9 @@ const WhatICanDo = () => {
               </div>
 
               {/* CTA Link */}
-              <button className="flex items-center space-x-2 text-emerald-600 font-semibold text-sm group/link hover:text-emerald-700 transition-colors mt-auto">
+              <button
+                onClick={() => handleScrollTo(service.target)}
+                className="flex items-center space-x-2 text-emerald-600 font-semibold text-sm group/link hover:text-emerald-700 transition-colors mt-auto">
                 <span className="uppercase tracking-wide">{service.link}</span>
                 <ArrowRight className="w-4 h-4 transform group-hover/link:translate-x-1 transition-transform duration-300" />
               </button>

@@ -1,22 +1,36 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowDown, Download, ArrowRight } from "lucide-react";
 import {
   FaReact,
   FaFigma,
   FaHtml5,
   FaCss3Alt,
-  FaSketch,
+  FaGitAlt,
 } from "react-icons/fa";
 import {
   SiTypescript,
+  SiJavascript,
   SiNextdotjs,
   SiTailwindcss,
-  SiFramer,
   SiCanva,
+  SiMysql,
+  SiSupabase,
+  SiClerk,
 } from "react-icons/si";
 import InfiniteMarquee from "./InfiniteMarquee";
 import heroBg from "../assets/hero-bg.png";
 import resumePdf from "../assets/CV-EFRAIM-JAMES-2026.pdf";
+
+const ConvexIcon = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className={className}
+    aria-hidden="true"
+  >
+    <path d="M15.09 18.916c3.488-.387 6.776-2.246 8.586-5.348-.857 7.673-9.247 12.522-16.095 9.545a3.47 3.47 0 0 1-1.547-1.314c-1.539-2.417-2.044-5.492-1.318-8.282 2.077 3.584 6.3 5.78 10.374 5.399m-10.501-7.65c-1.414 3.266-1.475 7.092.258 10.24-6.1-4.59-6.033-14.41-.074-18.953a3.44 3.44 0 0 1 1.893-.707c2.825-.15 5.695.942 7.708 2.977-4.09.04-8.073 2.66-9.785 6.442m11.757-5.437C14.283 2.951 11.053.992 7.515.933c6.84-3.105 15.253 1.929 16.17 9.37a3.6 3.6 0 0 1-.334 2.02c-1.278 2.594-3.647 4.607-6.416 5.352 2.029-3.763 1.778-8.36-.589-11.847" />
+  </svg>
+);
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -61,17 +75,22 @@ const Hero = () => {
   };
 
   // Toolkit with logos - Optimized for white background
+  // Frontend stack first, then backend/services, then design tools
   const techStack = [
-    { name: "Figma", icon: FaFigma, color: "text-purple-600" },
-    { name: "Sketch", icon: FaSketch, color: "text-amber-600" },
-    { name: "Framer", icon: SiFramer, color: "text-pink-600" },
-    { name: "Canva", icon: SiCanva, color: "text-blue-600" },
     { name: "React", icon: FaReact, color: "text-blue-600" },
-    { name: "Tailwind CSS", icon: SiTailwindcss, color: "text-cyan-600" },
     { name: "Next.js", icon: SiNextdotjs, color: "text-slate-900" },
     { name: "TypeScript", icon: SiTypescript, color: "text-blue-700" },
+    { name: "JavaScript", icon: SiJavascript, color: "text-yellow-500" },
+    { name: "Tailwind CSS", icon: SiTailwindcss, color: "text-cyan-600" },
     { name: "HTML5", icon: FaHtml5, color: "text-orange-600" },
     { name: "CSS3", icon: FaCss3Alt, color: "text-blue-600" },
+    { name: "Git", icon: FaGitAlt, color: "text-[#F05032]" },
+    { name: "Supabase", icon: SiSupabase, color: "text-[#3FCF8E]" },
+    { name: "Convex", icon: ConvexIcon, color: "text-[#EE342F]" },
+    { name: "MySQL", icon: SiMysql, color: "text-[#4479A1]" },
+    { name: "Clerk", icon: SiClerk, color: "text-[#6C47FF]" },
+    { name: "Figma", icon: FaFigma, color: "text-purple-600" },
+    { name: "Canva", icon: SiCanva, color: "text-blue-600" },
   ];
 
   return (
@@ -100,26 +119,30 @@ const Hero = () => {
           
           {/* Top badge */}
           <div
-            className={`transition-all duration-1000 transform ${
+            className={`mb-6 transition-all duration-1000 transform ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-emerald-100 text-sm font-medium text-slate-600 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              React · TypeScript · UI/UX Background
+            </span>
           </div>
 
           {/* Main Heading */}
           <div
-            className={`max-w-4xl mx-auto mb-8 transition-all duration-1000 delay-200 ${
+            className={`max-w-5xl mx-auto mb-8 transition-all duration-1000 delay-200 ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-           <h1 className="text-7xl sm:text-6xl md:text-6xl lg:text-9xl font-bold sm:font-medium tracking-[-1px] md:tracking-[-2px] lg:tracking-[-4px] text-slate-900 leading-[1.1] mb-6">
-              UI/UX{" "}
-              <span className="font-bold sm:font-medium font-jakarta italic bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent tracking-[-1px] md:tracking-[-2px] lg:tracking-[-4px]">
-                    Designer
+            <h1 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-bold sm:font-medium tracking-[-1px] md:tracking-[-2px] lg:tracking-[-4px] text-slate-900 leading-[1.05] mb-6">
+              Frontend
+              <span className="block pb-2 font-bold sm:font-medium italic bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
+                Developer
               </span>
-          </h1>
+            </h1>
             <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed font-medium">
-              Transforming complex problems into elegant, user-centered digital experiences that drive engagement and success.
+              I build fast, responsive, and accessible web applications with React and TypeScript — bringing a UI/UX designer's eye to every interface, from pixel-perfect components to data-rich dashboards.
             </p>
           </div>
 

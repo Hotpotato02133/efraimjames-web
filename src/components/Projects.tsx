@@ -30,8 +30,8 @@ const Projects = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-lg md:text-xl text-slate-600 leading-relaxed"
           >
-            A curated selection of my work in web applications, UI/UX design, and digital experiences. 
-            Each project represents a commitment to quality and innovation.
+            A curated selection of web applications, platforms, and interfaces I've built and designed —
+            each one crafted with clean code and a strong eye for user experience.
           </motion.p>
         </div>
 
