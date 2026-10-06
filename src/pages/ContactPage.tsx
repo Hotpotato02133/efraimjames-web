@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Mail, Phone, MapPin, CheckCircle } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import emailjs from '@emailjs/browser';
+import { sendContactForm } from '../lib/sendContactForm';
 import contactPageImg from '../assets/contact-page-img.png';
 
 const Contact = () => {
@@ -18,11 +18,6 @@ const Contact = () => {
   const [error, setError] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
 
-  useEffect(() => {
-    // Initialize EmailJS
-    emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY');
-  }, []);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -37,15 +32,11 @@ const Contact = () => {
     setError('');
 
     try {
-      // Send email using EmailJS
-      const result = await emailjs.sendForm(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID',
-        import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID || 'template_orw5xze',
-        formRef.current!,
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY'
+      const honeypot = formRef.current?.elements.namedItem('botcheck');
+      await sendContactForm(
+        formData,
+        honeypot instanceof HTMLInputElement && honeypot.checked
       );
-
-      console.log('Email sent successfully:', result.text);
       setIsSubmitted(true);
       
       setTimeout(() => {
@@ -107,7 +98,6 @@ const Contact = () => {
                       placeholder="First name"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-sm"
                     />
-                    <input type="hidden" name="first_name" value={formData.firstName} />
                   </div>
                   <div>
                     <label htmlFor="lastName" className="block text-xs font-semibold text-gray-700 mb-2 tracking-wide">
@@ -123,7 +113,6 @@ const Contact = () => {
                       placeholder="Last name"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-sm"
                     />
-                    <input type="hidden" name="last_name" value={formData.lastName} />
                   </div>
                 </div>
 
@@ -142,7 +131,6 @@ const Contact = () => {
                     placeholder="you@company.com"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-sm"
                   />
-                  <input type="hidden" name="user_email" value={formData.email} />
                 </div>
 
                 {/* Phone */}
@@ -164,7 +152,6 @@ const Contact = () => {
                       className="flex-1 px-4 py-3 border border-gray-300 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-sm"
                     />
                   </div>
-                  <input type="hidden" name="user_phone" value={formData.phone} />
                   <p className="text-xs text-gray-500 mt-1">
                     (+63) 965 639 4996 • efraimjamestalucod88@gmail.com
                   </p>
@@ -185,8 +172,16 @@ const Contact = () => {
                     placeholder="What kind of project do you have in mind ..."
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none text-sm"
                   />
-                  <input type="hidden" name="project_details" value={formData.project} />
                 </div>
+
+                {/* Honeypot: bots fill this in, people never see it */}
+                <input
+                  type="checkbox"
+                  name="botcheck"
+                  className="hidden"
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
 
                 {/* Privacy Policy */}
                 <div className="text-sm text-gray-600">

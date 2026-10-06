@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Mail, Phone, MapPin, Send, CheckCircle } from "lucide-react";
-import emailjs from "@emailjs/browser";
+import { sendContactForm } from "../lib/sendContactForm";
 import contactBg from "../assets/contact-bg.png";
 
 const Contact = () => {
@@ -19,9 +19,6 @@ const Contact = () => {
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    // Initialize EmailJS
-    emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY");
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -54,15 +51,11 @@ const Contact = () => {
     setError("");
 
     try {
-      // Send email using EmailJS - now using the same template as ContactPage
-      const result = await emailjs.sendForm(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID",
-        import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID || "template_orw5xze",
-        formRef.current!,
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY"
+      const honeypot = formRef.current?.elements.namedItem("botcheck");
+      await sendContactForm(
+        formData,
+        honeypot instanceof HTMLInputElement && honeypot.checked
       );
-
-      console.log("Email sent successfully:", result.text);
       setIsSubmitted(true);
 
       setTimeout(() => {
@@ -205,11 +198,6 @@ const Contact = () => {
                     className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300 text-sm sm:text-base"
                     placeholder="John"
                   />
-                  <input
-                    type="hidden"
-                    name="first_name"
-                    value={formData.firstName}
-                  />
                 </div>
                 <div>
                   <label
@@ -227,11 +215,6 @@ const Contact = () => {
                     required
                     className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300 text-sm sm:text-base"
                     placeholder="Doe"
-                  />
-                  <input
-                    type="hidden"
-                    name="last_name"
-                    value={formData.lastName}
                   />
                 </div>
               </div>
@@ -253,7 +236,6 @@ const Contact = () => {
                   className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300 text-sm sm:text-base"
                   placeholder="john@example.com"
                 />
-                <input type="hidden" name="user_email" value={formData.email} />
               </div>
 
               <div className="mb-4 sm:mb-6">
@@ -279,7 +261,6 @@ const Contact = () => {
                     className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-50 border border-gray-300 rounded-r-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300 text-sm sm:text-base"
                   />
                 </div>
-                <input type="hidden" name="user_phone" value={formData.phone} />
               </div>
 
               <div className="mb-4 sm:mb-6">
@@ -299,12 +280,16 @@ const Contact = () => {
                   className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300 resize-none text-sm sm:text-base"
                   placeholder="Tell me about your project..."
                 ></textarea>
-                <input
-                  type="hidden"
-                  name="project_details"
-                  value={formData.project}
-                />
               </div>
+
+              {/* Honeypot: bots fill this in, people never see it */}
+              <input
+                type="checkbox"
+                name="botcheck"
+                className="hidden"
+                tabIndex={-1}
+                autoComplete="off"
+              />
 
               <button
                 type="submit"
