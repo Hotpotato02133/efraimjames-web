@@ -152,12 +152,15 @@ Rendered inside `bg-stone-50 text-gray-900` with a fixed, faint green dot-patter
 - Staggered entrance via an `isVisible` flag set after 300 ms and Tailwind `transition-all delay-*` classes. Bouncing `ArrowDown` scroll indicator.
 
 ### `WhatICanDo.tsx` (services)
-Three Framer-Motion stagger-revealed cards, each with a Lucide icon, number, title, description, 5 bullet skills, and a CTA button that smooth-scrolls to its `target` section:
-1. **Frontend Development** (`Code2`) — React & Next.js, TypeScript & JavaScript, Tailwind CSS & Responsive Layouts, REST API & Backend Integration, Performance & Accessibility → `#projects`
-2. **Dashboards & Web Apps** (`LayoutDashboard`) — Analytics & Reporting Dashboards, Interactive Charts & Data Views, Role-Based Views & Route Guards, Auth/Onboarding & Account Flows, Reusable Component Patterns → `#work-history`
-3. **UI/UX-Driven Implementation** (`PenTool`) — Figma to Production Code, Design Systems & Component Libraries, Wireframing & Prototyping, UX Research & Usability Testing, Functional QA & UI Polish → `#about`
+Aceternity-style **bento grid** (`components/ui/bento-grid.tsx`: `BentoGrid` + `BentoGridItem`, with a cursor-following emerald spotlight driven by Framer `useMotionTemplate`; `cn()` helper in `src/lib/utils.ts` using `clsx` + `tailwind-merge`). Six cards, each with an animated mini-visual, Lucide icon, number, title, description and a CTA that smooth-scrolls to its `target`; wide cards use `lg:col-span-2` (zigzag 2/1, 1/2, 2/1):
+1. **Frontend Engineering** — code-window visual → `#projects`
+2. **Dashboards & Data UIs** — animated role-tab bar chart → `#work-history`
+3. **Design-to-Code** — Figma → component visual → `#about`
+4. **API & Backend Integration** — REST, Supabase, Clerk, MySQL tiles → `#work-history`
+5. **Performance & Accessibility** — checklist visual → `#projects`
+6. **AI-Assisted Development** — Claude Code / Codex terminal visual → `#contact`
 
-Hover: top emerald→teal bar scales in, icon tile turns solid emerald. Variants are typed with Framer Motion's `Variants`.
+The section also has a faint masked grid backdrop. Keep copy aligned with the Hero/WorkHistory content.
 
 ### `Projects.tsx` (Featured Projects)
 - Filters `projects` by a hard-coded title list: **Facundo Booking, Leafly, Broadheader, OFBank Mobile**.
@@ -174,18 +177,18 @@ Large, faint uppercase **"LET'S TALK +++"** text repeated 6×, scrolling via `In
 "About Me" heading, two paragraphs (a Frontend Developer with a UI/UX background who builds React/TypeScript dashboards and web apps), and tag pills: Frontend Development, React & TypeScript, Dashboards & Web Apps, UI/UX Design.
 
 ### `WorkHistory.tsx`
-Vertical timeline with a scroll-linked gradient line (`useScroll` on the timeline container → `useSpring` → `scaleY`, transform-only), cards alternating left/right on `md+` (content always left-aligned), single column on mobile. Cards fade up once in view.
+Aceternity-style timeline built from `components/ui/`: **TracingBeam** (`tracing-beam.tsx`, scroll-linked SVG beam + glowing dot via `useScroll`/`useSpring`, height tracked with `ResizeObserver`), **SpotlightCard** (`spotlight-card.tsx`, cursor-following emerald glow) and **AnimatedTooltip** (`animated-tooltip.tsx`, springy name tooltip over linked logo tiles). Layout: single column; on `md+` each entry is a two-column row — a rail with the period pill + location, and a spotlight card with role, company, description, projects and skill tags. Cards fade up once in view.
 
-Each entry is an `Experience` (typed in the file): `period`, `role`, `company`, `location`, `description` (a single short paragraph — kept the same length across all entries), optional `projects` (`{ name, url, description }`), and `skills` tags.
+Each entry is an `Experience` (typed in the file): `period`, `role`, `company`, `location`, `description` (a single short paragraph — kept the same length across all entries), optional `projects` (`TooltipLink` = `name`, `url`, `logo` imported from `src/assets`, optional `logoScale` to crop padded logos) and `skills` tags.
 
-Only entries with `projects` render a small "N Projects" pill under the company/location row. Hovering or focusing that pill (`group/emp` + `group-hover/focus-within`) smoothly expands a panel of project link-cards below it using a CSS `grid-template-rows: 0fr → 1fr` transition (no layout jump, no JS state); the chevron on the pill rotates in sync. This keeps the always-visible card the same shape across entries and reveals project detail on demand instead of inline.
+Entries with `projects` always show a "Projects" label and a row of clickable logo tiles (opens the live site in a new tab); hovering a logo shows its name in the animated tooltip.
 
 | Period | Role | Company | Location | Tags |
 |---|---|---|---|---|
-| Mar 2026 – Sep 2026 | Frontend Developer | Undisclosed Group / Social Intelligence Lab — hover reveals Yolk (useyolk.com), Inspo Web (findinspo.co) | Remote · New York, USA | Frontend Dev, Dashboards, Data Visualization, Role-Based UI, QA Testing, Git |
-| Nov 2024 – Feb 2026 | UI/UX Designer | Broadheader | Remote · Angeles City, Pampanga, PH | UI/UX, Frontend Dev, React / Vite, REST APIs |
+| Mar 2026 – Sep 2026 | Frontend Developer | Undisclosed Group / Social Intelligence Lab — hover reveals Yolk (useyolk.com), Inspo Web (app.findinspo.co) | Remote · New York, USA | Frontend Dev, Dashboards, Data Visualization, Role-Based UI, QA Testing, Git |
+| Nov 2024 – Feb 2026 | UI/UX Designer | Broadheader — hover reveals Broadheader (broadheader.com), Facundo (fcvndo.com) | Remote · Angeles City, Pampanga, PH | UI/UX, Frontend Dev, React / Vite, REST APIs |
 | Aug 2024 – Jan 2025 | Web Designer | Business Partner Group | Remote · Brisbane, Australia | Web Design, UX Writing, Frontend Dev, QA |
-| Oct 2023 – Sep 2024 | Frontend Developer | ORO Business Group | Onsite · Zamboanga City, PH | JavaScript, React, Git, Agile |
+| Oct 2023 – Sep 2024 | Frontend Developer | ORO Business Group — hover reveals ORO Admin (oroadmin.web.app) | Onsite · Zamboanga City, PH | JavaScript, React, Git, Agile |
 
 ### `Contact.tsx` (inline section on `/`)
 - Reveal driven by an `IntersectionObserver` (threshold 0.1) rather than Framer Motion.
@@ -334,7 +337,7 @@ Without them the code falls back to placeholder strings (`YOUR_PUBLIC_KEY`, `YOU
 1. **Framer Motion scroll reveal** (most sections): `initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}` with incremental `delay`.
 2. **Stagger variants** (`WhatICanDo`): container `staggerChildren: 0.2`, items fade up 30px.
 3. **Tailwind transition + state flag** (`Hero`, `Contact`): toggle `opacity-0 translate-y-8` → `opacity-100 translate-y-0` with `duration-1000 delay-*`.
-4. **Scroll-linked** (`WorkHistory`): `useScroll`/`useTransform` drives the timeline fill height.
+4. **Scroll-linked** (`WorkHistory`): `TracingBeam` (`useScroll`/`useTransform`/`useSpring`) drives the timeline beam.
 5. **Infinite marquee** (`InfiniteMarquee`).
 
 ---

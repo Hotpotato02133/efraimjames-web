@@ -125,7 +125,7 @@ const Hero = () => {
           >
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-emerald-100 text-sm font-medium text-slate-600 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              React · TypeScript · UI/UX Background
+              Hello! I'm Efraim James
             </span>
           </div>
 
@@ -142,7 +142,7 @@ const Hero = () => {
               </span>
             </h1>
             <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed font-medium">
-              I build fast, responsive, and accessible web applications with React and TypeScript — bringing a UI/UX designer's eye to every interface, from pixel-perfect components to data-rich dashboards.
+            I build fast, responsive web apps with React and TypeScript, combining strong UI/UX with AI-driven development using Claude Code and Codex.
             </p>
           </div>
 

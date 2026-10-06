@@ -28,13 +28,13 @@ const About = () => {
           >
             <p>
               I'm a Frontend Developer with a background in UI/UX design. I build responsive,
-              accessible web applications with React and TypeScript — from creator analytics
+              accessible web applications with React and TypeScript from creator analytics
               dashboards and reporting tools to booking platforms and marketing sites.
             </p>
             <p>
               Having designed interfaces before building them, I bring a designer's eye to the
               code: clear information hierarchy, reusable component patterns, and polished
-              interactions — backed by thorough QA and close collaboration with product and
+              interactions backed by thorough QA and close collaboration with product and
               engineering teams.
             </p>
           </motion.div>

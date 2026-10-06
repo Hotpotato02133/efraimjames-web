@@ -109,7 +109,8 @@ body {
 /* Prevent horizontal scrolling issues on mobile */
 .container {
   max-width: 100%;
-  overflow-x: hidden;
+  /* `clip` (not `hidden`) so the container doesn't become a vertical scroll container */
+  overflow-x: clip;
 }
 
 /* Better touch scrolling for mobile */
@@ -298,7 +299,8 @@ textarea {
 /* Prevent horizontal overflow */
 .container {
   max-width: 100%;
-  overflow-x: hidden;
+  /* `clip` (not `hidden`) so the container doesn't become a vertical scroll container */
+  overflow-x: clip;
 }
 
 /* Mobile-specific text sizing */

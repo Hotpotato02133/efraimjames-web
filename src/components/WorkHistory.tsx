@@ -1,12 +1,13 @@
-import { useRef } from 'react';
-import { motion, useScroll, useSpring } from 'framer-motion';
-import { Briefcase, Calendar, MapPin, ArrowUpRight, ChevronDown, Layers } from 'lucide-react';
-
-interface ExperienceProject {
-  name: string;
-  url: string;
-  description: string;
-}
+import { motion } from 'framer-motion';
+import { Briefcase, Calendar, MapPin, Layers } from 'lucide-react';
+import { TracingBeam } from './ui/tracing-beam';
+import { SpotlightCard } from './ui/spotlight-card';
+import { AnimatedTooltip, type TooltipLink } from './ui/animated-tooltip';
+import yolkLogo from '../assets/yolk-logo.png';
+import inspoLogo from '../assets/inspo-logo.png';
+import broadheaderLogo from '../assets/broadheader-logo.png';
+import facundoLogo from '../assets/facundo-logo.png';
+import oroLogo from '../assets/oro-logo.png';
 
 interface Experience {
   id: number;
@@ -15,7 +16,7 @@ interface Experience {
   company: string;
   location: string;
   description: string;
-  projects?: ExperienceProject[];
+  projects?: TooltipLink[];
   skills: string[];
 }
 
@@ -32,12 +33,13 @@ const WorkHistory = () => {
         {
           name: "Yolk",
           url: "https://useyolk.com/",
-          description: "Creator marketplace platform with role-based dashboards for agencies, clients, and creators.",
+          logo: yolkLogo,
         },
         {
           name: "Inspo Web",
-          url: "https://findinspo.co/",
-          description: "AI-powered social-media analytics dashboard for tracking accounts and trends.",
+          url: "https://app.findinspo.co/",
+          logo: inspoLogo,
+          logoScale: 1.9,
         },
       ],
       skills: ["Frontend Dev", "Dashboards", "Data Visualization", "Role-Based UI", "QA Testing", "Git"],
@@ -49,6 +51,20 @@ const WorkHistory = () => {
       company: "Broadheader",
       location: "Remote · Angeles City, Pampanga, PH",
       description: "Led the design and frontend development for diverse projects including trading platforms and booking services. Implemented UI components, integrated REST APIs, and maintained clean code documentation.",
+      projects: [
+        {
+          name: "Broadheader",
+          url: "https://www.broadheader.com/",
+          logo: broadheaderLogo,
+          logoScale: 1.7,
+        },
+        {
+          name: "Facundo",
+          url: "https://www.fcvndo.com/",
+          logo: facundoLogo,
+          logoScale: 1.45,
+        },
+      ],
       skills: ["UI/UX", "Frontend Dev", "React / Vite", "REST APIs"],
     },
     {
@@ -67,26 +83,26 @@ const WorkHistory = () => {
       company: "ORO Business Group",
       location: "Onsite · Zamboanga City, PH",
       description: "Collaborated in an agile environment to build and optimize frontend features. Expanded technical skills in JavaScript design patterns and actively participated in code reviews.",
+      projects: [
+        {
+          name: "ORO Admin",
+          url: "https://oroadmin.web.app/",
+          logo: oroLogo,
+        },
+      ],
       skills: ["JavaScript", "React", "Git", "Agile"],
     }
   ];
 
-  // Track progress across the timeline itself (not the whole section) so the
-  // line fills in step with the cards, and smooth it with a spring.
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: timelineRef,
-    offset: ["start 75%", "end 60%"]
-  });
-  const lineProgress = useSpring(scrollYProgress, {
-    stiffness: 120,
-    damping: 30,
-    restDelta: 0.001
-  });
-
   return (
     <section id="work-history" className="py-24 lg:py-32 bg-white relative overflow-hidden">
-      <div className="container mx-auto px-4 md:px-6">
+      {/* Faint grid backdrop, matching "What I Can Do" */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 [background-size:40px_40px] [background-image:linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
+      />
+
+      <div className="container mx-auto px-4 md:px-6 relative">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -103,136 +119,64 @@ const WorkHistory = () => {
           </p>
         </motion.div>
 
-        {/* Timeline Container */}
-        <div className="max-w-5xl mx-auto relative" ref={timelineRef}>
-          {/* Vertical Line - scaled with a transform instead of animating height */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-slate-100 md:-translate-x-1/2">
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-b from-emerald-400 to-teal-600 origin-top will-change-transform"
-              style={{ scaleY: lineProgress }}
-            />
-          </div>
-
-          <div className="space-y-12 md:space-y-16">
-            {experiences.map((exp, index) => {
-              const isEven = index % 2 === 0;
-
-              return (
-                <div key={exp.id} className="relative flex flex-col md:flex-row items-start w-full group">
-
-                  {/* Timeline Dot */}
-                  <div className="absolute left-4 md:left-1/2 top-7 w-4 h-4 rounded-full bg-white border-4 border-emerald-500 -translate-x-1/2 z-10 group-hover:scale-125 transition-transform duration-300 shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
-
-                  {/* Content Container (Left / Right Alternating for Desktop) */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.15 }}
-                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                    className={`w-full md:w-1/2 pl-12 ${isEven ? 'md:pl-0 md:pr-12 lg:pr-16' : 'md:ml-auto md:pl-12 lg:pl-16'}`}
-                  >
-                    {/* Background Card */}
-                    <div className="bg-stone-50 rounded-2xl p-6 lg:p-8 shadow-sm hover:shadow-xl border border-slate-100 transition-[transform,box-shadow] duration-300 group-hover:-translate-y-1 relative overflow-hidden">
-
-                      {/* Decorative Background Blob */}
-                      <div className="absolute -right-10 -top-10 w-32 h-32 bg-emerald-50 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-                      <div className="relative z-10 flex flex-col items-start gap-2 mb-4">
-                        {/* Period Tag */}
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-sm font-medium">
-                          <Calendar className="w-4 h-4" />
-                          <span>{exp.period}</span>
-                        </div>
-
-                        {/* Role & Company */}
-                        <h3 className="text-2xl font-bold text-slate-900 mt-2">{exp.role}</h3>
-                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-slate-500 font-medium">
-                          <span className="flex items-center gap-2">
-                            <Briefcase className="w-4 h-4 flex-shrink-0" />
-                            {exp.company}
-                          </span>
-                          <span className="flex items-center gap-2 text-sm">
-                            <MapPin className="w-4 h-4 flex-shrink-0" />
-                            {exp.location}
-                          </span>
-                        </div>
-
-                        {/* Projects reveal - hover or focus the badge to preview */}
-                        {exp.projects && (
-                          <div className="group/emp w-full mt-1">
-                            <button
-                              type="button"
-                              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold hover:bg-emerald-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 transition-colors duration-200"
-                            >
-                              <Layers className="w-3.5 h-3.5" />
-                              {exp.projects.length} {exp.projects.length === 1 ? 'Project' : 'Projects'}
-                              <ChevronDown className="w-3 h-3 transition-transform duration-300 group-hover/emp:rotate-180 group-focus-within/emp:rotate-180" />
-                            </button>
-
-                            <div className="grid grid-rows-[0fr] group-hover/emp:grid-rows-[1fr] group-focus-within/emp:grid-rows-[1fr] transition-[grid-template-rows] duration-300 ease-out">
-                              <div className="overflow-hidden">
-                                <div className="grid gap-2.5 pt-3">
-                                  {exp.projects.map((project) => (
-                                    <a
-                                      key={project.name}
-                                      href={project.url}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="group/project block p-3.5 bg-white border border-slate-200 rounded-xl hover:border-emerald-300 hover:shadow-md transition-[border-color,box-shadow] duration-300"
-                                    >
-                                      <div className="flex items-center justify-between gap-2 mb-1">
-                                        <span className="font-semibold text-slate-900 text-sm group-hover/project:text-emerald-600 transition-colors duration-300">
-                                          {project.name}
-                                        </span>
-                                        <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover/project:text-emerald-600 group-hover/project:translate-x-0.5 group-hover/project:-translate-y-0.5 transition-[color,transform] duration-300" />
-                                      </div>
-                                      <p className="text-xs text-slate-500 leading-relaxed">
-                                        {project.description}
-                                      </p>
-                                    </a>
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Description */}
-                      <p className="text-slate-600 leading-relaxed mb-6 relative z-10">
-                        {exp.description}
-                      </p>
-
-                      {/* Skills/Tags */}
-                      <div className="flex flex-wrap gap-2 relative z-10">
-                        {exp.skills.map((skill, sIdx) => (
-                          <span
-                            key={sIdx}
-                            className="px-3 py-1 text-xs font-medium bg-white text-slate-600 border border-slate-200 rounded-lg group-hover:border-emerald-200 group-hover:text-emerald-700 transition-colors"
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-
-                    </div>
-                  </motion.div>
+        <TracingBeam>
+          <ol className="space-y-12 md:space-y-16 pl-10 md:pl-16">
+            {experiences.map((exp) => (
+              <motion.li
+                key={exp.id}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                className="grid gap-4 md:grid-cols-[200px_1fr] md:gap-10"
+              >
+                {/* Period + location rail */}
+                <div className="md:sticky md:top-28 md:self-start space-y-2">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
+                    <Calendar className="h-4 w-4" />
+                    <span>{exp.period}</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-sm font-medium text-slate-500">
+                    <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                    {exp.location}
+                  </div>
                 </div>
-              );
-            })}
-          </div>
-        </div>
 
-        {/* Closing Element */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex justify-center mt-20"
-        >
-          <div className="w-3 h-3 rounded-full bg-slate-300" />
-        </motion.div>
+                {/* Card */}
+                <SpotlightCard className="p-6 lg:p-8">
+                  <h3 className="text-2xl font-bold text-slate-900">{exp.role}</h3>
+                  <p className="mt-1 mb-5 flex items-center gap-2 font-medium text-slate-500">
+                    <Briefcase className="h-4 w-4 flex-shrink-0" />
+                    {exp.company}
+                  </p>
+
+                  <p className="mb-6 leading-relaxed text-slate-600">{exp.description}</p>
+
+                  {exp.projects && (
+                    <div className="mb-6">
+                      <p className="mb-3 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        <Layers className="h-3.5 w-3.5" />
+                        {exp.projects.length === 1 ? 'Project' : 'Projects'}
+                      </p>
+                      <AnimatedTooltip items={exp.projects} />
+                    </div>
+                  )}
+
+                  <div className="flex flex-wrap gap-2 border-t border-slate-100 pt-5">
+                    {exp.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="rounded-lg border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 transition-colors group-hover:border-emerald-200 group-hover:text-emerald-700"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </SpotlightCard>
+              </motion.li>
+            ))}
+          </ol>
+        </TracingBeam>
       </div>
     </section>
   );
