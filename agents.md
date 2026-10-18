@@ -9,10 +9,10 @@ Context for AI coding agents working in this repository. Everything below was ve
 | | |
 |---|---|
 | **Name** | Efraim James Portfolio (`package.json` name is still the template default `vite-react-typescript-starter`, version `0.0.0`) |
-| **Owner** | Efraim James Talucod — Frontend Developer with a UI/UX design background, Zamboanga City, Philippines |
+| **Owner** | Efraim James Talucod — Software Engineer with a UI/UX design background, Zamboanga City, Philippines |
 | **Type** | Personal portfolio — static single-page app (SPA) with client-side routing |
 | **Stack** | React 18 + TypeScript + Vite 6 + Tailwind CSS 3 + Framer Motion |
-| **Positioning** | Frontend Developer first, UI/UX design as a supporting strength. Hero headline is **"Frontend Developer"**; page `<title>` is "Efraim James - Frontend Developer". Keep new copy in this voice. |
+| **Positioning** | Software Engineer first, UI/UX design as a supporting strength. Hero headline is **"Software Engineer"**; page `<title>` is "Efraim James - Software Engineer". Keep new copy in this voice. |
 | **Default branch** | `master` |
 
 The site presents: a hero with toolkit marquee and resume download, service offerings, featured and other projects (each with its own detail page), an about blurb, a work-history timeline, and a contact form wired to EmailJS.
@@ -174,7 +174,7 @@ The section also has a faint masked grid backdrop. Keep copy aligned with the He
 Large, faint uppercase **"LET'S TALK +++"** text repeated 6×, scrolling via `InfiniteMarquee` (speed 40). Purely decorative.
 
 ### `About.tsx`
-"About Me" heading, two paragraphs (a Frontend Developer with a UI/UX background who builds React/TypeScript dashboards and web apps), and tag pills: Frontend Development, React & TypeScript, Dashboards & Web Apps, UI/UX Design.
+"About Me" heading, two paragraphs (a Software Engineer with a UI/UX background who builds React/TypeScript dashboards and web apps), and tag pills: Frontend Development, React & TypeScript, Dashboards & Web Apps, UI/UX Design.
 
 ### `WorkHistory.tsx`
 Aceternity-style timeline built from `components/ui/`: **TracingBeam** (`tracing-beam.tsx`, scroll-linked SVG beam + glowing dot via `useScroll`/`useSpring`, height tracked with `ResizeObserver`), **SpotlightCard** (`spotlight-card.tsx`, cursor-following emerald glow) and **AnimatedTooltip** (`animated-tooltip.tsx`, springy name tooltip over linked logo tiles). Layout: single column; on `md+` each entry is a two-column row — a rail with the period pill + location, and a spotlight card with role, company, description, projects and skill tags. Cards fade up once in view.
@@ -185,10 +185,10 @@ Entries with `projects` always show a "Projects" label and a row of clickable lo
 
 | Period | Role | Company | Location | Tags |
 |---|---|---|---|---|
-| Mar 2026 – Sep 2026 | Frontend Developer | Undisclosed Group / Social Intelligence Lab — hover reveals Yolk (useyolk.com), Inspo Web (app.findinspo.co) | Remote · New York, USA | Frontend Dev, Dashboards, Data Visualization, Role-Based UI, QA Testing, Git |
+| Mar 2026 – Sep 2026 | Software Engineer | Undisclosed Group / Social Intelligence Lab — hover reveals Yolk (useyolk.com), Inspo Web (app.findinspo.co) | Remote · New York, USA | Frontend Dev, Dashboards, Data Visualization, Role-Based UI, QA Testing, Git |
 | Nov 2024 – Feb 2026 | UI/UX Designer | Broadheader — hover reveals Broadheader (broadheader.com), Facundo (fcvndo.com) | Remote · Angeles City, Pampanga, PH | UI/UX, Frontend Dev, React / Vite, REST APIs |
 | Aug 2024 – Jan 2025 | Web Designer | Business Partner Group | Remote · Brisbane, Australia | Web Design, UX Writing, Frontend Dev, QA |
-| Oct 2023 – Sep 2024 | Frontend Developer | ORO Business Group — hover reveals ORO Admin (oroadmin.web.app) | Onsite · Zamboanga City, PH | JavaScript, React, Git, Agile |
+| Oct 2023 – Sep 2024 | Software Engineer | ORO Business Group — hover reveals ORO Admin (oroadmin.web.app) | Onsite · Zamboanga City, PH | JavaScript, React, Git, Agile |
 
 ### `Contact.tsx` (inline section on `/`)
 - Reveal driven by an `IntersectionObserver` (threshold 0.1) rather than Framer Motion.
