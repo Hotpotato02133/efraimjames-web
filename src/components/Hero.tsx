@@ -136,9 +136,9 @@ const Hero = () => {
             }`}
           >
             <h1 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-bold sm:font-medium tracking-[-1px] md:tracking-[-2px] lg:tracking-[-4px] text-slate-900 leading-[1.05] mb-6">
-              Frontend
+              Software
               <span className="block pb-2 font-bold sm:font-medium italic bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
-                Developer
+                Engineer
               </span>
             </h1>
             <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed font-medium">
