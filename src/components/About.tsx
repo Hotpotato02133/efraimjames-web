@@ -27,7 +27,7 @@ const About = () => {
             className="space-y-6 text-slate-600 text-lg leading-relaxed"
           >
             <p>
-              I'm a Software Engineer with a background in UI/UX design. I build responsive,
+              I'm a Frontend Engineer with a background in UI/UX design. I build responsive,
               accessible web applications with React and TypeScript from creator analytics
               dashboards and reporting tools to booking platforms and marketing sites.
             </p>

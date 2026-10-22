@@ -25,7 +25,7 @@ const WorkHistory = () => {
     {
       id: 1,
       period: "Mar 2026 - Sep 2026",
-      role: "Software Engineer",
+      role: "Frontend Engineer",
       company: "Undisclosed Group / Social Intelligence Lab",
       location: "Remote · New York, USA",
       description: "Built and maintained frontend interfaces for two social-media intelligence platforms, including creator analytics, performance dashboards, and role-based reporting views. Collaborated closely with product and engineering through code review and QA to ship polished, reliable features.",
@@ -79,7 +79,7 @@ const WorkHistory = () => {
     {
       id: 4,
       period: "Oct 2023 - Sep 2024",
-      role: "Software Engineer",
+      role: "Software Developer",
       company: "ORO Business Group",
       location: "Onsite · Zamboanga City, PH",
       description: "Collaborated in an agile environment to build and optimize frontend features. Expanded technical skills in JavaScript design patterns and actively participated in code reviews.",

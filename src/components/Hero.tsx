@@ -12,7 +12,6 @@ import {
   SiJavascript,
   SiNextdotjs,
   SiTailwindcss,
-  SiCanva,
   SiMysql,
   SiSupabase,
   SiClerk,
@@ -90,7 +89,6 @@ const Hero = () => {
     { name: "MySQL", icon: SiMysql, color: "text-[#4479A1]" },
     { name: "Clerk", icon: SiClerk, color: "text-[#6C47FF]" },
     { name: "Figma", icon: FaFigma, color: "text-purple-600" },
-    { name: "Canva", icon: SiCanva, color: "text-blue-600" },
   ];
 
   return (
@@ -125,7 +123,7 @@ const Hero = () => {
           >
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-emerald-100 text-sm font-medium text-slate-600 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              Hello! I'm Efraim James
+              Available for Work
             </span>
           </div>
 
@@ -136,7 +134,7 @@ const Hero = () => {
             }`}
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold sm:font-medium tracking-tight text-slate-900 leading-[1.1] mb-6 whitespace-nowrap">
-              Software{" "}
+              Frontend{" "}
               <span className="inline pb-2 font-bold sm:font-medium italic bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
                 Engineer
               </span>

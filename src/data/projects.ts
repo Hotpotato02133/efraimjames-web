@@ -91,7 +91,7 @@ export const projects: Project[] = [
     link: 'https://orowonder.vercel.app/',
     year: '2024',
     client: 'ORO Analytics',
-    role: 'Software Engineer'
+    role: 'Frontend Engineer'
   },
   {
     id: 'buenas-coffee',
@@ -117,7 +117,7 @@ export const projects: Project[] = [
     link: 'https://car-rental-alpha-bice.vercel.app/',
     year: '2023',
     client: 'Car Rental PH',
-    role: 'Software Engineer'
+    role: 'Frontend Developer'
   },
   {
     id: 'hyde-learning',
@@ -143,7 +143,7 @@ export const projects: Project[] = [
     link: 'https://react-landing-page-or-ov2.vercel.app/',
     year: '2023',
     client: 'ORO Technologies',
-    role: 'Software Engineer'
+    role: 'Software Developer'
   },
   {
     id: 'ofbank-mobile',
