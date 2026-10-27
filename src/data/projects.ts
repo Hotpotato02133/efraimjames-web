@@ -31,41 +31,54 @@ export const projects: Project[] = [
   {
     id: 'facundo',
     title: 'Facundo Booking',
-    description: 'A focused booking reservation web app designed for Mr. Facundo, a well-known business owner in the Philippines.',
-    fullDescription: 'Facundo is a specialized booking reservation web application tailored specifically for Mr. Facundo, a prominent business owner in the Philippines. The platform features an exclusive and premium design that reflects the high standards of his services, providing a seamless and user-friendly experience for his loyal clients to book appointments with ease.',
+    description: 'A focused fullstack booking reservation web app developed for Mr. Facundo, a well-known business owner in the Philippines.',
+    fullDescription: 'Facundo is a specialized fullstack booking reservation web application tailored specifically for Mr. Facundo, a prominent business owner in the Philippines. Built as a comprehensive fullstack platform, it features a robust booking engine paired with a polished, high-performance interface that reflects the high standards of his services, providing a seamless and reliable reservation experience for clients.',
     image: facundoProject,
-    tags: ['Web App', 'UI/UX Design', 'Booking System', 'Premium Design'],
-    category: 'UI/UX Design',
-    link: '#',
+    tags: ['React', 'ShadCN', 'TailwindCSS', 'Supabase', 'Axios', 'Claude Code', 'Codex', 'Clerk Auth'],
+    category: 'Fullstack Project',
+    link: 'https://www.fcvndo.com/',
     year: '2024',
     client: 'Mr. Facundo',
-    role: 'UI/UX Designer'
-  },
-  {
-    id: 'leafly',
-    title: 'Leafly',
-    description: 'A comprehensive booking platform where businesses can list their services for users to book salon, spa, and barber appointments.',
-    fullDescription: 'Leafly is an all-in-one booking reservation platform designed to connect users with various local wellness and beauty businesses. Salons, spas, and barbershops can easily list their services on the platform, allowing users to browse, compare, and instantly book the services they desire. The project focused on creating an intuitive multi-tenant structure with a clean, inviting aesthetic.',
-    image: leaflyProject,
-    tags: ['Multitenant', 'UI/UX Design', 'Booking Platform', 'Web App'],
-    category: 'UI/UX Design',
-    link: '#',
-    year: '2024',
-    client: 'Leafly Business Module',
-    role: 'UI/UX Designer'
+    role: 'Frontend Developer'
   },
   {
     id: 'broadheader',
     title: 'Broadheader',
-    description: 'A comprehensive website builder platform with intuitive drag-and-drop functionality, designed to empower businesses to create professional websites seamlessly.',
-    fullDescription: 'Broadheader is a powerful website builder platform that empowers businesses to create professional websites without coding knowledge. As the lead UI/UX Designer, I crafted an intuitive drag-and-drop interface and an extensive library of customizable templates and components. The design process heavily focused on creating a frictionless user experience, ensuring that complex website building tasks become accessible and visually cohesive for end-users.',
+    description: 'A comprehensive fullstack website builder platform with intuitive drag-and-drop functionality, built to empower businesses to create professional websites seamlessly.',
+    fullDescription: 'Broadheader is a powerful fullstack website builder platform that empowers businesses to create professional websites without coding knowledge. As the Frontend Developer, I engineered the intuitive drag-and-drop interface, integrated dynamic REST APIs, and built a modular library of customizable components and templates. The development heavily focused on delivering a frictionless, high-performance experience, ensuring complex site-building workflows are seamless and responsive for end-users.',
     image: broadheaderProject,
-    tags: ['UI/UX Design', 'Product Design', 'Figma', 'Prototyping', 'User Research'],
-    category: 'UI/UX Design',
+    tags: ['React', 'TypeScript', 'TailwindCSS', 'Vite', 'REST APIs', 'Fullstack Development'],
+    category: 'Fullstack Project',
     link: 'https://www.broadheader.com/',
     year: '2024',
     client: 'Broadheader Technologies',
+    role: 'Frontend Developer'
+  },
+  {
+    id: 'ofbank-mobile',
+    title: 'OFBank Mobile',
+    description: 'A comprehensive mobile banking app redesign focusing on user experience and financial accessibility.',
+    fullDescription: 'OFBank Mobile is a comprehensive redesign of a mobile banking application with a focus on user experience and financial accessibility. The project involved reimagining the entire user journey, from onboarding to daily transactions. The new design emphasizes security, ease of use, and accessibility for users of all technical backgrounds.',
+    image: service3a,
+    tags: ['Mobile App', 'Banking', 'UI/UX', 'Redesign'],
+    category: 'UI/UX Design',
+    link: 'https://www.behance.net/gallery/180193513/OFBank-Mobile-App-Redesign',
+    year: '2023',
+    client: 'OFBank',
     role: 'UI/UX Designer'
+  },
+  {
+    id: 'travelista',
+    title: 'Travelista',
+    description: 'A travel platform UI design with immersive visuals and user-friendly navigation for travel enthusiasts.',
+    fullDescription: 'Travelista is a travel platform UI design that brings wanderlust to life through immersive visuals and user-friendly navigation. The design captures the excitement of travel while providing practical functionality for booking and planning trips. Every element was designed to inspire and facilitate the travel planning process.',
+    image: service3b,
+    tags: ['Travel', 'UI Design', 'Web Design', 'UX'],
+    category: 'UI/UX Design',
+    link: 'https://www.behance.net/gallery/181942299/Travelista-UI-Design-Web-Design',
+    year: '2023',
+    client: 'Travelista',
+    role: 'UI Designer'
   },
   {
     id: 'veloura',
@@ -79,6 +92,19 @@ export const projects: Project[] = [
     year: '2024',
     client: 'Veloura Fashion',
     role: 'Web Designer'
+  },
+  {
+    id: 'leafly',
+    title: 'Leafly',
+    description: 'A comprehensive booking platform where businesses can list their services for users to book salon, spa, and barber appointments.',
+    fullDescription: 'Leafly is an all-in-one booking reservation platform designed to connect users with various local wellness and beauty businesses. Salons, spas, and barbershops can easily list their services on the platform, allowing users to browse, compare, and instantly book the services they desire. The project focused on creating an intuitive multi-tenant structure with a clean, inviting aesthetic.',
+    image: leaflyProject,
+    tags: ['Multitenant', 'UI/UX Design', 'Booking Platform', 'Web App'],
+    category: 'UI/UX Design',
+    link: '#',
+    year: '2024',
+    client: 'Leafly Business Module',
+    role: 'UI/UX Designer'
   },
   {
     id: 'oro-dashboard',
@@ -146,19 +172,6 @@ export const projects: Project[] = [
     role: 'Software Developer'
   },
   {
-    id: 'ofbank-mobile',
-    title: 'OFBank Mobile',
-    description: 'A comprehensive mobile banking app redesign focusing on user experience and financial accessibility.',
-    fullDescription: 'OFBank Mobile is a comprehensive redesign of a mobile banking application with a focus on user experience and financial accessibility. The project involved reimagining the entire user journey, from onboarding to daily transactions. The new design emphasizes security, ease of use, and accessibility for users of all technical backgrounds.',
-    image: service3a,
-    tags: ['Mobile App', 'Banking', 'UI/UX', 'Redesign'],
-    category: 'UI/UX Design',
-    link: 'https://www.behance.net/gallery/180193513/OFBank-Mobile-App-Redesign',
-    year: '2023',
-    client: 'OFBank',
-    role: 'UI/UX Designer'
-  },
-  {
     id: 'logo-design',
     title: 'Logo Design',
     description: 'Professional brand identity and logo design services with creative and memorable visual solutions.',
@@ -170,19 +183,6 @@ export const projects: Project[] = [
     year: '2023',
     client: 'Various Clients',
     role: 'Graphic Designer'
-  },
-  {
-    id: 'travelista',
-    title: 'Travelista',
-    description: 'A travel platform UI design with immersive visuals and user-friendly navigation for travel enthusiasts.',
-    fullDescription: 'Travelista is a travel platform UI design that brings wanderlust to life through immersive visuals and user-friendly navigation. The design captures the excitement of travel while providing practical functionality for booking and planning trips. Every element was designed to inspire and facilitate the travel planning process.',
-    image: service3b,
-    tags: ['Travel', 'UI Design', 'Web Design', 'UX'],
-    category: 'UI/UX Design',
-    link: 'https://www.behance.net/gallery/181942299/Travelista-UI-Design-Web-Design',
-    year: '2023',
-    client: 'Travelista',
-    role: 'UI Designer'
   },
   {
     id: 'poster-design',
@@ -217,7 +217,14 @@ export const getProjectById = (id: string): Project | undefined => {
 };
 
 export const getRelatedProjects = (currentId: string, category: string, limit: number = 3): Project[] => {
-  return projects
-    .filter(project => project.id !== currentId && project.category === category)
-    .slice(0, limit);
+  const primaryMatches = projects.filter(
+    project => project.id !== currentId && project.category === category
+  );
+  if (primaryMatches.length >= limit) {
+    return primaryMatches.slice(0, limit);
+  }
+  const fallbackProjects = projects.filter(
+    project => project.id !== currentId && project.category !== category
+  );
+  return [...primaryMatches, ...fallbackProjects].slice(0, limit);
 };

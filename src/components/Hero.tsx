@@ -138,17 +138,17 @@ const Hero = () => {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full my-auto flex flex-col items-center">
         {/* Two-Column Hero: Left Content, Right Photo with balanced breathing room */}
-        <div className="w-full max-w-5xl lg:max-w-[1100px] xl:max-w-[1180px] mx-auto">
-          <div className="flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-20 xl:gap-24 2xl:gap-28">
+        <div className="w-full max-w-5xl lg:max-w-6xl xl:max-w-[1240px] 2xl:max-w-[1320px] mx-auto">
+          <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-10 lg:gap-14 xl:gap-16 2xl:gap-20">
 
             {/* Left Column: Content */}
-            <div className="flex-1 max-w-xl flex flex-col items-center lg:items-start text-center lg:text-left">
+            <div className="flex-1 max-w-xl lg:max-w-[620px] xl:max-w-[680px] flex flex-col items-center lg:items-start text-center lg:text-left">
               {/* Top badge */}
               <div
                 className={`mb-5 transition-all duration-1000 transform ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                   }`}
               >
-                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-emerald-100 text-sm font-medium text-slate-600 shadow-sm">
+                <span className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-emerald-100/80 text-xs sm:text-sm font-medium text-slate-600 shadow-sm whitespace-nowrap">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   Available for Work
                 </span>
@@ -159,13 +159,28 @@ const Hero = () => {
                 className={`mb-6 transition-all duration-1000 delay-200 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                   }`}
               >
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-[4rem] font-bold tracking-tight text-slate-900 leading-[1.15] mb-5">
+                <h1 className="text-5xl sm:text-6xl lg:text-[4rem] xl:text-[4.75rem] 2xl:text-[5.25rem] font-extrabold tracking-tight text-slate-900 leading-[1.1] mb-6">
                   Frontend{" "}
-                  <span className="inline-block pb-3 pr-2 -mb-3 font-bold italic bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
+                  <span className="relative inline-block pb-2 pr-1 font-extrabold italic bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 bg-clip-text text-transparent">
                     Engineer
+                    {/* Modern highlight accent underline */}
+                    <svg
+                      className="absolute -bottom-1 sm:-bottom-1.5 left-0 w-full h-2.5 sm:h-3.5 text-emerald-400/70 -z-10 pointer-events-none"
+                      viewBox="0 0 100 8"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      preserveAspectRatio="none"
+                    >
+                      <path
+                        d="M1 5.5C25 2 75 1.5 99 5"
+                        stroke="currentColor"
+                        strokeWidth="3.5"
+                        strokeLinecap="round"
+                      />
+                    </svg>
                   </span>
                 </h1>
-                <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal sm:font-medium">
+                <p className="text-lg sm:text-xl lg:text-[1.25rem] xl:text-[1.35rem] text-slate-600 leading-relaxed font-normal sm:font-medium max-w-xl">
                   Three years of building fast and responsive web apps with React, and NextJS,
                   combining strong UI/UX with AI-driven development.
                 </p>
@@ -178,16 +193,16 @@ const Hero = () => {
               >
                 <button
                   onClick={handleScrollToProjects}
-                  className="group relative px-8 py-3.5 sm:py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-green-500/25 hover:-translate-y-0.5 w-full sm:w-auto flex items-center justify-center gap-2"
+                  className="group relative px-8 sm:px-9 py-3.5 sm:py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white rounded-full font-semibold text-base sm:text-[1.05rem] transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-green-500/25 hover:-translate-y-0.5 w-full sm:w-auto flex items-center justify-center gap-2.5"
                 >
                   View My Work
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button
                   onClick={handleDownloadResume}
-                  className="group px-8 py-3.5 sm:py-4 bg-white text-slate-700 border border-slate-200 rounded-full font-semibold hover:border-slate-300 hover:bg-slate-50 transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 w-full sm:w-auto flex items-center justify-center gap-2"
+                  className="group px-8 sm:px-9 py-3.5 sm:py-4 bg-white text-slate-700 border border-slate-200 rounded-full font-semibold text-base sm:text-[1.05rem] hover:border-slate-300 hover:bg-slate-50 transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 w-full sm:w-auto flex items-center justify-center gap-2.5"
                 >
-                  <Download className="w-4 h-4" />
+                  <Download className="w-4 h-4 sm:w-5 sm:h-5" />
                   Download Resume
                 </button>
               </div>
@@ -195,16 +210,16 @@ const Hero = () => {
 
             {/* Right Column: Photo with Pill Overlay */}
             <div
-              className={`w-full max-w-xs sm:max-w-sm lg:w-[350px] xl:w-[370px] flex-shrink-0 flex justify-center transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              className={`w-full max-w-sm sm:max-w-md lg:w-[410px] xl:w-[450px] 2xl:w-[480px] flex-shrink-0 flex justify-center transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 }`}
             >
               <div className="relative w-full">
                 {/* Soft decorative glow behind photo */}
-                <div className="absolute -inset-3 sm:-inset-4 bg-gradient-to-tr from-emerald-500/25 via-teal-400/20 to-sky-400/15 rounded-[2.5rem] blur-2xl -z-10 opacity-70"></div>
+                <div className="absolute -inset-3 sm:-inset-5 bg-gradient-to-tr from-emerald-500/25 via-teal-400/20 to-sky-400/15 rounded-[2.8rem] blur-2xl -z-10 opacity-75"></div>
 
                 {/* Photo Frame Container */}
-                <div className="relative rounded-[2rem] sm:rounded-[2.3rem] p-2 sm:p-2.5 bg-gradient-to-b from-white/95 via-white/80 to-white/60 border border-white/80 shadow-2xl shadow-slate-900/10 backdrop-blur-md">
-                  <div className="relative rounded-[1.6rem] sm:rounded-[1.9rem] overflow-hidden aspect-[4/5] bg-gradient-to-b from-slate-50 to-slate-100">
+                <div className="relative rounded-[2.2rem] sm:rounded-[2.6rem] p-2.5 sm:p-3 bg-gradient-to-b from-white/95 via-white/80 to-white/60 border border-white/80 shadow-2xl shadow-slate-900/10 backdrop-blur-md">
+                  <div className="relative rounded-[1.8rem] sm:rounded-[2.2rem] overflow-hidden aspect-[4/5] bg-gradient-to-b from-slate-50 to-slate-100">
                     <img
                       src={jamesPhoto}
                       alt="Efraim James"
@@ -212,16 +227,16 @@ const Hero = () => {
                     />
 
                     {/* Component from reference image: Dark pill overlay */}
-                    <div className="absolute bottom-3 inset-x-3 sm:bottom-4 sm:inset-x-4 z-10">
-                      <div className="bg-[#18181b]/95 backdrop-blur-md rounded-full border border-white/10 shadow-2xl py-2.5 px-4 sm:py-3 sm:px-4.5 flex items-center justify-between gap-2.5 transition-all duration-300 hover:border-white/20">
-                        <span className="text-xs sm:text-[13px] font-semibold text-white tracking-tight whitespace-nowrap">
+                    <div className="absolute bottom-3.5 inset-x-3.5 sm:bottom-4.5 sm:inset-x-4.5 z-10">
+                      <div className="bg-[#18181b]/95 backdrop-blur-md rounded-full border border-white/10 shadow-2xl py-2.5 px-4 sm:py-3 sm:px-5 flex items-center justify-between gap-2.5 transition-all duration-300 hover:border-white/20">
+                        <span className="text-xs sm:text-sm font-semibold text-white tracking-tight whitespace-nowrap">
                           Frontend Engineer
                         </span>
-                        <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-zinc-400 font-medium whitespace-nowrap">
+                        <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-zinc-300 font-medium whitespace-nowrap">
                           <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                           <span>Philippines</span>
-                          <span className="text-zinc-600">·</span>
-                          <span className="text-zinc-200 tabular-nums">
+                          <span className="text-zinc-500">·</span>
+                          <span className="text-white tabular-nums font-semibold">
                             {philippineTime || "8:36 PM"}
                           </span>
                         </div>

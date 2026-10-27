@@ -6,12 +6,34 @@ import { projects } from '../data/projects';
 
 const OtherProjects = () => {
   const [showAllProjects, setShowAllProjects] = useState(false);
-  const featuredProjectTitles = ["Facundo Booking", "Leafly", "Broadheader", "OFBank Mobile"];
+  const featuredProjectTitles = ["Facundo Booking", "Broadheader"];
   
   // Exclude featured ones
-  const otherProjects = projects.filter(p => !featuredProjectTitles.includes(p.title));
-  // By default, showing up to 4 other projects
+  const rawOtherProjects = projects.filter(p => !featuredProjectTitles.includes(p.title));
+
+  // Ensure the top 4 projects are strictly ordered:
+  // 1. OFBank Mobile, 2. Travelista, 3. Veloura, 4. Leafly
+  const priorityIds = ['ofbank-mobile', 'travelista', 'veloura', 'leafly'];
+  const prioritized = priorityIds
+    .map(id => rawOtherProjects.find(p => p.id === id || p.title.toLowerCase() === id.toLowerCase()))
+    .filter((p): p is (typeof rawOtherProjects)[0] => Boolean(p));
+  const remainingOtherProjects = rawOtherProjects.filter(
+    p => !priorityIds.includes(p.id) && !priorityIds.includes(p.title.toLowerCase())
+  );
+  const otherProjects = [...prioritized, ...remainingOtherProjects];
+
+  // 4 projects are visible at first; the rest are revealed when clicking "View All Projects"
   const displayedProjects = showAllProjects ? otherProjects : otherProjects.slice(0, 4);
+
+  const handleToggleProjects = () => {
+    if (showAllProjects) {
+      const section = document.getElementById('other-projects');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    setShowAllProjects(!showAllProjects);
+  };
 
   return (
     <section id="other-projects" className="py-24 lg:py-32 bg-white overflow-hidden">
@@ -41,14 +63,15 @@ const OtherProjects = () => {
 
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          <AnimatePresence>
+          <AnimatePresence mode="popLayout">
             {displayedProjects.map((project, index) => (
               <motion.div
                 key={project.id}
+                layout
                 initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.4, delay: showAllProjects && index >= 4 ? Math.min((index - 4) * 0.05, 0.3) : Math.min(index * 0.08, 0.3) }}
                 className="group relative h-[400px] w-full overflow-hidden rounded-3xl cursor-pointer shadow-sm hover:shadow-xl transition-shadow duration-500"
               >
                 <Link 
@@ -94,12 +117,12 @@ const OtherProjects = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-center mt-16 md:mt-24"
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-center mt-12 md:mt-16"
           >
             <button
-              onClick={() => setShowAllProjects(!showAllProjects)}
-              className="inline-flex items-center justify-center px-8 py-3 border border-slate-200 hover:border-emerald-600 text-slate-900 hover:text-emerald-600 rounded-full font-semibold transition-all duration-300 bg-white hover:bg-emerald-50"
+              onClick={handleToggleProjects}
+              className="inline-flex items-center justify-center px-8 py-3 border border-slate-200 hover:border-emerald-600 text-slate-900 hover:text-emerald-600 rounded-full font-semibold transition-all duration-300 bg-white hover:bg-emerald-50 shadow-sm hover:shadow"
             >
               {showAllProjects ? 'Show Less Work' : 'View All Projects'}
             </button>

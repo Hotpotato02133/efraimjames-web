@@ -5,7 +5,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { projects } from '../data/projects';
 
 const Projects = () => {
-  const featuredProjectTitles = ["Facundo Booking", "Leafly", "Broadheader", "OFBank Mobile"];
+  const featuredProjectTitles = ["Facundo Booking", "Broadheader"];
   const displayedProjects = projects.filter(p => featuredProjectTitles.includes(p.title));
 
   return (

@@ -163,12 +163,12 @@ Aceternity-style **bento grid** (`components/ui/bento-grid.tsx`: `BentoGrid` + `
 The section also has a faint masked grid backdrop. Keep copy aligned with the Hero/WorkHistory content.
 
 ### `Projects.tsx` (Featured Projects)
-- Filters `projects` by a hard-coded title list: **Facundo Booking, Leafly, Broadheader, OFBank Mobile**.
+- Filters `projects` by a hard-coded title list: **Facundo Booking, Broadheader**.
 - 2-column grid of 400 px image cards with a glassmorphism info box (title + category + `ArrowUpRight`); each card is a `<Link>` to `/project/:id`. Image zooms on hover.
 
 ### `OtherProjects.tsx`
-- Every project **not** in the featured list (duplicates the same title array — keep both in sync).
-- Shows 4 by default; a **View All Projects / Show Less Work** toggle appears when there are more than 4. Same card design as `Projects`.
+- Every project **not** in the featured list (excludes Facundo Booking and Broadheader).
+- Shows OFBank Mobile at first; a **View All Projects / Show Less Work** toggle reveals the rest of the projects. Same card design as `Projects`.
 
 ### `LetsTalkMarquee.tsx`
 Large, faint uppercase **"LET'S TALK +++"** text repeated 6×, scrolling via `InfiniteMarquee` (speed 40). Purely decorative.
@@ -259,16 +259,16 @@ export const getRelatedProjects: (currentId: string, category: string, limit?: n
 
 | id | Title | Category | Year | Image | Link | Featured |
 |---|---|---|---|---|---|---|
-| `facundo` | Facundo Booking | UI/UX Design | 2024 | Facundo-cover.png | `#` | ✅ |
-| `leafly` | Leafly | UI/UX Design | 2024 | Leafly-cover.png | `#` | ✅ |
-| `broadheader` | Broadheader | UI/UX Design | 2024 | Broadheader.jpg | broadheader.com | ✅ |
+| `facundo` | Facundo Booking | Fullstack Project | 2024 | Facundo-cover.png | fcvndo.com | ✅ |
+| `broadheader` | Broadheader | Fullstack Project | 2024 | Broadheader.jpg | broadheader.com | ✅ |
+| `ofbank-mobile` | OFBank Mobile | UI/UX Design | 2023 | service-3a.jpg | Behance | |
+| `leafly` | Leafly | UI/UX Design | 2024 | Leafly-cover.png | `#` | |
 | `veloura` | Veloura | Web Design | 2024 | service-1c.jpg | Behance | |
 | `oro-dashboard` | ORO Dashboard | Frontend | 2024 | service-2b.png | orowonder.vercel.app | |
 | `buenas-coffee` | Buenas Coffee | Web Design | 2023 | service-1b.jpg | Behance | |
 | `car-rental-ph` | Car Rental PH | Frontend | 2023 | service-2a.png | car-rental-alpha-bice.vercel.app | |
 | `hyde-learning` | Hyde Learning | Web Design | 2023 | service-1a.jpg | Behance | |
 | `oro-landing` | ORO Landing | Frontend | 2023 | service-2c.png | react-landing-page-or-ov2.vercel.app | |
-| `ofbank-mobile` | OFBank Mobile | UI/UX Design | 2023 | service-3a.jpg | Behance | ✅ |
 | `logo-design` | Logo Design | Graphic Design | 2023 | service-4a.jpg | Behance | |
 | `travelista` | Travelista | UI/UX Design | 2023 | service-3b.jpg | Behance | |
 | `poster-design` | Poster Design | Graphic Design | 2023 | service-4b.jpg | Behance | |
