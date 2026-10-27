@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, Mail } from 'lucide-react';
+import { Menu, X, Mail, Github } from 'lucide-react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -71,8 +71,18 @@ const Header = () => {
             </div>
           </div>
 
-          {/* Desktop CTA Button - Right */}
-          <div className="hidden lg:block">
+          {/* Desktop CTA Button & GitHub - Right */}
+          <div className="hidden lg:flex items-center space-x-3">
+            <a
+              href="https://github.com/Hotpotato02133"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub Profile"
+              title="GitHub Profile"
+              className="w-10 h-10 xl:w-12 xl:h-12 rounded-full flex items-center justify-center text-gray-700 hover:text-green-600 bg-white/20 hover:bg-white/40 border border-white/30 hover:border-green-500/30 shadow-sm hover:shadow-md backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95 group"
+            >
+              <Github className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
+            </a>
             <button
               onClick={handleContactClick}
               className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white px-4 xl:px-6 py-2.5 xl:py-3 rounded-full font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-green-500/25 flex items-center space-x-2 text-sm xl:text-base"
@@ -108,11 +118,21 @@ const Header = () => {
               </button>
             ))}
             
-            {/* Mobile Menu Contact Button */}
-            <div className="px-2 pt-2">
+            {/* Mobile Menu Contact Button & GitHub */}
+            <div className="px-2 pt-2 flex items-center space-x-2">
+              <a
+                href="https://github.com/Hotpotato02133"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub Profile"
+                title="GitHub Profile"
+                className="p-3 bg-gray-100 hover:bg-green-50 text-gray-700 hover:text-green-600 rounded-full transition-all duration-300 flex items-center justify-center hover:scale-105 active:scale-95"
+              >
+                <Github className="w-5 h-5" />
+              </a>
               <button
                 onClick={handleContactClick}
-                className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white px-4 py-3 rounded-full font-semibold transition-all duration-300 flex items-center justify-center space-x-2 text-sm"
+                className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white px-4 py-3 rounded-full font-semibold transition-all duration-300 flex items-center justify-center space-x-2 text-sm"
               >
                 <Mail className="w-4 h-4" />
                 <span>Contact Me</span>

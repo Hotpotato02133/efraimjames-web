@@ -140,7 +140,7 @@ Rendered inside `bg-stone-50 text-gray-900` with a fixed, faint green dot-patter
 
 ### `Header.tsx`
 - Fixed, transparent header. Left: `/Logo1.png` + "Efraim James" in a green→emerald gradient text; clicking navigates to `/`.
-- Desktop (`lg+`): centered glass pill nav (`bg-white/10 backdrop-blur-md`) with items **Home, About, Projects, What I Can Do** (`#home`, `#about`, `#projects`, `#what-i-can-do`), animated underline on hover; right-side **"Let's Talk"** gradient CTA → `/contact`.
+- Desktop (`lg+`): centered glass pill nav (`bg-white/10 backdrop-blur-md`) with items **Home, About, Projects, What I Can Do** (`#home`, `#about`, `#projects`, `#what-i-can-do`), animated underline on hover; right-side glassmorphic **GitHub** icon button (`github.com/Hotpotato02133` → new tab) to the left of the **"Let's Talk"** gradient CTA → `/contact`.
 - Mobile/tablet (`< lg`): hamburger (`Menu`/`X`) toggles a collapsible frosted panel (`max-h-0` ↔ `max-h-96`) containing the same items plus a "Contact Me" button. Menu closes after any click.
 - `handleNavClick`: on `/contact` it calls `navigate('/' + href)`; everywhere else it `scrollIntoView({ behavior: 'smooth' })` on the section.
 
