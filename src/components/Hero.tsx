@@ -250,32 +250,29 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Tech Stack Section (Full Width Toolkit) */}
+        {/* Tech Stack Section (Matched width with Left Content & Right Photo) */}
         <div
-          className={`w-full mt-12 sm:mt-14 lg:mt-16 transition-all duration-1000 delay-600 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          className={`w-full max-w-5xl lg:max-w-6xl xl:max-w-[1240px] 2xl:max-w-[1320px] mx-auto mt-12 sm:mt-14 lg:mt-16 transition-all duration-1000 delay-600 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
         >
-          <p className="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider mb-6 text-center">
+          <p className="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider mb-5 sm:mb-6 text-center">
             My Tech Stacks
           </p>
 
-          <div className="relative">
-            {/* Fade edges for marquee */}
-            <div className="absolute inset-y-0 left-0 w-16 sm:w-24 bg-gradient-to-r from-transparent to-transparent z-10 pointer-events-none"></div>
-            <div className="absolute inset-y-0 right-0 w-16 sm:w-24 bg-gradient-to-l from-transparent to-transparent z-10 pointer-events-none"></div>
-
-            <InfiniteMarquee speed={80} direction="left" className="py-2">
+          {/* Marquee with ultra-soft edge fading mask */}
+          <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.05)_2%,rgba(0,0,0,0.3)_6%,rgba(0,0,0,0.7)_12%,black_20%,black_80%,rgba(0,0,0,0.7)_88%,rgba(0,0,0,0.3)_94%,rgba(0,0,0,0.05)_98%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.05)_2%,rgba(0,0,0,0.3)_6%,rgba(0,0,0,0.7)_12%,black_20%,black_80%,rgba(0,0,0,0.7)_88%,rgba(0,0,0,0.3)_94%,rgba(0,0,0,0.05)_98%,transparent_100%)]">
+            <InfiniteMarquee speed={80} direction="left" className="py-2.5">
               {techStack.map((tech, index) => {
                 const IconComponent = tech.icon;
                 return (
                   <div
                     key={index}
-                    className="flex items-center gap-3 px-6 py-3 rounded-xl shadow-sm mx-3 hover:shadow-md transition-all duration-300 group"
+                    className="flex items-center gap-3 px-4 py-2 sm:px-6 sm:py-3 mx-2 sm:mx-3 transition-all duration-300 group"
                   >
-                    <div className="p-2 rounded-lg group-hover:bg-emerald-50 transition-colors">
+                    <div className="p-2 rounded-lg group-hover:bg-emerald-50/60 transition-colors">
                       <IconComponent className={`w-6 h-6 ${tech.color}`} />
                     </div>
-                    <span className="font-semibold text-slate-700">
+                    <span className="font-semibold text-sm sm:text-base text-slate-700 whitespace-nowrap">
                       {tech.name}
                     </span>
                   </div>

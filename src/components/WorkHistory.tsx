@@ -26,7 +26,7 @@ const WorkHistory = () => {
       id: 1,
       period: "Mar 2026 - Sep 2026",
       role: "Frontend Engineer",
-      company: "Undisclosed Group / Social Intelligence Lab",
+      company: "Undisclosed Group",
       location: "Remote · New York, USA",
       description: "Built and maintained frontend interfaces for two social-media intelligence platforms, including creator analytics, performance dashboards, and role-based reporting views. Collaborated closely with product and engineering through code review and QA to ship polished, reliable features.",
       projects: [
