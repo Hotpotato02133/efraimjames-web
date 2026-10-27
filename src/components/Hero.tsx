@@ -17,7 +17,6 @@ import {
   SiClerk,
 } from "react-icons/si";
 import InfiniteMarquee from "./InfiniteMarquee";
-import { Button } from "./ui/button";
 import heroBg from "../assets/hero-bg.png";
 import resumePdf from "../assets/CV-EFRAIM-JAMES-2026.pdf";
 import jamesPhoto from "../assets/2X2JAMES.jpg";
@@ -174,26 +173,23 @@ const Hero = () => {
 
               {/* CTA Buttons */}
               <div
-                className={`flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto items-center justify-center lg:justify-start transition-all duration-1000 delay-400 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                className={`flex flex-col sm:flex-row gap-4 w-full sm:w-auto items-center justify-center lg:justify-start transition-all duration-1000 delay-400 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                   }`}
               >
-                <Button
+                <button
                   onClick={handleScrollToProjects}
-                  size="lg"
-                  className="group w-full sm:w-auto"
+                  className="group relative px-8 py-3.5 sm:py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-green-500/25 hover:-translate-y-0.5 w-full sm:w-auto flex items-center justify-center gap-2"
                 >
-                  <span>View My Work</span>
+                  View My Work
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
-                <Button
+                </button>
+                <button
                   onClick={handleDownloadResume}
-                  variant="outline"
-                  size="lg"
-                  className="group w-full sm:w-auto"
+                  className="group px-8 py-3.5 sm:py-4 bg-white text-slate-700 border border-slate-200 rounded-full font-semibold hover:border-slate-300 hover:bg-slate-50 transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 w-full sm:w-auto flex items-center justify-center gap-2"
                 >
                   <Download className="w-4 h-4" />
-                  <span>Download Resume</span>
-                </Button>
+                  Download Resume
+                </button>
               </div>
             </div>
 
