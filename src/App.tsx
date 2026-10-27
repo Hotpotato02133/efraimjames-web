@@ -12,6 +12,7 @@ import Footer from './components/Footer';
 import ContactPage from './pages/ContactPage';
 import ProjectDetails from './pages/ProjectDetails';
 import WorkHistory from './components/WorkHistory';
+import BackToTop from './components/BackToTop';
 
 function App() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -52,6 +53,7 @@ function App() {
           </div>
         } />
       </Routes>
+      <BackToTop />
     </div>
   );
 }
