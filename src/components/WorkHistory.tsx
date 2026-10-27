@@ -79,7 +79,7 @@ const WorkHistory = () => {
     {
       id: 4,
       period: "Oct 2023 - Sep 2024",
-      role: "Software Developer",
+      role: "Frontend Developer",
       company: "ORO Business Group",
       location: "Onsite · Zamboanga City, PH",
       description: "Collaborated in an agile environment to build and optimize frontend features. Expanded technical skills in JavaScript design patterns and actively participated in code reviews.",

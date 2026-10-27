@@ -169,7 +169,7 @@ export const projects: Project[] = [
     link: 'https://react-landing-page-or-ov2.vercel.app/',
     year: '2023',
     client: 'ORO Technologies',
-    role: 'Software Developer'
+    role: 'Frontend Developer'
   },
   {
     id: 'logo-design',
