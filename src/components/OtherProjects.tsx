@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
@@ -6,10 +6,16 @@ import { projects } from '../data/projects';
 
 const OtherProjects = () => {
   const [showAllProjects, setShowAllProjects] = useState(false);
-  const featuredProjectTitles = ["Facundo Booking", "Broadheader"];
+  const excludedProjectTitles = [
+    "Digital Archiving Management System",
+    "Zion Shop",
+    "Quantyx Trading Journal",
+    "Facundo Booking",
+    "Broadheader"
+  ];
   
-  // Exclude featured ones
-  const rawOtherProjects = projects.filter(p => !featuredProjectTitles.includes(p.title));
+  // Exclude featured and collaborative ones
+  const rawOtherProjects = projects.filter(p => !excludedProjectTitles.includes(p.title));
 
   // Ensure the top 4 projects are strictly ordered:
   // 1. OFBank Mobile, 2. Travelista, 3. Veloura, 4. Leafly

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
 import Projects from './components/Projects';
+import CollaborativeProjects from './components/CollaborativeProjects';
 import OtherProjects from './components/OtherProjects';
 import WhatICanDo from './components/WhatICanDo';
 import Contact from './components/Contact';
@@ -42,6 +43,7 @@ function App() {
                 <Hero />
                 <WhatICanDo />
                 <Projects />
+                <CollaborativeProjects />
                 <OtherProjects />
                 <LetsTalkMarquee />
                 <About />

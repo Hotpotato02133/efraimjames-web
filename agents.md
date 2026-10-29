@@ -87,6 +87,7 @@ efraimjames-web/
     │   ├── Hero.tsx
     │   ├── WhatICanDo.tsx
     │   ├── Projects.tsx
+    │   ├── CollaborativeProjects.tsx
     │   ├── OtherProjects.tsx
     │   ├── LetsTalkMarquee.tsx
     │   ├── About.tsx
@@ -126,12 +127,13 @@ Rendered inside `bg-stone-50 text-gray-900` with a fixed, faint green dot-patter
 | — | `Header` | — (fixed, `z-50`) | transparent |
 | 1 | `Hero` | `#home` | `hero-bg.png` + dot pattern + blurred emerald/blue blobs |
 | 2 | `WhatICanDo` | `#what-i-can-do` | `bg-stone-50` |
-| 3 | `Projects` | `#projects` | `bg-stone-50` |
-| 4 | `OtherProjects` | `#other-projects` | `bg-white` |
-| 5 | `LetsTalkMarquee` | — | `bg-stone-50` |
-| 6 | `About` | `#about` | `bg-white` |
-| 7 | `WorkHistory` | `#work-history` | `bg-white` |
-| 8 | `Contact` | `#contact` | `contact-bg.png` |
+| 3 | `Projects` | `#projects` | `bg-white` |
+| 4 | `CollaborativeProjects` | `#collaborative-projects` | `bg-stone-50` |
+| 5 | `OtherProjects` | `#other-projects` | `bg-white` |
+| 6 | `LetsTalkMarquee` | — | `bg-stone-50` |
+| 7 | `About` | `#about` | `bg-white` |
+| 8 | `WorkHistory` | `#work-history` | `bg-white` |
+| 9 | `Contact` | `#contact` | `contact-bg.png` |
 | — | `Footer` | — | `bg-white` |
 
 ---
@@ -163,11 +165,16 @@ Aceternity-style **bento grid** (`components/ui/bento-grid.tsx`: `BentoGrid` + `
 The section also has a faint masked grid backdrop. Keep copy aligned with the Hero/WorkHistory content.
 
 ### `Projects.tsx` (Featured Projects)
-- Filters `projects` by a hard-coded title list: **Facundo Booking, Broadheader**.
-- 2-column grid of 400 px image cards with a glassmorphism info box (title + category + `ArrowUpRight`); each card is a `<Link>` to `/project/:id`. Image zooms on hover.
+- Filters `projects` by a hard-coded title list for personal solo projects: **Digital Archiving Management System, Zion Shop, Quantyx Trading Journal**.
+- 3-column responsive grid on lg+ (2-column on md with 3rd card spanning); 400 px image cards with a glassmorphism info box (title + category + `ArrowUpRight`); each card is a `<Link>` to `/project/:id`. Image zooms on hover.
+
+### `CollaborativeProjects.tsx` (Collaborative Projects)
+- Filters `projects` by hard-coded title list: **Facundo Booking, Broadheader**.
+- 2-column grid of 400 px image cards with a glassmorphism info box; each card is a `<Link>` to `/project/:id`.
+- Sub-headline/description: "Emphasizes collaboration and teamwork. A good option if you want to highlight how you worked alongside other developers."
 
 ### `OtherProjects.tsx`
-- Every project **not** in the featured list (excludes Facundo Booking and Broadheader).
+- Every project **not** in the featured or collaborative list (excludes Digital Archiving Management System, Zion Shop, Quantyx Trading Journal, Facundo Booking, and Broadheader).
 - Shows OFBank Mobile at first; a **View All Projects / Show Less Work** toggle reveals the rest of the projects. Same card design as `Projects`.
 
 ### `LetsTalkMarquee.tsx`
@@ -239,6 +246,7 @@ The single source of truth for project content.
 export interface Project {
   id: string;              // URL slug for /project/:id
   title: string;           // Also used for featured filtering — renaming breaks it
+  cardTitle?: string;      // Optional shorter title for display cards (e.g. DAMS)
   description: string;     // Short blurb
   fullDescription: string; // Detail-page body
   image: string;           // Imported asset from src/assets
@@ -255,12 +263,15 @@ export const getProjectById: (id: string) => Project | undefined;
 export const getRelatedProjects: (currentId: string, category: string, limit?: number /* 3 */) => Project[];
 ```
 
-### Current projects (14, in array order)
+### Current projects (17, in array order)
 
 | id | Title | Category | Year | Image | Link | Featured |
 |---|---|---|---|---|---|---|
-| `facundo` | Facundo Booking | Fullstack Project | 2024 | Facundo-cover.png | fcvndo.com | ✅ |
-| `broadheader` | Broadheader | Fullstack Project | 2024 | Broadheader.jpg | broadheader.com | ✅ |
+| `digital-archiving-management-system` | Digital Archiving Management System | Fullstack Project | 2025 | DAMS Project.jpg | `#` | ✅ (Featured) |
+| `zion-shop` | Zion Shop | Fullstack Project | 2025 | Zion Shop.jpg | `#` | ✅ (Featured) |
+| `quantyx-trading-journal` | Quantyx Trading Journal | Fullstack Project | 2025 | Quantyx Trading Journal.jpg | `#` | ✅ (Featured) |
+| `facundo` | Facundo Booking | Fullstack Project | 2024 | Facundo-cover.png | fcvndo.com | Collaborative |
+| `broadheader` | Broadheader | Fullstack Project | 2024 | Broadheader.jpg | broadheader.com | Collaborative |
 | `ofbank-mobile` | OFBank Mobile | UI/UX Design | 2023 | service-3a.jpg | Behance | |
 | `leafly` | Leafly | UI/UX Design | 2024 | Leafly-cover.png | `#` | |
 | `veloura` | Veloura | Web Design | 2024 | service-1c.jpg | Behance | |
@@ -346,7 +357,7 @@ Without them the code falls back to placeholder strings (`YOUR_PUBLIC_KEY`, `YOU
 
 Imported via ES modules from `src/assets/` (Vite fingerprints them). `public/` files are referenced by absolute path (`/Logo1.png`).
 
-**In use**: `hero-bg.png` (Hero), `contact-bg.png` (Contact section), `contact-page-img.png` (ContactPage), `CV-EFRAIM-JAMES-2026.pdf` (resume), `Facundo-cover.png`, `Leafly-cover.png`, `Broadheader.jpg`, `service-1a/1b/1c.jpg`, `service-2a/2b/2c.png`, `service-3a/3b.jpg`, `service-4a/4b/4d.jpg` (project images), `public/Logo1.png` (logo + favicon).
+**In use**: `hero-bg.png`, `DAMS Project.jpg`, `Zion Shop.jpg`, `Quantyx Trading Journal.jpg` (Hero), `contact-bg.png` (Contact section), `contact-page-img.png` (ContactPage), `CV-EFRAIM-JAMES-2026.pdf` (resume), `Facundo-cover.png`, `Leafly-cover.png`, `Broadheader.jpg`, `service-1a/1b/1c.jpg`, `service-2a/2b/2c.png`, `service-3a/3b.jpg`, `service-4a/4b/4d.jpg` (project images), `public/Logo1.png` (logo + favicon).
 
 **Not referenced by code** (candidates for cleanup): `Flux.jpg`, `about-img.jpg`, `about-img 1.jpg`, `berkay.jpg`, `bpg.webp`, `carousel-11.jpg`, `carousel-2a.jpg`, `carousel-a.jpg`, `carousel-b.jpg`, `hero-section-sample.png`, `me1.png`, `mockup1.jpeg`, `react.svg`, `service-11/22/33/44.jpg`, `service-4c.png`, `src/assets/Logo1.png` (duplicate of the public one), `public/CV-EFRAIM-JAMES-TALUCOD.pdf`, `public/vite.svg`.
 

@@ -1,15 +1,20 @@
-
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { projects } from '../data/projects';
 
 const Projects = () => {
-  const featuredProjectTitles = ["Facundo Booking", "Broadheader"];
-  const displayedProjects = projects.filter(p => featuredProjectTitles.includes(p.title));
+  const featuredProjectTitles = [
+    "Digital Archiving Management System",
+    "Zion Shop",
+    "Quantyx Trading Journal"
+  ];
+  const displayedProjects = featuredProjectTitles
+    .map(title => projects.find(p => p.title === title))
+    .filter((p): p is (typeof projects)[0] => Boolean(p));
 
   return (
-    <section id="projects" className="py-24 lg:py-32 bg-stone-50 overflow-hidden">
+    <section id="projects" className="py-24 lg:py-32 bg-white overflow-hidden">
       <div className="container mx-auto px-4 md:px-6 !overflow-visible">
         
         {/* Header */}
@@ -30,13 +35,12 @@ const Projects = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-lg md:text-xl text-slate-600 leading-relaxed"
           >
-            A curated selection of web applications, platforms, and interfaces I've built and designed —
-            each one crafted with clean code and a strong eye for user experience.
+            A curated selection of personal solo projects — each one crafted with clean code, modern architecture, and a strong eye for user experience.
           </motion.p>
         </div>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           <AnimatePresence>
             {displayedProjects.map((project, index) => (
               <motion.div
@@ -45,7 +49,9 @@ const Projects = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative h-[400px] w-full overflow-hidden rounded-3xl cursor-pointer shadow-sm hover:shadow-xl transition-shadow duration-500"
+                className={`group relative h-[400px] w-full overflow-hidden rounded-3xl cursor-pointer shadow-sm hover:shadow-xl transition-shadow duration-500 ${
+                  index === 2 ? 'md:col-span-2 lg:col-span-1' : ''
+                }`}
               >
                 <Link 
                   to={`/project/${project.id}`}
@@ -65,15 +71,15 @@ const Projects = () => {
                   {/* Glass Info Box */}
                   <div className="absolute bottom-6 left-6 right-6">
                     <div className="flex items-center justify-between p-5 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-lg transform transition-all duration-300 group-hover:-translate-y-1">
-                      <div className="flex flex-col">
+                      <div className="flex flex-col pr-2 min-w-0">
                         <h3 className="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors drop-shadow-md">
-                          {project.title}
+                          {project.cardTitle || project.title}
                         </h3>
                         <span className="text-sm font-medium text-white/80 mt-1">
                           {project.category}
                         </span>
                       </div>
-                      <div className="h-10 w-10 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors backdrop-blur-sm">
+                      <div className="h-10 w-10 flex-shrink-0 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors backdrop-blur-sm">
                         <ArrowUpRight className="w-5 h-5 text-white group-hover:text-emerald-400 transition-colors" />
                       </div>
                     </div>
@@ -83,8 +89,6 @@ const Projects = () => {
             ))}
           </AnimatePresence>
         </div>
-
-        {/* View All Button removed as per user request */}
 
       </div>
     </section>

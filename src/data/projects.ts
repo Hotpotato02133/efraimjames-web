@@ -12,10 +12,14 @@ import service4d from '../assets/service-4d.jpg';
 import broadheaderProject from '../assets/Broadheader.jpg';
 import facundoProject from '../assets/Facundo-cover.png';
 import leaflyProject from '../assets/Leafly-cover.png';
+import damsProject from '../assets/DAMS Project.jpg';
+import zionShopProject from '../assets/Zion Shop.jpg';
+import quantyxProject from '../assets/Quantyx Trading Journal.jpg';
 
 export interface Project {
   id: string;
   title: string;
+  cardTitle?: string;
   description: string;
   fullDescription: string;
   image: string;
@@ -28,6 +32,46 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  {
+    id: 'digital-archiving-management-system',
+    title: 'Digital Archiving Management System',
+    cardTitle: 'DAMS',
+    description: 'A university registrar web app that scans student documents, extracts text via OCR, and stores them in a searchable archive.',
+    fullDescription: 'Digital Archiving Management System is a university registrar web application that scans student documents, extracts text via Optical Character Recognition (OCR), and securely stores them in an indexed, searchable archive. Built as a solo project, it eliminates administrative paper bottlenecks with automated text extraction, instant keyword search, and systematic academic record organization.',
+    image: damsProject,
+    tags: ['React', 'TypeScript', 'TailwindCSS', 'OCR', 'Document Management', 'Web App'],
+    category: 'Fullstack Project',
+    link: '#',
+    year: '2026',
+    client: 'University Registrar',
+    role: 'Fullstack Developer'
+  },
+  {
+    id: 'zion-shop',
+    title: 'Zion Shop',
+    description: 'A full-stack e-commerce app built with React, Shadcn UI, Supabase, and Clerk, featuring wishlists, cart management, and secure payment checkout.',
+    fullDescription: 'Zion Shop is a full-stack e-commerce application built with React, Shadcn UI, Supabase, and Clerk. Developed as a solo project, it delivers a smooth shopping experience with interactive product catalogs, personalized customer wishlists, dynamic cart management, and secure payment checkout workflows backed by real-time database state and authentication.',
+    image: zionShopProject,
+    tags: ['React', 'Shadcn UI', 'TailwindCSS', 'Supabase', 'Clerk', 'TypeScript', 'E-commerce'],
+    category: 'Fullstack Project',
+    link: '#',
+    year: '2026',
+    client: 'Personal Project',
+    role: 'Fullstack Developer'
+  },
+  {
+    id: 'quantyx-trading-journal',
+    title: 'Quantyx Trading Journal',
+    description: 'A high-density trading journal & performance analytics terminal built with React, TanStack Table, Supabase RLS, and Clerk.',
+    fullDescription: 'Quantyx Trading Journal is a high-density trading journal and performance analytics terminal built with React, TanStack Table, Supabase RLS, and Clerk. Developed as a solo project for disciplined market participants, it provides comprehensive trade logging, risk-to-reward analytics, interactive high-density data tables, and granular Row Level Security for private execution data.',
+    image: quantyxProject,
+    tags: ['React', 'TanStack Table', 'Supabase RLS', 'Clerk', 'TypeScript', 'Data Analytics'],
+    category: 'Fullstack Project',
+    link: '#',
+    year: '2026',
+    client: 'Personal Project',
+    role: 'Fullstack Developer'
+  },
   {
     id: 'facundo',
     title: 'Facundo Booking',
