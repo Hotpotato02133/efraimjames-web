@@ -13,7 +13,7 @@ const OtherProjects = () => {
     "Facundo Booking",
     "Broadheader"
   ];
-  
+
   // Exclude featured and collaborative ones
   const rawOtherProjects = projects.filter(p => !excludedProjectTitles.includes(p.title));
 
@@ -44,19 +44,19 @@ const OtherProjects = () => {
   return (
     <section id="other-projects" className="py-24 lg:py-32 bg-white overflow-hidden">
       <div className="container mx-auto px-4 md:px-6 !overflow-visible">
-        
+
         {/* Header */}
         <div className="max-w-3xl mx-auto text-center mb-16 md:mb-24">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
             className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-gray-900 via-emerald-700 to-green-700 bg-clip-text text-transparent px-2"
           >
-            Other Projects
+            Explorations
           </motion.h2>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -80,14 +80,14 @@ const OtherProjects = () => {
                 transition={{ duration: 0.4, delay: showAllProjects && index >= 4 ? Math.min((index - 4) * 0.05, 0.3) : Math.min(index * 0.08, 0.3) }}
                 className="group relative h-[400px] w-full overflow-hidden rounded-3xl cursor-pointer shadow-sm hover:shadow-xl transition-shadow duration-500"
               >
-                <Link 
+                <Link
                   to={`/project/${project.id}`}
                   className="block h-full w-full"
                 >
                   {/* Background Image */}
                   <div className="absolute inset-0">
-                    <img 
-                      src={project.image} 
+                    <img
+                      src={project.image}
                       alt={project.title}
                       className="h-full w-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
                     />
@@ -119,7 +119,7 @@ const OtherProjects = () => {
 
         {/* View All Button */}
         {otherProjects.length > 4 && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
