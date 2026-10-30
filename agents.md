@@ -15,7 +15,7 @@ Context for AI coding agents working in this repository. Everything below was ve
 | **Positioning** | Software Engineer first, UI/UX design as a supporting strength. Hero headline is **"Software Engineer"**; page `<title>` is "Efraim James - Software Engineer". Keep new copy in this voice. |
 | **Default branch** | `master` |
 
-The site presents: a hero with toolkit marquee and resume download, service offerings, featured and other projects (each with its own detail page), an about blurb, a work-history timeline, and a contact form wired to EmailJS.
+The site presents: a hero with toolkit marquee and resume download, service offerings, featured and other projects (each with its own detail page), an about blurb, a work-history timeline, and a contact form wired to Web3Forms.
 
 ---
 
@@ -29,7 +29,7 @@ The site presents: a hero with toolkit marquee and resume download, service offe
 | `framer-motion` | ^12.19.1 | Scroll-reveal animations, marquee, scroll-linked timeline line |
 | `lucide-react` | ^0.344.0 | Primary icon set |
 | `react-icons` | ^5.5.0 | Brand/tech logos in the Hero toolkit (`react-icons/fa`, `react-icons/si`) |
-| `@emailjs/browser` | ^4.4.1 | Sending contact-form submissions |
+| Web3Forms API | REST | Sending contact-form submissions (via `fetch` in `src/lib/sendContactForm.ts`) |
 
 ### Dev dependencies
 Vite ^6.3.5, `@vitejs/plugin-react` ^4.3.1, TypeScript ^5.5.3, Tailwind CSS ^3.4.1, PostCSS ^8.4.35, Autoprefixer ^10.4.18, ESLint ^9.9.1, `typescript-eslint` ^8.3.0, `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh`, `globals`.
@@ -200,7 +200,7 @@ Entries with `projects` always show a "Projects" label and a row of clickable lo
 ### `Contact.tsx` (inline section on `/`)
 - Reveal driven by an `IntersectionObserver` (threshold 0.1) rather than Framer Motion.
 - Left: contact cards — **Email** `efraimjamestalucod88@gmail.com`, **WhatsApp** `(+63) 965 639 4996` (`wa.me` link with prefilled message), **Location** Zamboanga City, Philippines (Google Maps link).
-- Right: EmailJS form (see §8). Green-gradient submit with idle / "Sending..." spinner / "Message Sent!" states; resets 3 s after success.
+- Right: Web3Forms form (see §9). Green-gradient submit with idle / "Sending..." spinner / "Message Sent!" states; resets 3 s after success.
 
 ### `Footer.tsx`
 - Brand block with tagline and social links: **GitHub** `github.com/Hotpotato02133`, **LinkedIn** `linkedin.com/in/efraim-james-talucod-065959244/`, **Behance** `behance.net/efraimjames`.
@@ -292,23 +292,22 @@ export const getRelatedProjects: (currentId: string, category: string, limit?: n
 
 ---
 
-## 9. Contact Form / EmailJS
+## 9. Contact Form / Web3Forms
 
-Both `components/Contact.tsx` and `pages/ContactPage.tsx` use identical logic:
+Both `components/Contact.tsx` and `pages/ContactPage.tsx` submit through `src/lib/sendContactForm.ts`:
 
-- `emailjs.init(VITE_EMAILJS_PUBLIC_KEY)` on mount, then `emailjs.sendForm(serviceId, templateId, formRef.current!, publicKey)`.
+- Submits via `fetch` POST to Web3Forms API (`https://api.web3forms.com/submit`).
 - Visible fields: `firstName`*, `lastName`*, `email`*, `phone` (with fixed 🇵🇭 +63 prefix), `project`* (textarea). `*` = required.
-- Hidden mirror inputs are submitted for the EmailJS template: **`first_name`, `last_name`, `user_email`, `user_phone`, `project_details`**. If you rename a visible field, keep its hidden twin in sync, and keep the template variables matching these names.
+- Anti-spam: Hidden honeypot checkbox named `botcheck`.
+- Failure fallback: If unconfigured or the request fails, the UI surfaces a direct email link to `efraimjamestalucod88@gmail.com`.
 
 ### Environment variables (`.env`, gitignored, not committed)
 
 ```env
-VITE_EMAILJS_PUBLIC_KEY=...
-VITE_EMAILJS_SERVICE_ID=...
-VITE_EMAILJS_CONTACT_TEMPLATE_ID=...   # code falls back to "template_orw5xze"
+VITE_WEB3FORMS_ACCESS_KEY=your_web3forms_access_key_here
 ```
 
-Without them the code falls back to placeholder strings (`YOUR_PUBLIC_KEY`, `YOUR_SERVICE_ID`) and submissions will fail with the "Failed to send message" error. These must also be set in the hosting provider's env settings for production builds.
+A template is provided in `.env.example`. Obtain a free key at [web3forms.com](https://web3forms.com) by entering `efraimjamestalucod88@gmail.com`. This environment variable must also be configured in your hosting provider (Vercel, Netlify, etc.) settings for production builds.
 
 ---
 
@@ -408,14 +407,14 @@ Useful when fixing bugs or extending the site:
 3. **New route**: add a `<Route>` in `App.tsx`; include `<Header />` and `<Footer />` in the page component like the existing pages.
 4. **Styling**: stick to the green/emerald/teal accent and slate/stone neutrals; extend `tailwind.config.js` for new tokens rather than hard-coding hex values.
 5. **Before finishing**: `npm run lint`, `npx tsc -b` (the build doesn't type-check), and `npm run build`. Visually check the change at mobile (<640px), tablet (`md`), and desktop (`lg+`) — the header switches to the hamburger below `lg` (1024px).
-6. Never commit `.env` or EmailJS credentials.
+6. Never commit `.env` or API credentials.
 
 ---
 
 ## 15. Deployment
 
 - `npm run build` → static output in `dist/`.
-- Compatible with Vercel / Netlify / any static host; configure an SPA fallback to `index.html` and set the three `VITE_EMAILJS_*` env vars at build time.
+- Compatible with Vercel / Netlify / any static host; configure an SPA fallback to `index.html` and set `VITE_WEB3FORMS_ACCESS_KEY` in environment variables at build time.
 - No CI configuration is present in the repository.
 
 ---

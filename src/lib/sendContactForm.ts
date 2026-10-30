@@ -11,18 +11,32 @@ export const sendContactForm = async (
   formData: ContactFormData,
   botcheck: boolean
 ) => {
+  if (botcheck) {
+    // Hidden honeypot triggered by automated bot — exit quietly
+    return;
+  }
+
+  const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+  if (!accessKey) {
+    console.error(
+      "[Contact Form] Missing VITE_WEB3FORMS_ACCESS_KEY. Please set this variable in your .env file or hosting provider settings."
+    );
+    throw new Error(
+      "The contact form is currently unconfigured (missing access key)."
+    );
+  }
+
   const response = await fetch("https://api.web3forms.com/submit", {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify({
-      access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
+      access_key: accessKey,
       subject: `New portfolio inquiry from ${formData.firstName} ${formData.lastName}`,
       from_name: "Portfolio Contact Form",
       name: `${formData.firstName} ${formData.lastName}`,
       email: formData.email,
       phone: formData.phone ? `+63 ${formData.phone}` : "Not provided",
       message: formData.project,
-      botcheck,
     }),
   });
 

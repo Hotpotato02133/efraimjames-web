@@ -45,7 +45,11 @@ const Contact = () => {
       }, 3000);
     } catch (error) {
       console.error('Failed to send email:', error);
-      setError('Failed to send message. Please try again.');
+      const errorMessage =
+        error instanceof Error && error.message
+          ? error.message
+          : 'Failed to send message. Please try again.';
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -77,8 +81,18 @@ const Contact = () => {
 
               <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
                 {error && (
-                  <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
-                    {error}
+                  <div className="p-3 bg-red-50 border border-red-300 text-red-700 rounded-lg text-sm">
+                    <p className="font-medium">{error}</p>
+                    <p className="mt-1 text-xs text-red-600">
+                      You can also reach out directly via{" "}
+                      <a
+                        href="mailto:efraimjamestalucod88@gmail.com"
+                        className="underline font-semibold hover:text-red-800"
+                      >
+                        efraimjamestalucod88@gmail.com
+                      </a>{" "}
+                      or WhatsApp.
+                    </p>
                   </div>
                 )}
 
