@@ -164,7 +164,7 @@ const ProjectDetails = () => {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-8 py-4 bg-slate-900 text-white rounded-full font-semibold hover:bg-slate-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
                 >
-                  View Live Project
+                  Preview Live Project
                   <ExternalLink className="w-4 h-4" />
                 </a>
               </motion.div>

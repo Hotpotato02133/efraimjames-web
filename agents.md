@@ -268,7 +268,7 @@ export const getRelatedProjects: (currentId: string, category: string, limit?: n
 | id | Title | Category | Year | Image | Link | Featured |
 |---|---|---|---|---|---|---|
 | `digital-archiving-management-system` | Digital Archiving Management System | Fullstack Project | 2025 | DAMS Project.jpg | `#` | ✅ (Featured) |
-| `zion-shop` | Zion Shop | Fullstack Project | 2025 | Zion Shop.jpg | `#` | ✅ (Featured) |
+| `zion-shop` | Zion Shop | Fullstack Project | 2026 | Zion Shop.jpg | zion-shop-znej.vercel.app | ✅ (Featured) |
 | `quantyx-trading-journal` | Quantyx Trading Journal | Fullstack Project | 2025 | Quantyx Trading Journal.jpg | `#` | ✅ (Featured) |
 | `facundo` | Facundo Booking | Fullstack Project | 2024 | Facundo-cover.png | fcvndo.com | Collaborative |
 | `broadheader` | Broadheader | Fullstack Project | 2024 | Broadheader.jpg | broadheader.com | Collaborative |

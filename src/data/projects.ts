@@ -54,7 +54,7 @@ export const projects: Project[] = [
     image: zionShopProject,
     tags: ['React', 'Shadcn UI', 'TailwindCSS', 'Supabase', 'Clerk', 'TypeScript', 'E-commerce'],
     category: 'Fullstack Project',
-    link: '#',
+    link: 'https://zion-shop-znej.vercel.app/',
     year: '2026',
     client: 'Personal Project',
     role: 'Fullstack Developer'
