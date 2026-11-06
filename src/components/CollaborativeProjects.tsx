@@ -4,6 +4,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { useContent } from '../hooks/useContent';
 import { getProjects } from '../lib/content';
 import { fallbackProjects } from '../data/fallback';
+import { trackEvent } from '../lib/analytics';
 
 const CollaborativeProjects = () => {
   const projects = useContent(getProjects, fallbackProjects);
@@ -49,8 +50,9 @@ const CollaborativeProjects = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="group relative h-[400px] w-full overflow-hidden rounded-3xl cursor-pointer shadow-sm hover:shadow-xl transition-shadow duration-500"
               >
-                <Link 
+                <Link
                   to={`/project/${project.id}`}
+                  onClick={() => trackEvent('project_click', { projectId: project.id })}
                   className="block h-full w-full"
                 >
                   {/* Background Image */}

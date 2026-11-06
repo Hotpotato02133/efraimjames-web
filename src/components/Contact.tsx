@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Mail, Phone, MapPin, Send, CheckCircle } from "lucide-react";
 import { sendContactForm } from "../lib/sendContactForm";
+import { trackEvent } from "../lib/analytics";
 import { useContent } from "../hooks/useContent";
 import { getSiteSettings } from "../lib/content";
 import { fallbackSiteSettings } from "../data/fallback";
@@ -60,6 +61,7 @@ const Contact = () => {
         formData,
         honeypot instanceof HTMLInputElement && honeypot.checked
       );
+      trackEvent("contact_submit");
       setIsSubmitted(true);
 
       setTimeout(() => {

@@ -5,6 +5,7 @@ import { useContent } from "../hooks/useContent";
 import { getHeroToolkit } from "../lib/content";
 import { fallbackHeroToolkit } from "../data/fallback";
 import { ICON_REGISTRY } from "../lib/iconRegistry";
+import { trackEvent } from "../lib/analytics";
 import heroBg from "../assets/hero-bg.png";
 import resumePdf from "../assets/CV-EFRAIM-JAMES-2026.pdf";
 import jamesPhoto from "../assets/2X2JAMES.jpg";
@@ -59,6 +60,7 @@ const Hero = () => {
 
   // Resume download function with mobile support
   const handleDownloadResume = async () => {
+    trackEvent("resume_download");
     try {
       const response = await fetch(resumePdf);
       const blob = await response.blob();

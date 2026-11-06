@@ -5,6 +5,7 @@ import { ArrowLeft, ExternalLink, Calendar, User, Briefcase } from 'lucide-react
 import { useContent } from '../hooks/useContent';
 import { getProjects, getProjectById, getRelatedProjects } from '../lib/content';
 import { fallbackProjects } from '../data/fallback';
+import { trackEvent } from '../lib/analytics';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -165,6 +166,7 @@ const ProjectDetails = () => {
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackEvent('project_click', { projectId: project.id })}
                   className="inline-flex items-center gap-2 px-8 py-4 bg-slate-900 text-white rounded-full font-semibold hover:bg-slate-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
                 >
                   Preview Live Project
@@ -187,6 +189,7 @@ const ProjectDetails = () => {
                     <Link
                       key={relatedProject.id}
                       to={`/project/${relatedProject.id}`}
+                      onClick={() => trackEvent('project_click', { projectId: relatedProject.id })}
                       className="group relative aspect-[4/3] overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300"
                     >
                       <img

@@ -4,6 +4,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { useContent } from '../hooks/useContent';
 import { getProjects } from '../lib/content';
 import { fallbackProjects } from '../data/fallback';
+import { trackEvent } from '../lib/analytics';
 
 const Projects = () => {
   const projects = useContent(getProjects, fallbackProjects);
@@ -51,8 +52,9 @@ const Projects = () => {
                   index === 2 ? 'md:col-span-2 lg:col-span-1' : ''
                 }`}
               >
-                <Link 
+                <Link
                   to={`/project/${project.id}`}
+                  onClick={() => trackEvent('project_click', { projectId: project.id })}
                   className="block h-full w-full"
                 >
                   {/* Background Image */}

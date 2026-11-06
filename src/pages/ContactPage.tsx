@@ -3,6 +3,7 @@ import { Mail, Phone, MapPin, CheckCircle } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { sendContactForm } from '../lib/sendContactForm';
+import { trackEvent } from '../lib/analytics';
 import { useContent } from '../hooks/useContent';
 import { getSiteSettings } from '../lib/content';
 import { fallbackSiteSettings } from '../data/fallback';
@@ -41,6 +42,7 @@ const Contact = () => {
         formData,
         honeypot instanceof HTMLInputElement && honeypot.checked
       );
+      trackEvent('contact_submit');
       setIsSubmitted(true);
       
       setTimeout(() => {

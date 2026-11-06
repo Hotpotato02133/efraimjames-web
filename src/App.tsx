@@ -1,5 +1,5 @@
 import { useEffect, useState, type ComponentType } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -16,7 +16,7 @@ import WorkHistory from './components/WorkHistory';
 import BackToTop from './components/BackToTop';
 import AdminLogin from './admin/AdminLogin';
 import AdminLayout from './admin/AdminLayout';
-import AdminHome from './admin/AdminHome';
+import AnalyticsDashboard from './admin/pages/AnalyticsDashboard';
 import ProjectsAdmin from './admin/pages/ProjectsAdmin';
 import WorkHistoryAdmin from './admin/pages/WorkHistoryAdmin';
 import HeroAboutAdmin from './admin/pages/HeroAboutAdmin';
@@ -26,6 +26,7 @@ import CustomSectionBlock from './components/CustomSectionBlock';
 import { useContent } from './hooks/useContent';
 import { getPageBlocks, getCustomSections } from './lib/content';
 import { fallbackPageBlocks, fallbackCustomSections } from './data/fallback';
+import { trackEvent } from './lib/analytics';
 
 // Fixed home-page sections, keyed by page_blocks.block_key. CMS toggles
 // enabled/order per key; 'custom:<uuid>' blocks are resolved against
@@ -46,10 +47,16 @@ function App() {
   const [isLoaded, setIsLoaded] = useState(false);
   const pageBlocks = useContent(getPageBlocks, fallbackPageBlocks);
   const customSections = useContent(getCustomSections, fallbackCustomSections);
+  const location = useLocation();
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
+
+  useEffect(() => {
+    if (location.pathname.startsWith('/admin')) return;
+    trackEvent('pageview', { path: location.pathname });
+  }, [location.pathname]);
 
   return (
     <div className={`min-h-screen transition-all duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
@@ -63,7 +70,7 @@ function App() {
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminHome />} />
+          <Route index element={<AnalyticsDashboard />} />
           <Route path="projects" element={<ProjectsAdmin />} />
           <Route path="work-history" element={<WorkHistoryAdmin />} />
           <Route path="hero-about" element={<HeroAboutAdmin />} />

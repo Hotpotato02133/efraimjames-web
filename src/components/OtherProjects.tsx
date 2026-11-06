@@ -5,6 +5,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { useContent } from '../hooks/useContent';
 import { getProjects } from '../lib/content';
 import { fallbackProjects } from '../data/fallback';
+import { trackEvent } from '../lib/analytics';
 
 const OtherProjects = () => {
   const [showAllProjects, setShowAllProjects] = useState(false);
@@ -67,6 +68,7 @@ const OtherProjects = () => {
               >
                 <Link
                   to={`/project/${project.id}`}
+                  onClick={() => trackEvent('project_click', { projectId: project.id })}
                   className="block h-full w-full"
                 >
                   {/* Background Image */}
