@@ -3,9 +3,13 @@ import { Mail, Phone, MapPin, CheckCircle } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { sendContactForm } from '../lib/sendContactForm';
+import { useContent } from '../hooks/useContent';
+import { getSiteSettings } from '../lib/content';
+import { fallbackSiteSettings } from '../data/fallback';
 import contactPageImg from '../assets/contact-page-img.png';
 
 const Contact = () => {
+  const settings = useContent(getSiteSettings, fallbackSiteSettings);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -86,10 +90,10 @@ const Contact = () => {
                     <p className="mt-1 text-xs text-red-600">
                       You can also reach out directly via{" "}
                       <a
-                        href="mailto:efraimjamestalucod88@gmail.com"
+                        href={`mailto:${settings.contactEmail}`}
                         className="underline font-semibold hover:text-red-800"
                       >
-                        efraimjamestalucod88@gmail.com
+                        {settings.contactEmail}
                       </a>{" "}
                       or WhatsApp.
                     </p>
@@ -167,7 +171,7 @@ const Contact = () => {
                     />
                   </div>
                   <p className="text-xs text-gray-500 mt-1">
-                    (+63) 965 639 4996 • efraimjamestalucod88@gmail.com
+                    {settings.contactPhoneDisplay} • {settings.contactEmail}
                   </p>
                 </div>
 
@@ -271,17 +275,17 @@ const Contact = () => {
           <div className="text-center">
             <Mail className="w-8 h-8 mx-auto mb-4 text-gray-600" />
             <h3 className="font-semibold text-gray-900 mb-2 text-sm tracking-wide">EMAIL</h3>
-            <p className="text-gray-600 text-sm">efraimjamestalucod88@gmail.com</p>
+            <p className="text-gray-600 text-sm">{settings.contactEmail}</p>
           </div>
           <div className="text-center">
             <Phone className="w-8 h-8 mx-auto mb-4 text-gray-600" />
             <h3 className="font-semibold text-gray-900 mb-2 text-sm tracking-wide">PHONE</h3>
-            <p className="text-gray-600 text-sm">+63 965 639 4996</p>
+            <p className="text-gray-600 text-sm">{settings.contactPhoneDisplay}</p>
           </div>
           <div className="text-center">
             <MapPin className="w-8 h-8 mx-auto mb-4 text-gray-600" />
             <h3 className="font-semibold text-gray-900 mb-2 text-sm tracking-wide">LOCATION</h3>
-            <p className="text-gray-600 text-sm">Philippines</p>
+            <p className="text-gray-600 text-sm">{settings.contactLocationShort}</p>
           </div>
         </div>
       </div>

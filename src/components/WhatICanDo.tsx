@@ -11,15 +11,15 @@ import {
 } from "lucide-react";
 import { SiSupabase, SiClerk, SiMysql } from "react-icons/si";
 import { BentoGrid, BentoGridItem } from "./ui/bento-grid";
+import { useContent } from "../hooks/useContent";
+import { getCapabilities } from "../lib/content";
+import { fallbackCapabilities } from "../data/fallback";
 
-interface Capability {
-  number: string;
-  title: string;
-  description: string;
+// Each capability's icon/visual mini-animation is hand-built and stays fixed
+// in code, keyed by id (1-6) — only the copy/CTA fields are CMS-editable.
+interface CapabilityVisual {
   icon: ReactNode;
   visual: ReactNode;
-  cta: string;
-  target: string;
   className?: string;
 }
 
@@ -220,72 +220,18 @@ const AIVisual = () => (
 
 /* ---------- Section ---------- */
 
+// Fixed by capability id (1-6) — matches the `capabilities` table's check constraint.
+const VISUALS: Record<number, CapabilityVisual> = {
+  1: { icon: <Code2 className="h-6 w-6" />, visual: <CodeVisual />, className: "lg:col-span-2" },
+  2: { icon: <LayoutDashboard className="h-6 w-6" />, visual: <ChartVisual /> },
+  3: { icon: <PenTool className="h-6 w-6" />, visual: <DesignVisual /> },
+  4: { icon: <Plug className="h-6 w-6" />, visual: <IntegrationVisual />, className: "lg:col-span-2" },
+  5: { icon: <Gauge className="h-6 w-6" />, visual: <QualityVisual /> },
+  6: { icon: <Sparkles className="h-6 w-6" />, visual: <AIVisual />, className: "lg:col-span-2" },
+};
+
 const WhatICanDo = () => {
-  const capabilities: Capability[] = [
-    {
-      number: "01",
-      title: "Frontend Engineering",
-      description:
-        "Fast, accessible, type-safe interfaces with React, Next.js and TypeScript — component architecture that stays maintainable as your product grows.",
-      icon: <Code2 className="h-6 w-6" />,
-      visual: <CodeVisual />,
-      cta: "See my work",
-      target: "#projects",
-      className: "lg:col-span-2",
-    },
-    {
-      number: "02",
-      title: "Dashboards & Data UIs",
-      description:
-        "Analytics views, charts and role-based interfaces, like the platforms I shipped at Social Intelligence Lab.",
-      icon: <LayoutDashboard className="h-6 w-6" />,
-      visual: <ChartVisual />,
-      cta: "See my experience",
-      target: "#work-history",
-    },
-    {
-      number: "03",
-      title: "Design-to-Code",
-      description:
-        "A UI/UX background means Figma designs turn into pixel-accurate, reusable components and design-system patterns.",
-      icon: <PenTool className="h-6 w-6" />,
-      visual: <DesignVisual />,
-      cta: "About me",
-      target: "#about",
-    },
-    {
-      number: "04",
-      title: "API & Backend Integration",
-      description:
-        "Wiring the frontend to real data: REST APIs, authentication flows and managed backends such as Supabase, Convex and Clerk.",
-      icon: <Plug className="h-6 w-6" />,
-      visual: <IntegrationVisual />,
-      cta: "See my experience",
-      target: "#work-history",
-      className: "lg:col-span-2",
-    },
-    {
-      number: "05",
-      title: "Performance & Accessibility",
-      description:
-        "Responsive, keyboard-friendly pages that load quickly and work for everyone, on every screen size.",
-      icon: <Gauge className="h-6 w-6" />,
-      visual: <QualityVisual />,
-      cta: "See my work",
-      target: "#projects",
-    },
-    {
-      number: "06",
-      title: "AI-Assisted Development",
-      description:
-        "I use Claude Code and Codex to ship faster, then review, test and polish everything by hand so quality never slips.",
-      icon: <Sparkles className="h-6 w-6" />,
-      visual: <AIVisual />,
-      cta: "Let's talk",
-      target: "#contact",
-      className: "lg:col-span-2",
-    },
-  ];
+  const capabilities = useContent(getCapabilities, fallbackCapabilities);
 
   const handleScrollTo = (target: string) => {
     document.querySelector(target)?.scrollIntoView({ behavior: "smooth" });
@@ -316,20 +262,24 @@ const WhatICanDo = () => {
         </motion.div>
 
         <BentoGrid>
-          {capabilities.map((item, index) => (
-            <BentoGridItem
-              key={item.number}
-              index={index}
-              number={item.number}
-              title={item.title}
-              description={item.description}
-              icon={item.icon}
-              visual={item.visual}
-              cta={item.cta}
-              onCtaClick={() => handleScrollTo(item.target)}
-              className={item.className}
-            />
-          ))}
+          {capabilities.map((item, index) => {
+            const visual = VISUALS[item.id];
+            if (!visual) return null;
+            return (
+              <BentoGridItem
+                key={item.id}
+                index={index}
+                number={String(item.id).padStart(2, '0')}
+                title={item.title}
+                description={item.description}
+                icon={visual.icon}
+                visual={visual.visual}
+                cta={item.ctaLabel}
+                onCtaClick={() => handleScrollTo(item.ctaTarget)}
+                className={visual.className}
+              />
+            );
+          })}
         </BentoGrid>
       </div>
     </section>

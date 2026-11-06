@@ -1,14 +1,18 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Github, Linkedin, Palette } from 'lucide-react';
+import { useContent } from '../hooks/useContent';
+import { getSiteSettings } from '../lib/content';
+import { fallbackSiteSettings } from '../data/fallback';
 
 const Footer = () => {
   const navigate = useNavigate();
+  const settings = useContent(getSiteSettings, fallbackSiteSettings);
 
   const socialLinks = [
-    { icon: Github, href: 'https://github.com/Hotpotato02133', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://www.linkedin.com/in/efraim-james-talucod-065959244/', label: 'LinkedIn' },
-    { icon: Palette, href: 'https://www.behance.net/efraimjames', label: 'Behance' },
+    { icon: Github, href: settings.socialGithub, label: 'GitHub' },
+    { icon: Linkedin, href: settings.socialLinkedin, label: 'LinkedIn' },
+    { icon: Palette, href: settings.socialBehance, label: 'Behance' },
   ];
 
   const quickLinks = [
@@ -48,8 +52,7 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-gray-600 leading-relaxed mb-4">
-              Creating digital experiences that blend innovation with aesthetics. 
-              Let's build something extraordinary together.
+              {settings.footerTagline}
             </p>
             <div className="flex space-x-4">
               {socialLinks.map((social, index) => (
@@ -86,9 +89,9 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Get In Touch</h3>
             <div className="space-y-2 text-gray-600">
-              <p>efraimjamestalucod88@gmail.com</p>
-              <p>+63 (965) 639-4996</p>
-              <p>Zamboanga City, Philippines, 7000</p>
+              <p>{settings.contactEmail}</p>
+              <p>{settings.contactPhoneDisplay}</p>
+              <p>{settings.contactLocationFull}</p>
             </div>
             <div className="mt-4">
               <button
@@ -104,8 +107,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-center items-center mx-4 sm:mx-6 lg:mx-8">
           <p className="text-gray-600 text-sm flex items-center">
-            © 2026 Efraim James Portfolio.{' '}
-            {' '}
+            {settings.copyrightText}
           </p>
         </div>
       </div>

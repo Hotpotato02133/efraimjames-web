@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X, Mail, Github } from 'lucide-react';
+import { useContent } from '../hooks/useContent';
+import { getSiteSettings } from '../lib/content';
+import { fallbackSiteSettings } from '../data/fallback';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const settings = useContent(getSiteSettings, fallbackSiteSettings);
 
   const navItems = [
     { href: '#home', label: 'Home' },
@@ -74,7 +78,7 @@ const Header = () => {
           {/* Desktop CTA Button & GitHub - Right */}
           <div className="hidden lg:flex items-center space-x-3">
             <a
-              href="https://github.com/Hotpotato02133"
+              href={settings.socialGithub}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub Profile"
@@ -121,7 +125,7 @@ const Header = () => {
             {/* Mobile Menu Contact Button & GitHub */}
             <div className="px-2 pt-2 flex items-center space-x-2">
               <a
-                href="https://github.com/Hotpotato02133"
+                href={settings.socialGithub}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub Profile"

@@ -1,3 +1,10 @@
+// Frozen, build-time snapshot of the site's content, bundled into the app.
+// src/lib/content.ts falls back to this whenever a Supabase fetch fails (missing
+// env vars, network error, outage) so the public site never renders blank.
+// This intentionally duplicates what's seeded in supabase/migrations/0001_init.sql —
+// keep them in sync if you change the canonical content, but don't treat this file
+// as the live source of truth once the CMS is in use; it's a safety net only.
+
 import service1c from '../assets/service-1c.jpg';
 import service2b from '../assets/service-2b.png';
 import service1b from '../assets/service-1b.jpg';
@@ -16,22 +23,25 @@ import damsProject from '../assets/DAMS Project.jpg';
 import zionShopProject from '../assets/Zion Shop.jpg';
 import quantyxProject from '../assets/Quantyx Trading Journal.jpg';
 
-export interface Project {
-  id: string;
-  title: string;
-  cardTitle?: string;
-  description: string;
-  fullDescription: string;
-  image: string;
-  tags: string[];
-  category: string;
-  link: string;
-  year: string;
-  client: string;
-  role: string;
-}
+import yolkLogo from '../assets/yolk-logo.png';
+import inspoLogo from '../assets/inspo-logo.png';
+import broadheaderLogo from '../assets/broadheader-logo.png';
+import facundoLogo from '../assets/facundo-logo.png';
+import oroLogo from '../assets/oro-logo.png';
 
-export const projects: Project[] = [
+import type {
+  Project,
+  WorkHistoryEntry,
+  HeroToolkitItem,
+  HeroContent,
+  AboutContent,
+  SiteSettings,
+  Capability,
+  CustomSection,
+  PageBlock,
+} from '../lib/types';
+
+export const fallbackProjects: Project[] = [
   {
     id: 'digital-archiving-management-system',
     title: 'Digital Archiving Management System',
@@ -44,7 +54,9 @@ export const projects: Project[] = [
     link: '#',
     year: '2026',
     client: 'University Registrar',
-    role: 'Fullstack Developer'
+    role: 'Fullstack Developer',
+    section: 'featured',
+    displayOrder: 0,
   },
   {
     id: 'zion-shop',
@@ -57,7 +69,9 @@ export const projects: Project[] = [
     link: 'https://zion-shop-znej.vercel.app/',
     year: '2026',
     client: 'Personal Project',
-    role: 'Fullstack Developer'
+    role: 'Fullstack Developer',
+    section: 'featured',
+    displayOrder: 1,
   },
   {
     id: 'quantyx-trading-journal',
@@ -70,7 +84,9 @@ export const projects: Project[] = [
     link: '#',
     year: '2026',
     client: 'Personal Project',
-    role: 'Fullstack Developer'
+    role: 'Fullstack Developer',
+    section: 'featured',
+    displayOrder: 2,
   },
   {
     id: 'facundo',
@@ -83,7 +99,9 @@ export const projects: Project[] = [
     link: 'https://www.fcvndo.com/',
     year: '2024',
     client: 'Mr. Facundo',
-    role: 'Frontend Developer'
+    role: 'Frontend Developer',
+    section: 'collaborative',
+    displayOrder: 0,
   },
   {
     id: 'broadheader',
@@ -96,7 +114,9 @@ export const projects: Project[] = [
     link: 'https://www.broadheader.com/',
     year: '2024',
     client: 'Broadheader Technologies',
-    role: 'Frontend Developer'
+    role: 'Frontend Developer',
+    section: 'collaborative',
+    displayOrder: 1,
   },
   {
     id: 'ofbank-mobile',
@@ -109,7 +129,9 @@ export const projects: Project[] = [
     link: 'https://www.behance.net/gallery/180193513/OFBank-Mobile-App-Redesign',
     year: '2023',
     client: 'OFBank',
-    role: 'UI/UX Designer'
+    role: 'UI/UX Designer',
+    section: 'other',
+    displayOrder: 0,
   },
   {
     id: 'travelista',
@@ -122,7 +144,9 @@ export const projects: Project[] = [
     link: 'https://www.behance.net/gallery/181942299/Travelista-UI-Design-Web-Design',
     year: '2023',
     client: 'Travelista',
-    role: 'UI Designer'
+    role: 'UI Designer',
+    section: 'other',
+    displayOrder: 1,
   },
   {
     id: 'veloura',
@@ -135,7 +159,9 @@ export const projects: Project[] = [
     link: 'https://www.behance.net/gallery/212698409/Veloura-Web-Design-Figma',
     year: '2024',
     client: 'Veloura Fashion',
-    role: 'Web Designer'
+    role: 'Web Designer',
+    section: 'other',
+    displayOrder: 2,
   },
   {
     id: 'leafly',
@@ -148,7 +174,9 @@ export const projects: Project[] = [
     link: '#',
     year: '2024',
     client: 'Leafly Business Module',
-    role: 'UI/UX Designer'
+    role: 'UI/UX Designer',
+    section: 'other',
+    displayOrder: 3,
   },
   {
     id: 'oro-dashboard',
@@ -161,7 +189,9 @@ export const projects: Project[] = [
     link: 'https://orowonder.vercel.app/',
     year: '2024',
     client: 'ORO Analytics',
-    role: 'Frontend Engineer'
+    role: 'Frontend Engineer',
+    section: 'other',
+    displayOrder: 4,
   },
   {
     id: 'buenas-coffee',
@@ -174,7 +204,9 @@ export const projects: Project[] = [
     link: 'https://www.behance.net/gallery/183390349/Buenas-Coffee-II-Landing-Page',
     year: '2023',
     client: 'Buenas Coffee Co.',
-    role: 'Web Designer'
+    role: 'Web Designer',
+    section: 'other',
+    displayOrder: 5,
   },
   {
     id: 'car-rental-ph',
@@ -187,7 +219,9 @@ export const projects: Project[] = [
     link: 'https://car-rental-alpha-bice.vercel.app/',
     year: '2023',
     client: 'Car Rental PH',
-    role: 'Frontend Developer'
+    role: 'Frontend Developer',
+    section: 'other',
+    displayOrder: 6,
   },
   {
     id: 'hyde-learning',
@@ -200,7 +234,9 @@ export const projects: Project[] = [
     link: 'https://www.behance.net/gallery/186754327/Hyde-Online-Learning-Platform-UI-Design',
     year: '2023',
     client: 'Hyde Education',
-    role: 'UI Designer'
+    role: 'UI Designer',
+    section: 'other',
+    displayOrder: 7,
   },
   {
     id: 'oro-landing',
@@ -213,7 +249,9 @@ export const projects: Project[] = [
     link: 'https://react-landing-page-or-ov2.vercel.app/',
     year: '2023',
     client: 'ORO Technologies',
-    role: 'Frontend Developer'
+    role: 'Frontend Developer',
+    section: 'other',
+    displayOrder: 8,
   },
   {
     id: 'logo-design',
@@ -226,7 +264,9 @@ export const projects: Project[] = [
     link: 'https://www.behance.net/gallery/181927731/Team-LAU-Logo-Design-Team-T-shirt-Design',
     year: '2023',
     client: 'Various Clients',
-    role: 'Graphic Designer'
+    role: 'Graphic Designer',
+    section: 'other',
+    displayOrder: 9,
   },
   {
     id: 'poster-design',
@@ -239,7 +279,9 @@ export const projects: Project[] = [
     link: 'https://www.behance.net/gallery/185524145/Hiring-Poster-Design',
     year: '2023',
     client: 'Various Clients',
-    role: 'Graphic Designer'
+    role: 'Graphic Designer',
+    section: 'other',
+    displayOrder: 10,
   },
   {
     id: 'banner-design',
@@ -252,23 +294,131 @@ export const projects: Project[] = [
     link: 'https://www.behance.net/gallery/211765299/Sample-Banner-Design',
     year: '2024',
     client: 'Various Clients',
-    role: 'Graphic Designer'
-  }
+    role: 'Graphic Designer',
+    section: 'other',
+    displayOrder: 11,
+  },
 ];
 
-export const getProjectById = (id: string): Project | undefined => {
-  return projects.find(project => project.id === id);
+export const fallbackWorkHistory: WorkHistoryEntry[] = [
+  {
+    id: '1',
+    period: 'Mar 2026 - Sep 2026',
+    role: 'Frontend Engineer',
+    company: 'Undisclosed Group',
+    location: 'Remote · New York, USA',
+    description: 'Built and maintained frontend interfaces for two social-media intelligence platforms, including creator analytics, performance dashboards, and role-based reporting views. Collaborated closely with product and engineering through code review and QA to ship polished, reliable features.',
+    projectLinks: [
+      { name: 'Yolk', url: 'https://useyolk.com/', logo: yolkLogo },
+      { name: 'Inspo Web', url: 'https://app.findinspo.co/', logo: inspoLogo, logoScale: 1.9 },
+    ],
+    skills: ['Frontend Dev', 'Dashboards', 'Data Visualization', 'Role-Based UI', 'QA Testing', 'Git'],
+    displayOrder: 0,
+  },
+  {
+    id: '2',
+    period: 'Nov 2024 - Feb 2026',
+    role: 'UI/UX Designer',
+    company: 'Broadheader',
+    location: 'Remote · Angeles City, Pampanga, PH',
+    description: 'Led the design and frontend development for diverse projects including trading platforms and booking services. Implemented UI components, integrated REST APIs, and maintained clean code documentation.',
+    projectLinks: [
+      { name: 'Broadheader', url: 'https://www.broadheader.com/', logo: broadheaderLogo, logoScale: 1.7 },
+      { name: 'Facundo', url: 'https://www.fcvndo.com/', logo: facundoLogo, logoScale: 1.45 },
+    ],
+    skills: ['UI/UX', 'Frontend Dev', 'React / Vite', 'REST APIs'],
+    displayOrder: 1,
+  },
+  {
+    id: '3',
+    period: 'Aug 2024 - Jan 2025',
+    role: 'Web Designer',
+    company: 'Business Partner Group',
+    location: 'Remote · Brisbane, Australia',
+    description: 'Developed frontend components for key responsive pages. Led UX writing efforts for micro-copy and managed QA processes to ensure optimal user experiences and seamless functionality.',
+    skills: ['Web Design', 'UX Writing', 'Frontend Dev', 'QA'],
+    displayOrder: 2,
+  },
+  {
+    id: '4',
+    period: 'Oct 2023 - Sep 2024',
+    role: 'Frontend Developer',
+    company: 'ORO Business Group',
+    location: 'Onsite · Zamboanga City, PH',
+    description: 'Collaborated in an agile environment to build and optimize frontend features. Expanded technical skills in JavaScript design patterns and actively participated in code reviews.',
+    projectLinks: [
+      { name: 'ORO Admin', url: 'https://oroadmin.web.app/', logo: oroLogo },
+    ],
+    skills: ['JavaScript', 'React', 'Git', 'Agile'],
+    displayOrder: 3,
+  },
+];
+
+export const fallbackHeroToolkit: HeroToolkitItem[] = [
+  { id: '1', name: 'React', iconKey: 'react', displayOrder: 0 },
+  { id: '2', name: 'Next.js', iconKey: 'nextjs', displayOrder: 1 },
+  { id: '3', name: 'TypeScript', iconKey: 'typescript', displayOrder: 2 },
+  { id: '4', name: 'JavaScript', iconKey: 'javascript', displayOrder: 3 },
+  { id: '5', name: 'Tailwind CSS', iconKey: 'tailwindcss', displayOrder: 4 },
+  { id: '6', name: 'HTML5', iconKey: 'html5', displayOrder: 5 },
+  { id: '7', name: 'CSS3', iconKey: 'css3', displayOrder: 6 },
+  { id: '8', name: 'Git', iconKey: 'git', displayOrder: 7 },
+  { id: '9', name: 'Supabase', iconKey: 'supabase', displayOrder: 8 },
+  { id: '10', name: 'Convex', iconKey: 'convex', displayOrder: 9 },
+  { id: '11', name: 'MySQL', iconKey: 'mysql', displayOrder: 10 },
+  { id: '12', name: 'Clerk', iconKey: 'clerk', displayOrder: 11 },
+  { id: '13', name: 'Figma', iconKey: 'figma', displayOrder: 12 },
+];
+
+export const fallbackHeroContent: HeroContent = {
+  badgeText: 'Available for Work',
+  headingLine1: 'Frontend ',
+  headingLine2: 'Engineer',
+  subheading: 'Three years of building fast and responsive web apps with React, and NextJS, combining strong UI/UX with AI-driven development.',
+  ctaPrimaryLabel: 'View My Work',
+  ctaSecondaryLabel: 'Download Resume',
 };
 
-export const getRelatedProjects = (currentId: string, category: string, limit: number = 3): Project[] => {
-  const primaryMatches = projects.filter(
-    project => project.id !== currentId && project.category === category
-  );
-  if (primaryMatches.length >= limit) {
-    return primaryMatches.slice(0, limit);
-  }
-  const fallbackProjects = projects.filter(
-    project => project.id !== currentId && project.category !== category
-  );
-  return [...primaryMatches, ...fallbackProjects].slice(0, limit);
+export const fallbackAboutContent: AboutContent = {
+  paragraph1: "I'm a Frontend Engineer with a background in UI/UX design. I build responsive, accessible web applications with React and TypeScript from creator analytics dashboards and reporting tools to booking platforms and marketing sites.",
+  paragraph2: "Having designed interfaces before building them, I bring a designer's eye to the code: clear information hierarchy, reusable component patterns, and polished interactions backed by thorough QA and close collaboration with product and engineering teams.",
+  tags: ['Frontend Development', 'React & TypeScript', 'Dashboards & Web Apps', 'UI/UX Design'],
 };
+
+// Canonical values reconcile the three conflicting copies previously hardcoded in
+// Contact.tsx / ContactPage.tsx / Footer.tsx. Matches supabase/migrations/0001_init.sql.
+export const fallbackSiteSettings: SiteSettings = {
+  contactEmail: 'efraimjamestalucod88@gmail.com',
+  contactPhoneDisplay: '(+63) 965 639 4996',
+  contactWhatsappDigits: '639656394996',
+  contactLocationShort: 'Philippines',
+  contactLocationFull: 'Zamboanga City, Philippines, 7000',
+  socialGithub: 'https://github.com/Hotpotato02133',
+  socialLinkedin: 'https://www.linkedin.com/in/efraim-james-talucod-065959244/',
+  socialBehance: 'https://www.behance.net/efraimjames',
+  footerTagline: "Creating digital experiences that blend innovation with aesthetics. Let's build something extraordinary together.",
+  copyrightText: '© 2026 Efraim James Portfolio.',
+};
+
+export const fallbackCapabilities: Capability[] = [
+  { id: 1, title: 'Frontend Engineering', description: 'Fast, accessible, type-safe interfaces with React, Next.js and TypeScript — component architecture that stays maintainable as your product grows.', ctaLabel: 'See my work', ctaTarget: '#projects' },
+  { id: 2, title: 'Dashboards & Data UIs', description: 'Analytics views, charts and role-based interfaces, like the platforms I shipped at Social Intelligence Lab.', ctaLabel: 'See my experience', ctaTarget: '#work-history' },
+  { id: 3, title: 'Design-to-Code', description: 'A UI/UX background means Figma designs turn into pixel-accurate, reusable components and design-system patterns.', ctaLabel: 'About me', ctaTarget: '#about' },
+  { id: 4, title: 'API & Backend Integration', description: 'Wiring the frontend to real data: REST APIs, authentication flows and managed backends such as Supabase, Convex and Clerk.', ctaLabel: 'See my experience', ctaTarget: '#work-history' },
+  { id: 5, title: 'Performance & Accessibility', description: 'Responsive, keyboard-friendly pages that load quickly and work for everyone, on every screen size.', ctaLabel: 'See my work', ctaTarget: '#projects' },
+  { id: 6, title: 'AI-Assisted Development', description: 'I use Claude Code and Codex to ship faster, then review, test and polish everything by hand so quality never slips.', ctaLabel: "Let's talk", ctaTarget: '#contact' },
+];
+
+export const fallbackCustomSections: CustomSection[] = [];
+
+export const fallbackPageBlocks: PageBlock[] = [
+  { id: 'hero', blockKey: 'hero', enabled: true, displayOrder: 0 },
+  { id: 'what-i-can-do', blockKey: 'what-i-can-do', enabled: true, displayOrder: 1 },
+  { id: 'projects', blockKey: 'projects', enabled: true, displayOrder: 2 },
+  { id: 'collaborative-projects', blockKey: 'collaborative-projects', enabled: true, displayOrder: 3 },
+  { id: 'other-projects', blockKey: 'other-projects', enabled: true, displayOrder: 4 },
+  { id: 'lets-talk', blockKey: 'lets-talk', enabled: true, displayOrder: 5 },
+  { id: 'about', blockKey: 'about', enabled: true, displayOrder: 6 },
+  { id: 'work-history', blockKey: 'work-history', enabled: true, displayOrder: 7 },
+  { id: 'contact', blockKey: 'contact', enabled: true, displayOrder: 8 },
+];

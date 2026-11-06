@@ -2,31 +2,16 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import { projects } from '../data/projects';
+import { useContent } from '../hooks/useContent';
+import { getProjects } from '../lib/content';
+import { fallbackProjects } from '../data/fallback';
 
 const OtherProjects = () => {
   const [showAllProjects, setShowAllProjects] = useState(false);
-  const excludedProjectTitles = [
-    "Digital Archiving Management System",
-    "Zion Shop",
-    "Quantyx Trading Journal",
-    "Facundo Booking",
-    "Broadheader"
-  ];
-
-  // Exclude featured and collaborative ones
-  const rawOtherProjects = projects.filter(p => !excludedProjectTitles.includes(p.title));
-
-  // Ensure the top 4 projects are strictly ordered:
-  // 1. OFBank Mobile, 2. Travelista, 3. Veloura, 4. Leafly
-  const priorityIds = ['ofbank-mobile', 'travelista', 'veloura', 'leafly'];
-  const prioritized = priorityIds
-    .map(id => rawOtherProjects.find(p => p.id === id || p.title.toLowerCase() === id.toLowerCase()))
-    .filter((p): p is (typeof rawOtherProjects)[0] => Boolean(p));
-  const remainingOtherProjects = rawOtherProjects.filter(
-    p => !priorityIds.includes(p.id) && !priorityIds.includes(p.title.toLowerCase())
-  );
-  const otherProjects = [...prioritized, ...remainingOtherProjects];
+  const projects = useContent(getProjects, fallbackProjects);
+  const otherProjects = projects
+    .filter((p) => p.section === 'other')
+    .sort((a, b) => a.displayOrder - b.displayOrder);
 
   // 4 projects are visible at first; the rest are revealed when clicking "View All Projects"
   const displayedProjects = showAllProjects ? otherProjects : otherProjects.slice(0, 4);

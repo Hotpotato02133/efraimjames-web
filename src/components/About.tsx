@@ -1,7 +1,11 @@
-
 import { motion } from 'framer-motion';
+import { useContent } from '../hooks/useContent';
+import { getAboutContent } from '../lib/content';
+import { fallbackAboutContent } from '../data/fallback';
 
 const About = () => {
+  const about = useContent(getAboutContent, fallbackAboutContent);
+
   return (
     <section id="about" className="py-24 lg:py-32 bg-white overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
@@ -26,17 +30,8 @@ const About = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="space-y-6 text-slate-600 text-lg leading-relaxed"
           >
-            <p>
-              I'm a Frontend Engineer with a background in UI/UX design. I build responsive,
-              accessible web applications with React and TypeScript from creator analytics
-              dashboards and reporting tools to booking platforms and marketing sites.
-            </p>
-            <p>
-              Having designed interfaces before building them, I bring a designer's eye to the
-              code: clear information hierarchy, reusable component patterns, and polished
-              interactions backed by thorough QA and close collaboration with product and
-              engineering teams.
-            </p>
+            <p>{about.paragraph1}</p>
+            <p>{about.paragraph2}</p>
           </motion.div>
 
           {/* Skills Tags */}
@@ -47,7 +42,7 @@ const About = () => {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="flex flex-wrap justify-center gap-3 mt-10"
           >
-            {['Frontend Development', 'React & TypeScript', 'Dashboards & Web Apps', 'UI/UX Design'].map((skill, index) => (
+            {about.tags.map((skill, index) => (
               <span 
                 key={index} 
                 className="px-4 py-2 bg-slate-100 text-slate-700 rounded-full text-sm font-medium"

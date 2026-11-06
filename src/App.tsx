@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ComponentType } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -14,9 +14,38 @@ import ContactPage from './pages/ContactPage';
 import ProjectDetails from './pages/ProjectDetails';
 import WorkHistory from './components/WorkHistory';
 import BackToTop from './components/BackToTop';
+import AdminLogin from './admin/AdminLogin';
+import AdminLayout from './admin/AdminLayout';
+import AdminHome from './admin/AdminHome';
+import ProjectsAdmin from './admin/pages/ProjectsAdmin';
+import WorkHistoryAdmin from './admin/pages/WorkHistoryAdmin';
+import HeroAboutAdmin from './admin/pages/HeroAboutAdmin';
+import SiteSettingsAdmin from './admin/pages/SiteSettingsAdmin';
+import SectionsAdmin from './admin/pages/SectionsAdmin';
+import CustomSectionBlock from './components/CustomSectionBlock';
+import { useContent } from './hooks/useContent';
+import { getPageBlocks, getCustomSections } from './lib/content';
+import { fallbackPageBlocks, fallbackCustomSections } from './data/fallback';
+
+// Fixed home-page sections, keyed by page_blocks.block_key. CMS toggles
+// enabled/order per key; 'custom:<uuid>' blocks are resolved against
+// custom_sections below instead of this registry.
+const COMPONENT_REGISTRY: Record<string, ComponentType> = {
+  hero: Hero,
+  'what-i-can-do': WhatICanDo,
+  projects: Projects,
+  'collaborative-projects': CollaborativeProjects,
+  'other-projects': OtherProjects,
+  'lets-talk': LetsTalkMarquee,
+  about: About,
+  'work-history': WorkHistory,
+  contact: Contact,
+};
 
 function App() {
   const [isLoaded, setIsLoaded] = useState(false);
+  const pageBlocks = useContent(getPageBlocks, fallbackPageBlocks);
+  const customSections = useContent(getCustomSections, fallbackCustomSections);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -30,6 +59,17 @@ function App() {
         
         {/* Project Details Route */}
         <Route path="/project/:id" element={<ProjectDetails />} />
+
+        {/* Admin Routes */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminHome />} />
+          <Route path="projects" element={<ProjectsAdmin />} />
+          <Route path="work-history" element={<WorkHistoryAdmin />} />
+          <Route path="hero-about" element={<HeroAboutAdmin />} />
+          <Route path="site-settings" element={<SiteSettingsAdmin />} />
+          <Route path="sections" element={<SectionsAdmin />} />
+        </Route>
         
         {/* Main Portfolio Page Route */}
         <Route path="/" element={
@@ -40,15 +80,17 @@ function App() {
               
               <Header />
               <main>
-                <Hero />
-                <WhatICanDo />
-                <Projects />
-                <CollaborativeProjects />
-                <OtherProjects />
-                <LetsTalkMarquee />
-                <About />
-                <WorkHistory />
-                <Contact />
+                {pageBlocks
+                  .filter((block) => block.enabled)
+                  .map((block) => {
+                    if (block.blockKey.startsWith('custom:')) {
+                      const sectionId = block.blockKey.slice('custom:'.length);
+                      const section = customSections.find((s) => s.id === sectionId && s.enabled);
+                      return section ? <CustomSectionBlock key={block.id} section={section} /> : null;
+                    }
+                    const Component = COMPONENT_REGISTRY[block.blockKey];
+                    return Component ? <Component key={block.id} /> : null;
+                  })}
               </main>
               <Footer />
             </div>

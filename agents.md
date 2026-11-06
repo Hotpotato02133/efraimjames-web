@@ -21,19 +21,6 @@ The site presents: a hero with toolkit marquee and resume download, service offe
 
 ## 2. Tech Stack
 
-### Runtime dependencies
-| Package | Version | Used for |
-|---|---|---|
-| `react`, `react-dom` | ^18.3.1 | UI |
-| `react-router-dom` | ^6.8.0 | Routing (`BrowserRouter`, `Routes`, `Link`, `useNavigate`, `useParams`, `useLocation`) |
-| `framer-motion` | ^12.19.1 | Scroll-reveal animations, marquee, scroll-linked timeline line |
-| `lucide-react` | ^0.344.0 | Primary icon set |
-| `react-icons` | ^5.5.0 | Brand/tech logos in the Hero toolkit (`react-icons/fa`, `react-icons/si`) |
-| Web3Forms API | REST | Sending contact-form submissions (via `fetch` in `src/lib/sendContactForm.ts`) |
-
-### Dev dependencies
-Vite ^6.3.5, `@vitejs/plugin-react` ^4.3.1, TypeScript ^5.5.3, Tailwind CSS ^3.4.1, PostCSS ^8.4.35, Autoprefixer ^10.4.18, ESLint ^9.9.1, `typescript-eslint` ^8.3.0, `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh`, `globals`.
-
 ### Fonts
 - **Plus Jakarta Sans** (200–800, incl. italics) — imported in `src/index.css`; the default `sans` font in Tailwind and forced on `*` in `@layer base`.
 - **Instrument Serif** — loaded in `index.html`, mapped to Tailwind `font-serif`.
@@ -43,12 +30,7 @@ Vite ^6.3.5, `@vitejs/plugin-react` ^4.3.1, TypeScript ^5.5.3, Tailwind CSS ^3.4
 
 ## 3. Scripts
 
-```bash
-npm run dev       # Vite dev server (http://localhost:5173)
-npm run build     # Production build -> dist/   (note: runs `vite build` only, no `tsc` type-check)
-npm run preview   # Serve the built dist/ locally
-npm run lint      # ESLint over the project
-```
+`npm run dev|build|preview|lint` — standard Vite scripts from `package.json`; `build` runs `vite build` only, no `tsc` type-check.
 
 There is **no test framework** configured. To type-check, run `npx tsc -b` (or `npx tsc -p tsconfig.app.json`).
 
@@ -56,51 +38,7 @@ There is **no test framework** configured. To type-check, run `npx tsc -b` (or `
 
 ## 4. Directory Structure
 
-```
-efraimjames-web/
-├── index.html                 # HTML shell: meta, Google Fonts, favicon, dark-mode flash script
-├── package.json
-├── vite.config.ts             # react() plugin; optimizeDeps.exclude: ['lucide-react']
-├── tailwind.config.js         # Theme extensions (fonts, colors, animations, gradients)
-├── postcss.config.js          # tailwindcss + autoprefixer
-├── eslint.config.js           # Flat config: js + typescript-eslint recommended, react-hooks, react-refresh
-├── tsconfig.json              # References tsconfig.app.json + tsconfig.node.json
-├── tsconfig.app.json          # strict, noUnusedLocals/Parameters, bundler resolution, jsx: react-jsx
-├── tsconfig.node.json
-├── README.md                  # Unmodified Vite template README
-├── agents.md                  # This file
-├── public/
-│   ├── Logo1.png              # Logo + favicon (referenced as "/Logo1.png")
-│   ├── CV-EFRAIM-JAMES-TALUCOD.pdf   # Older CV — not referenced by code
-│   └── vite.svg               # Template leftover
-└── src/
-    ├── main.tsx               # Entry: StrictMode > BrowserRouter > App
-    ├── App.tsx                # Routes + home page section order
-    ├── index.css              # Tailwind layers, global styles, scrollbar, custom utilities
-    ├── vite-env.d.ts          # Vite client types + `declare module '*.pdf'`
-    ├── data/
-    │   └── projects.ts        # Project type, all project data, lookup helpers
-    ├── hooks/
-    │   └── useDarkMode.ts     # Dark-mode hook (currently unused)
-    ├── components/
-    │   ├── Header.tsx
-    │   ├── Hero.tsx
-    │   ├── WhatICanDo.tsx
-    │   ├── Projects.tsx
-    │   ├── CollaborativeProjects.tsx
-    │   ├── OtherProjects.tsx
-    │   ├── LetsTalkMarquee.tsx
-    │   ├── About.tsx
-    │   ├── WorkHistory.tsx
-    │   ├── Contact.tsx
-    │   ├── Footer.tsx
-    │   ├── InfiniteMarquee.tsx
-    │   └── Skills.tsx         # Legacy "Services" section — not rendered anywhere
-    ├── pages/
-    │   ├── ContactPage.tsx    # /contact
-    │   └── ProjectDetails.tsx # /project/:id
-    └── assets/                # Images + current CV PDF (imported via ES modules)
-```
+Run `ls`/`find` for the current tree. Component purposes are documented in §6-7 below; unused/dead files are listed in §11 (assets) and noted inline in §6 (`Skills.tsx`).
 
 ---
 
@@ -285,10 +223,7 @@ export const getRelatedProjects: (currentId: string, category: string, limit?: n
 | `poster-design` | Poster Design | Graphic Design | 2023 | service-4b.jpg | Behance | |
 | `banner-design` | Banner Design | Graphic Design | 2024 | service-4d.jpg | Behance | |
 
-### How to add a project
-1. Put the image in `src/assets/` and `import` it at the top of `projects.ts`.
-2. Append an object to `projects` with a unique kebab-case `id`.
-3. To feature it, add its exact `title` to `featuredProjectTitles` in **both** `components/Projects.tsx` and `components/OtherProjects.tsx`.
+See the `portfolio-content` skill for the step-by-step procedure to add a new project.
 
 ---
 
@@ -301,13 +236,7 @@ Both `components/Contact.tsx` and `pages/ContactPage.tsx` submit through `src/li
 - Anti-spam: Hidden honeypot checkbox named `botcheck`.
 - Failure fallback: If unconfigured or the request fails, the UI surfaces a direct email link to `efraimjamestalucod88@gmail.com`.
 
-### Environment variables (`.env`, gitignored, not committed)
-
-```env
-VITE_WEB3FORMS_ACCESS_KEY=your_web3forms_access_key_here
-```
-
-A template is provided in `.env.example`. Obtain a free key at [web3forms.com](https://web3forms.com) by entering `efraimjamestalucod88@gmail.com`. This environment variable must also be configured in your hosting provider (Vercel, Netlify, etc.) settings for production builds.
+See the `portfolio-content` skill for how to obtain and configure the `VITE_WEB3FORMS_ACCESS_KEY` environment variable.
 
 ---
 
@@ -402,12 +331,9 @@ Useful when fixing bugs or extending the site:
 
 ## 14. Working in This Repo — Checklist for Agents
 
-1. **Content changes** (projects, experience, services, contact info) are plain data edits — find the array in the relevant file (`data/projects.ts`, `WorkHistory.tsx`, `WhatICanDo.tsx`, `Hero.tsx` toolkit, `Contact.tsx`/`Footer.tsx`/`ContactPage.tsx` contact details). Contact details are duplicated across those three files — update all of them.
-2. **New home section**: create `src/components/Name.tsx` with a `<section id="kebab-id" className="py-24 lg:py-32 bg-...">`, use the standard gradient heading and Framer `whileInView` reveal, add it to the `<main>` list in `App.tsx`, and add a nav item in `Header.tsx`/`Footer.tsx` if it should be linked.
-3. **New route**: add a `<Route>` in `App.tsx`; include `<Header />` and `<Footer />` in the page component like the existing pages.
-4. **Styling**: stick to the green/emerald/teal accent and slate/stone neutrals; extend `tailwind.config.js` for new tokens rather than hard-coding hex values.
-5. **Before finishing**: `npm run lint`, `npx tsc -b` (the build doesn't type-check), and `npm run build`. Visually check the change at mobile (<640px), tablet (`md`), and desktop (`lg+`) — the header switches to the hamburger below `lg` (1024px).
-6. Never commit `.env` or API credentials.
+See the `portfolio-content` skill for the content-change, new-section, new-route, and pre-finish-checklist workflows.
+
+Always: never commit `.env` or API credentials.
 
 ---
 

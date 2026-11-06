@@ -1,9 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Mail, Phone, MapPin, Send, CheckCircle } from "lucide-react";
 import { sendContactForm } from "../lib/sendContactForm";
+import { useContent } from "../hooks/useContent";
+import { getSiteSettings } from "../lib/content";
+import { fallbackSiteSettings } from "../data/fallback";
 import contactBg from "../assets/contact-bg.png";
 
 const Contact = () => {
+  const settings = useContent(getSiteSettings, fallbackSiteSettings);
   const [isVisible, setIsVisible] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -84,20 +88,20 @@ const Contact = () => {
     {
       icon: Mail,
       title: "Email",
-      value: "efraimjamestalucod88@gmail.com",
-      href: "mailto:efraimjamestalucod88@gmail.com",
+      value: settings.contactEmail,
+      href: `mailto:${settings.contactEmail}`,
     },
     {
       icon: Phone,
       title: "WhatsApp",
-      value: "(+63) 965 639 4996",
-      href: "https://wa.me/639656394996?text=Hello%20Efraim,%20I%20would%20like%20to%20discuss%20a%20project%20with%20you.",
+      value: settings.contactPhoneDisplay,
+      href: `https://wa.me/${settings.contactWhatsappDigits}?text=Hello%20Efraim,%20I%20would%20like%20to%20discuss%20a%20project%20with%20you.`,
     },
     {
       icon: MapPin,
       title: "Location",
-      value: "Zamboanga City, Philippines",
-      href: "https://maps.google.com/?q=Zamboanga+City,+Philippines",
+      value: settings.contactLocationFull,
+      href: `https://maps.google.com/?q=${encodeURIComponent(settings.contactLocationFull)}`,
     },
   ];
 
@@ -184,10 +188,10 @@ const Contact = () => {
                   <p className="mt-1 text-xs text-red-600">
                     You can also reach out directly via{" "}
                     <a
-                      href="mailto:efraimjamestalucod88@gmail.com"
+                      href={`mailto:${settings.contactEmail}`}
                       className="underline font-semibold hover:text-red-800"
                     >
-                      efraimjamestalucod88@gmail.com
+                      {settings.contactEmail}
                     </a>{" "}
                     or WhatsApp.
                   </p>

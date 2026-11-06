@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import { projects } from '../data/projects';
+import { useContent } from '../hooks/useContent';
+import { getProjects } from '../lib/content';
+import { fallbackProjects } from '../data/fallback';
 
 const CollaborativeProjects = () => {
-  const collaborativeProjectTitles = ["Facundo Booking", "Broadheader"];
-  const displayedProjects = collaborativeProjectTitles
-    .map(title => projects.find(p => p.title === title))
-    .filter((p): p is (typeof projects)[0] => Boolean(p));
+  const projects = useContent(getProjects, fallbackProjects);
+  const displayedProjects = projects
+    .filter((p) => p.section === 'collaborative')
+    .sort((a, b) => a.displayOrder - b.displayOrder);
 
   return (
     <section id="collaborative-projects" className="py-24 lg:py-32 bg-stone-50 overflow-hidden">

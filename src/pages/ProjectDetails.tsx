@@ -2,15 +2,18 @@ import { useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ExternalLink, Calendar, User, Briefcase } from 'lucide-react';
-import { getProjectById, getRelatedProjects } from '../data/projects';
+import { useContent } from '../hooks/useContent';
+import { getProjects, getProjectById, getRelatedProjects } from '../lib/content';
+import { fallbackProjects } from '../data/fallback';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 const ProjectDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const project = id ? getProjectById(id) : undefined;
-  const relatedProjects = project ? getRelatedProjects(project.id, project.category) : [];
+  const projects = useContent(getProjects, fallbackProjects);
+  const project = id ? getProjectById(projects, id) : undefined;
+  const relatedProjects = project ? getRelatedProjects(projects, project.id, project.category) : [];
 
   useEffect(() => {
     window.scrollTo(0, 0);

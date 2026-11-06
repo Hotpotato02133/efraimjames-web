@@ -1,17 +1,15 @@
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import { projects } from '../data/projects';
+import { useContent } from '../hooks/useContent';
+import { getProjects } from '../lib/content';
+import { fallbackProjects } from '../data/fallback';
 
 const Projects = () => {
-  const featuredProjectTitles = [
-    "Digital Archiving Management System",
-    "Zion Shop",
-    "Quantyx Trading Journal"
-  ];
-  const displayedProjects = featuredProjectTitles
-    .map(title => projects.find(p => p.title === title))
-    .filter((p): p is (typeof projects)[0] => Boolean(p));
+  const projects = useContent(getProjects, fallbackProjects);
+  const displayedProjects = projects
+    .filter((p) => p.section === 'featured')
+    .sort((a, b) => a.displayOrder - b.displayOrder);
 
   return (
     <section id="projects" className="py-24 lg:py-32 bg-white overflow-hidden">
