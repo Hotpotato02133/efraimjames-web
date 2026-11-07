@@ -4,9 +4,10 @@
 // service-role key (the client never touches analytics_events directly —
 // RLS has no policies on it at all, by design).
 //
-// Only works where /api/* is actually served (a Vercel deployment, or
-// `vercel dev` locally) — under plain `vite dev` the fetch 404s and is
-// swallowed, so local development is unaffected either way.
+// /api/* is served by Vercel in production and by the `vercelApiDev` plugin
+// in vite.config.ts during `npm run dev`, so events are recorded in both. If
+// the route is ever unavailable the fetch fails silently and the site is
+// unaffected.
 
 export type AnalyticsEventType = 'pageview' | 'resume_download' | 'contact_submit' | 'project_click';
 

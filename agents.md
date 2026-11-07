@@ -2,6 +2,8 @@
 
 Context for AI coding agents working in this repository. Everything below was verified against the source code; if the code and this file disagree, trust the code and update this file.
 
+**As of the Supabase/CMS migration (commits `d116508`, `2eb628f`), this site has a real backend.** Content (projects, work history, hero toolkit, about copy, site settings, custom sections) lives in Supabase Postgres and is editable by the owner at `/admin` without touching code. See **§16–18** for the full architecture, admin workflows, and analytics — read those before assuming anything in §6–9 below (which describe the original static-data version) is still how content is sourced. The component *rendering* and styling those sections describe is still accurate; only the *data source* changed.
+
 ---
 
 ## 1. Project Overview
@@ -11,7 +13,7 @@ Context for AI coding agents working in this repository. Everything below was ve
 | **Name** | Efraim James Portfolio (`package.json` name is still the template default `vite-react-typescript-starter`, version `0.0.0`) |
 | **Owner** | Efraim James Talucod — Software Engineer with a UI/UX design background, Zamboanga City, Philippines |
 | **Type** | Personal portfolio — static single-page app (SPA) with client-side routing |
-| **Stack** | React 18 + TypeScript + Vite 6 + Tailwind CSS 3 + Framer Motion |
+| **Stack** | React 18 + TypeScript + Vite 6 + Tailwind CSS 3 + Framer Motion + Supabase (Postgres/Auth/Storage) + Vercel serverless functions |
 | **Positioning** | Software Engineer first, UI/UX design as a supporting strength. Hero headline is **"Software Engineer"**; page `<title>` is "Efraim James - Software Engineer". Keep new copy in this voice. |
 | **Default branch** | `master` |
 
@@ -50,7 +52,9 @@ Defined in `src/App.tsx` (router provided in `src/main.tsx`):
 |---|---|---|
 | `/` | Inline home layout | Full single-page portfolio |
 | `/contact` | `pages/ContactPage.tsx` | Standalone contact page with its own Header/Footer |
-| `/project/:id` | `pages/ProjectDetails.tsx` | `id` matches `Project.id` in `data/projects.ts`; shows "Project Not Found" fallback for unknown ids |
+| `/project/:id` | `pages/ProjectDetails.tsx` | `id` matches a `projects.id` row (fetched via `getProjects()`/`getProjectById()`, §16); shows "Project Not Found" fallback for unknown ids |
+| `/admin/login` | `admin/AdminLogin.tsx` | Supabase Auth email/password sign-in |
+| `/admin` | `admin/AdminLayout.tsx` (layout) | Session-gated — redirects to `/admin/login` if unauthenticated. Nested routes: `index` → `AnalyticsDashboard`, `projects`, `work-history`, `hero-about`, `site-settings`, `sections`. See §17. |
 
 There is no catch-all/404 route. `App` wraps everything in a div that fades from `opacity-0` to `opacity-100` (1000 ms) on mount.
 
@@ -313,6 +317,7 @@ Several project images are large PNGs (e.g. `Leafly-cover.png` ≈ 1.3 MB) — c
 
 Useful when fixing bugs or extending the site:
 
+0. *(fixed by the CMS migration)* Projects used to be sorted into Featured/Collaborative/Other by matching a hard-coded `title` string in three separate component files. They're now filtered by a `section` + `display_order` column on the `projects` table (§16), set from `/admin/projects` (§17) — no more title-string coupling.
 1. **Hash navigation from other routes doesn't scroll.** `navigate('/#about')` (Header on `/contact`) and `navigate('/#projects')` (ProjectDetails back button) land on `/` but nothing scrolls to the hash — there's no hash-scroll effect on the home route. It just shows the top of the page.
 2. **Header/Footer nav is dead on `/project/:id`.** `Header.handleNavClick` only special-cases `/contact`; on project pages (and in `Footer` on any sub-page) it `querySelector`s a section that doesn't exist, so nothing happens.
 3. **Dark mode is half-wired.** `index.html` adds `class="dark"` based on `localStorage.darkMode` / system preference, and `useDarkMode` exists, but the hook is never used, `darkMode` isn't set in `tailwind.config.js` (defaults to `media`), and no `dark:` classes exist. The site is effectively light-only.
@@ -339,10 +344,99 @@ Always: never commit `.env` or API credentials.
 
 ## 15. Deployment
 
-- `npm run build` → static output in `dist/`.
-- Compatible with Vercel / Netlify / any static host; configure an SPA fallback to `index.html` and set `VITE_WEB3FORMS_ACCESS_KEY` in environment variables at build time.
+- `npm run build` → static output in `dist/`; `api/*.ts` deploy as Vercel serverless functions with zero extra config.
+- **Host: Vercel** (not just "compatible with" — `vercel.json` defines the SPA rewrite that explicitly excludes `/api`: `{"rewrites":[{"source":"/((?!api/).*)","destination":"/index.html"}]}`). In production the `/api/*` functions run on Vercel; during `npm run dev` the `vercelApiDev` plugin in `vite.config.ts` serves the same `api/*.ts` files (loaded via `ssrLoadModule`, with the full `.env` copied into `process.env`), so tracking and the analytics dashboard work locally without the Vercel CLI. Before this plugin, Vite's SPA fallback answered `/api/analytics-summary` with `index.html` (HTTP 200, `text/html`) and the dashboard failed with "Request failed (200)".
+- **Required environment variables**, set in Vercel's **Project Settings → Environment Variables** (a local `.env` is gitignored and never reaches the build — these must be entered in the dashboard separately):
+  | Variable | Exposure | Notes |
+  |---|---|---|
+  | `VITE_WEB3FORMS_ACCESS_KEY` | Client | Contact form |
+  | `VITE_SUPABASE_URL` | Client | Project URL |
+  | `VITE_SUPABASE_ANON_KEY` | Client | Publishable/anon key (`sb_publishable_...`) |
+  | `SUPABASE_SERVICE_ROLE_KEY` | Server-only (Vercel functions) | Secret key (`sb_secret_...`) — **never** prefix with `VITE_`, never expose client-side |
+  Vercel's env-var UI flags a `VITE_`-prefixed variable marked "Sensitive" as contradictory (the prefix bakes it into the public bundle anyway) — choose the plain/Config type for the two `VITE_` vars above, and Sensitive/Secret for `SUPABASE_SERVICE_ROLE_KEY`.
+  Vite inlines `VITE_*` vars **at build time**, not runtime — after adding/changing any of them in Vercel, trigger **Deployments → Redeploy** for the change to take effect.
 - No CI configuration is present in the repository.
 
 ---
 
-*Last updated: 2026-09-26 — generated from a full read of the source at commit `1aff116`.*
+## 16. Backend Architecture (Supabase)
+
+Added by the CMS migration (plan: see git history / `d116508`, `2eb628f`). Full picture:
+
+```
+Public site               Admin (/admin/*)              Vercel functions
+    │                            │                             │
+    ▼                            ▼                             │
+src/lib/content.ts  ◄──reads── Supabase Postgres ◄──writes── src/lib/adminApi.ts
+(anon key, cached per        (RLS: public SELECT,                │
+ page load via cached())      authenticated-only writes)         │
+    │                                                            │
+    ▼                                                 analytics_events
+src/data/fallback.ts                                  (no anon access either way —
+(frozen snapshot — used                                only api/track.ts and
+ if the Supabase fetch fails,                          api/analytics-summary.ts,
+ so the site never goes blank)                         both using the service-role key,
+                                                        can touch this table)
+```
+
+### Tables (`supabase/migrations/0001_init.sql`, `0002_storage_policies.sql`)
+
+| Table | Purpose | Notes |
+|---|---|---|
+| `projects` | All project cards | `section` (`'featured'\|'collaborative'\|'other'`) + `display_order` drive `Projects.tsx`/`CollaborativeProjects.tsx`/`OtherProjects.tsx` — no more title matching |
+| `work_history` | `WorkHistory.tsx` timeline | `project_links` jsonb array; DB keys are `logo_url`/`logo_scale`, mapped to the `TooltipLink` shape (`logo`/`logoScale`) in both `content.ts` and `adminApi.ts` |
+| `hero_toolkit` | `Hero.tsx` tech marquee | `icon_key` is a whitelist string, resolved only against `src/lib/iconRegistry.tsx`'s fixed `ICON_REGISTRY` map — never rendered as arbitrary code |
+| `hero_content`, `about_content`, `site_settings`, `capabilities` | Singleton rows (one row each) | `site_settings` is the single source of truth for contact/social info — previously duplicated and inconsistent across `Contact.tsx`/`ContactPage.tsx`/`Footer.tsx` |
+| `custom_sections` | Generic new-section blocks | heading + minimal markdown (paragraphs, `**bold**`/`*italic*`) + optional image/button, rendered by `src/components/CustomSectionBlock.tsx` |
+| `page_blocks` | Drives home-page section order/visibility | `block_key` is either a fixed key matching `App.tsx`'s `COMPONENT_REGISTRY` (`hero`, `projects`, …) or `'custom:<uuid>'` resolving against `custom_sections` |
+| `analytics_events` | Pageviews + conversion events | RLS enabled with **no policies at all** — unreachable by the anon or authenticated client in either direction; only the two `/api` functions (service-role key) touch it |
+
+**RLS pattern** (every content table): public `SELECT`; `INSERT`/`UPDATE`/`DELETE` restricted to `authenticated` (there's one admin account, so "logged in" is sufficient — no role table). Verified directly against the live project: anon `SELECT` on `projects` → 200 with data; anon `INSERT` → 401 `42501` row-level-security violation; anon `SELECT` on `analytics_events` → 200 with an empty array regardless of actual contents. **This is the real security boundary — the `/admin` route guard in React is UX, not security.**
+
+Storage (`portfolio-assets` bucket, public-read): the bucket's `{ public: true }` flag only exempts the public-read CDN endpoint. Writes (upload/update/delete) need their own `storage.objects` policies scoped to `bucket_id = 'portfolio-assets'`, which is what `0002_storage_policies.sql` adds (authenticated-only insert/update/delete, public select).
+
+### Data access layer
+
+- **`src/lib/supabaseClient.ts`** — exports `supabase: SupabaseClient | null`, `null` when `VITE_SUPABASE_URL`/`VITE_SUPABASE_ANON_KEY` are missing (e.g. local dev without a `.env`, or a misconfigured deployment). Every consumer must handle the `null` case.
+- **`src/lib/content.ts`** — public-facing read API (`getProjects`, `getProjectById`, `getRelatedProjects`, `getWorkHistory`, `getHeroContent`, `getHeroToolkit`, `getAboutContent`, `getSiteSettings`, `getPageBlocks`, `getCustomSections`, …). Each getter is wrapped in `cached()`, which memoizes the in-flight promise per page load so multiple components sharing a table issue one network request. On any Supabase error (including `supabase === null`), falls back to the matching array in `src/data/fallback.ts` — the site never goes blank.
+- **`src/hooks/useContent.ts`** — generic hook: renders the fallback value synchronously on mount, swaps in the live result once the fetcher resolves. No loading spinners, no blank flash.
+- **`src/lib/adminApi.ts`** — write-side CRUD used only by `/admin/*` pages: `uploadAsset` plus per-table list/save/delete/move functions, issued as direct (uncached) Supabase queries under the signed-in session. Throws on error — the admin UI must surface it, never silently fall back.
+- **`src/data/fallback.ts`** — frozen snapshot of the pre-migration static content; the reliability net described above. `src/data/projects.ts` (the old static array) has been deleted.
+
+### One-off scripts
+
+- `scripts/seed.mjs` (`npm run db:seed`) — uploads project/logo images to Storage and inserts the original static content into every table. Uses `SUPABASE_SERVICE_ROLE_KEY` — only ever run manually, once, against a fresh project.
+
+## 17. Admin / CMS (`src/admin/**`, routes under `/admin`)
+
+- **Auth**: `AdminLogin.tsx` calls `supabase.auth.signInWithPassword()`; shows "Supabase is not configured (missing env vars)." if `supabase` is `null` (i.e. the deployment is missing `VITE_SUPABASE_URL`/`VITE_SUPABASE_ANON_KEY` — see §15). There is exactly one admin account, created via `supabase.auth.admin.createUser()` (service-role key, one-time, not in app code).
+- **`AdminLayout.tsx`**: session guard (`getSession` + `onAuthStateChange`), redirects to `/admin/login` when signed out (remembering the attempted path in router state). Owns the shell: the dark `Sidebar` (fixed; desktop toggles between a 264px sidebar and a 76px icon rail with hover labels, below `lg` it is an off-canvas drawer with backdrop), the sticky top bar (toggle button, breadcrumb, "Supabase connected" pill, "View site" link, avatar), and the `ToastProvider`/`ConfirmProvider` wrappers. Sidebar collapse (`ej_admin_sidebar_collapsed`) and tips visibility (`ej_admin_tips`) persist in `localStorage`; **Ctrl/Cmd+B** toggles the sidebar. Sets `document.title` per route.
+- **`nav.ts`**: `NAV_GROUPS` (Overview / Content / Configuration with Lucide icons), `findNavItem()`, the `CREATOR` constant, and `CREATOR_TIPS` (route-keyed hint strings).
+- **Shared components** (`src/admin/components/`):
+  - `ui.tsx` — the kit every page uses: `PageHeader`, `Card`, `Field`, `Input`/`Textarea`/`Select`, `Button` (variants/sizes/loading/icon), `IconButton`, `Badge`, `Chips`, `EmptyState`, `Skeleton`/`PageSkeleton`, `Switch`, `ReorderButtons`, `Tabs`, `Kbd`, plus `splitList()` and `slugify()` helpers.
+  - `Toast.tsx` — `ToastProvider` + `useToast()` (`success`/`error`/`info`, bottom-right, auto-dismiss) and `errorMessage()`; replaces the old inline Error/Success banners.
+  - `ConfirmDialog.tsx` — `ConfirmProvider` + `useConfirm()` (promise-based modal replacing `window.confirm`).
+  - `Drawer.tsx` — right-hand slide-over used for every create/edit form (body-scroll lock, Escape/backdrop close, `form=` footer buttons).
+  - `ImageUpload.tsx` — drop-zone/preview that calls `uploadAsset()` and validates type/size (8 MB).
+  - `Sidebar.tsx`, `CreatorProfile.tsx` (owner card in the sidebar footer and avatar in the top bar; popover with email, live-site/GitHub links, tips toggle, sign out), `TipCard.tsx` (contextual "Creator tip" in the sidebar, cycles `CREATOR_TIPS` for the current route).
+- **CMS pages** (`src/admin/pages/`):
+  - `ProjectsAdmin.tsx` — three section cards with numbered, reorderable rows; Drawer form with auto-slug from title, cover upload, tag chip preview; delete via confirm dialog.
+  - `WorkHistoryAdmin.tsx` — timeline-style list (period badge, logo stack, skill chips); Drawer form with a project-links editor (logo upload + zoom).
+  - `HeroAboutAdmin.tsx` — tabs: Hero (with headline preview), About, Toolkit (Drawer add/edit), Capabilities (six cards). Save buttons stay disabled until the form is dirty.
+  - `SiteSettingsAdmin.tsx` — Contact / Social / Footer cards with a floating "Unsaved changes" save bar; WhatsApp digits are normalised on save.
+  - `SectionsAdmin.tsx` — page-order list with `Switch` toggles (optimistic), Built-in/Custom badges, live-site anchor links; Drawer form for custom sections.
+- **`WhatICanDo.tsx` cards are only partially CMS-editable** — `title`/`description`/`cta_label`/`cta_target` come from `capabilities`, but each card's hand-built mini-animation stays hardcoded in the component (not worth generalizing for 6 fixed visuals).
+- "Add a new section" means a `custom_sections` block (heading + markdown + optional image/button) via `SectionsAdmin.tsx` — not a freeform component builder. A genuinely new, bespoke React section is still a code change (§ "New home section" in the `portfolio-content` skill).
+
+## 18. Analytics
+
+- **`src/lib/analytics.ts`** — `trackEvent(type, extra)` for `'pageview' | 'resume_download' | 'contact_submit' | 'project_click'`. Session id is a `crypto.randomUUID()` cached in `localStorage` (`ej_session_id`) — no cookies, no consent banner needed. Fires a `fetch('/api/track', { keepalive: true })` and swallows failures (so a missing `/api` route in local dev is silent, not a thrown error).
+- Call sites: pageview on every non-`/admin` route change (`App.tsx`'s `useLocation()` effect); `resume_download` in `Hero.tsx`'s download handler; `contact_submit` on a successful `sendContactForm` call in `Contact.tsx`/`ContactPage.tsx`; `project_click` on project card/link clicks (`Projects.tsx`, `CollaborativeProjects.tsx`, `OtherProjects.tsx`, `ProjectDetails.tsx`).
+- **`api/track.ts`** — Vercel function, service-role key, inserts into `analytics_events`; derives `device_type`/`browser`/`os` from the `user-agent` header and `country` from Vercel's `x-vercel-ip-country` header; filters obvious bot user-agents.
+- **`api/analytics-summary.ts`** — Vercel function; verifies the caller's Supabase session JWT (`auth.getUser(token)`) before reading with the service-role key. Accepts `?days=` (default 30, max 365) and returns: a zero-filled `pageviewsByDay` series for the window, totals (`uniqueSessions`, `totalPageviews`, `projectClicks`, `resumeDownloads`, `contactSubmits`) plus the same totals for the `previous` window of equal length (for the deltas), `topPaths`, `topReferrers` (grouped by host), `topProjects` (by `project_id`), and per-session `devices`/`browsers`/`operatingSystems`/`countries` breakdowns (each session counted once).
+- **`AnalyticsDashboard.tsx`** (the `/admin` index route) — 7/30/90-day range tabs + refresh, five stat tiles with "vs previous period" deltas, a `recharts` area chart with a crosshair tooltip, rank lists (pages, referrers, most-clicked projects resolved to titles, devices, browsers, OS, countries via `Intl.DisplayNames`), and quick-action links. Error state shows the real message, a retry button and how the `/api` route is served. Styled per this repo's `dataviz` conventions: single-hue sequential emerald, one axis, no legend for the single series.
+- `api/` is covered by `tsconfig.node.json` (`include: ["vite.config.ts", "api"]`), so `npx tsc -b` type-checks the functions too.
+
+---
+
+*Last updated: 2026-11-07 — Supabase/CMS/analytics backend added (migration plan `lovely-crafting-wilkinson`); verified against source at commit `2eb628f` plus live RLS checks against the deployed Supabase project.*

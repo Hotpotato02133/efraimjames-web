@@ -4,21 +4,25 @@
 -- in via Supabase Auth) still go through storage.objects RLS like any other
 -- table. Without these policies, admin image uploads are rejected.
 
+drop policy if exists "portfolio-assets public read" on storage.objects;
 create policy "portfolio-assets public read"
   on storage.objects for select
   using (bucket_id = 'portfolio-assets');
 
+drop policy if exists "portfolio-assets authenticated insert" on storage.objects;
 create policy "portfolio-assets authenticated insert"
   on storage.objects for insert
   to authenticated
   with check (bucket_id = 'portfolio-assets');
 
+drop policy if exists "portfolio-assets authenticated update" on storage.objects;
 create policy "portfolio-assets authenticated update"
   on storage.objects for update
   to authenticated
   using (bucket_id = 'portfolio-assets')
   with check (bucket_id = 'portfolio-assets');
 
+drop policy if exists "portfolio-assets authenticated delete" on storage.objects;
 create policy "portfolio-assets authenticated delete"
   on storage.objects for delete
   to authenticated

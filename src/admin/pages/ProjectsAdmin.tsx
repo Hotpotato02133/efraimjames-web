@@ -1,24 +1,40 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
-import { ArrowUp, ArrowDown, Pencil, Trash2, Plus, X } from 'lucide-react';
-import {
-  adminListProjects,
-  adminSaveProject,
-  adminDeleteProject,
-  adminMoveProject,
-  uploadAsset,
-} from '../../lib/adminApi';
+import { ExternalLink, FolderKanban, Link2, Pencil, Plus, Trash2 } from 'lucide-react';
+import { adminListProjects, adminSaveProject, adminDeleteProject, adminMoveProject } from '../../lib/adminApi';
 import type { Project } from '../../lib/types';
-import { Field, Card, AdminButton, ErrorBanner, SuccessBanner, inputClass } from '../components/Field';
+import {
+  Badge,
+  Button,
+  Card,
+  Chips,
+  EmptyState,
+  Field,
+  IconButton,
+  Input,
+  PageHeader,
+  PageSkeleton,
+  ReorderButtons,
+  SectionLabel,
+  Select,
+  Textarea,
+  slugify,
+  splitList,
+} from '../components/ui';
+import { Drawer } from '../components/Drawer';
+import { ImageUpload } from '../components/ImageUpload';
+import { useToast, errorMessage } from '../components/Toast';
+import { useConfirm } from '../components/ConfirmDialog';
 
-const SECTIONS: { key: Project['section']; label: string }[] = [
-  { key: 'featured', label: 'Featured Projects' },
-  { key: 'collaborative', label: 'Collaborative Projects' },
-  { key: 'other', label: 'Explorations' },
+const SECTIONS: { key: Project['section']; label: string; hint: string }[] = [
+  { key: 'featured', label: 'Featured Projects', hint: 'Solo work shown first on the home page — up to three cards.' },
+  { key: 'collaborative', label: 'Collaborative Projects', hint: 'Work shipped with a team — two cards side by side.' },
+  { key: 'other', label: 'Explorations', hint: 'Everything else, revealed by the "View all projects" toggle.' },
 ];
 
 interface FormState {
   isNew: boolean;
+  slugTouched: boolean;
   id: string;
   title: string;
   cardTitle: string;
@@ -38,6 +54,7 @@ interface FormState {
 function toFormState(p: Project): FormState {
   return {
     isNew: false,
+    slugTouched: true,
     id: p.id,
     title: p.title,
     cardTitle: p.cardTitle ?? '',
@@ -58,6 +75,7 @@ function toFormState(p: Project): FormState {
 function emptyFormState(section: Project['section'], nextOrder: number): FormState {
   return {
     isNew: true,
+    slugTouched: false,
     id: '',
     title: '',
     cardTitle: '',
@@ -65,7 +83,7 @@ function emptyFormState(section: Project['section'], nextOrder: number): FormSta
     fullDescription: '',
     image: '',
     tagsText: '',
-    category: '',
+    category: 'Fullstack Project',
     link: '#',
     year: String(new Date().getFullYear()),
     client: '',
@@ -76,325 +94,332 @@ function emptyFormState(section: Project['section'], nextOrder: number): FormSta
 }
 
 const ProjectsAdmin = () => {
+  const toast = useToast();
+  const confirm = useConfirm();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const [editing, setEditing] = useState<FormState | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [busyId, setBusyId] = useState<string | null>(null);
 
-  const load = async () => {
-    setLoading(true);
+  const load = useCallback(async () => {
     try {
       setProjects(await adminListProjects());
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load projects.');
+      toast.error('Failed to load projects.', errorMessage(e));
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
+  }, [toast]);
 
   useEffect(() => {
     load();
-  }, []);
+  }, [load]);
 
   const startCreate = (section: Project['section']) => {
     const count = projects.filter((p) => p.section === section).length;
     setEditing(emptyFormState(section, count));
-    setSuccess('');
   };
 
-  const handleUpload = async (file: File | undefined) => {
-    if (!file || !editing) return;
-    setUploading(true);
-    setError('');
-    try {
-      const url = await uploadAsset(file, 'projects');
-      setEditing((prev) => (prev ? { ...prev, image: url } : prev));
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Upload failed.');
-    }
-    setUploading(false);
-  };
+  const closeDrawer = useCallback(() => setEditing(null), []);
 
   const handleSave = async (e: FormEvent) => {
     e.preventDefault();
     if (!editing) return;
+    const id = editing.id.trim();
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id)) {
+      toast.error('Invalid ID.', 'Use lowercase letters, numbers and hyphens only, e.g. "zion-shop".');
+      return;
+    }
+    if (!editing.image) {
+      toast.error('Add a cover image before saving.');
+      return;
+    }
     setSaving(true);
-    setError('');
     try {
       await adminSaveProject({
-        id: editing.id.trim(),
-        title: editing.title,
+        id,
+        title: editing.title.trim(),
         cardTitle: editing.cardTitle.trim() || undefined,
-        description: editing.description,
-        fullDescription: editing.fullDescription,
+        description: editing.description.trim(),
+        fullDescription: editing.fullDescription.trim(),
         image: editing.image,
-        tags: editing.tagsText.split(',').map((t) => t.trim()).filter(Boolean),
-        category: editing.category,
-        link: editing.link,
-        year: editing.year,
-        client: editing.client,
-        role: editing.role,
+        tags: splitList(editing.tagsText),
+        category: editing.category.trim(),
+        link: editing.link.trim() || '#',
+        year: editing.year.trim(),
+        client: editing.client.trim(),
+        role: editing.role.trim(),
         section: editing.section,
         displayOrder: editing.displayOrder,
         isNew: editing.isNew,
       });
-      setSuccess('Project saved.');
+      toast.success(editing.isNew ? 'Project created.' : 'Project saved.', `"${editing.title.trim()}" is live on the site.`);
       setEditing(null);
       await load();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to save project.');
+      toast.error('Failed to save project.', errorMessage(e));
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!window.confirm('Delete this project? This cannot be undone.')) return;
-    setError('');
+  const handleDelete = async (project: Project) => {
+    const ok = await confirm({
+      title: `Delete "${project.title}"?`,
+      description: 'The project card and its detail page are removed from the live site immediately. This cannot be undone.',
+      confirmLabel: 'Delete project',
+      danger: true,
+    });
+    if (!ok) return;
+    setBusyId(project.id);
     try {
-      await adminDeleteProject(id);
+      await adminDeleteProject(project.id);
+      toast.success('Project deleted.');
       await load();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to delete project.');
+      toast.error('Failed to delete project.', errorMessage(e));
+    } finally {
+      setBusyId(null);
     }
   };
 
   const handleMove = async (id: string, direction: 'up' | 'down') => {
-    setError('');
+    setBusyId(id);
     try {
       await adminMoveProject(projects, id, direction);
       await load();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to reorder.');
+      toast.error('Failed to reorder.', errorMessage(e));
+    } finally {
+      setBusyId(null);
     }
   };
 
-  if (loading) return <p className="text-slate-500">Loading…</p>;
+  if (loading) return <PageSkeleton rows={3} />;
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900 mb-6">Projects</h1>
-      {error && <ErrorBanner message={error} />}
-      {success && <SuccessBanner message={success} />}
+      <PageHeader
+        eyebrow="Content"
+        title="Projects"
+        description="Each card links to its own detail page. Order within a section is the order visitors see."
+        actions={
+          <Button icon={Plus} onClick={() => startCreate('featured')}>
+            New project
+          </Button>
+        }
+      />
 
-      {editing && (
-        <Card className="mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold text-slate-900">
-              {editing.isNew ? 'New Project' : `Edit: ${editing.title}`}
-            </h2>
-            <button onClick={() => setEditing(null)} className="text-slate-400 hover:text-slate-600">
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          <form onSubmit={handleSave} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Field label="ID (URL slug)" hint="Lowercase, hyphenated. Cannot be changed after creation.">
-                <input
-                  value={editing.id}
-                  onChange={(e) => setEditing({ ...editing, id: e.target.value })}
-                  disabled={!editing.isNew}
-                  required
-                  className={inputClass + (!editing.isNew ? ' bg-slate-50 text-slate-500' : '')}
-                  placeholder="my-project-slug"
-                />
-              </Field>
-              <Field label="Section">
-                <select
-                  value={editing.section}
-                  onChange={(e) => setEditing({ ...editing, section: e.target.value as Project['section'] })}
-                  className={inputClass}
-                >
-                  {SECTIONS.map((s) => (
-                    <option key={s.key} value={s.key}>
-                      {s.label}
-                    </option>
-                  ))}
-                </select>
-              </Field>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Field label="Title">
-                <input
-                  value={editing.title}
-                  onChange={(e) => setEditing({ ...editing, title: e.target.value })}
-                  required
-                  className={inputClass}
-                />
-              </Field>
-              <Field label="Card Title (optional, shorter display title)">
-                <input
-                  value={editing.cardTitle}
-                  onChange={(e) => setEditing({ ...editing, cardTitle: e.target.value })}
-                  className={inputClass}
-                />
-              </Field>
-            </div>
-
-            <Field label="Short Description (shown on cards)">
-              <textarea
-                value={editing.description}
-                onChange={(e) => setEditing({ ...editing, description: e.target.value })}
-                required
-                rows={2}
-                className={inputClass}
-              />
-            </Field>
-
-            <Field label="Full Description (shown on the project detail page)">
-              <textarea
-                value={editing.fullDescription}
-                onChange={(e) => setEditing({ ...editing, fullDescription: e.target.value })}
-                required
-                rows={4}
-                className={inputClass}
-              />
-            </Field>
-
-            <Field label="Image">
-              <div className="flex items-center gap-4">
-                {editing.image && (
-                  <img src={editing.image} alt="" className="w-20 h-20 object-cover rounded-lg border border-slate-200" />
-                )}
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleUpload(e.target.files?.[0])}
-                  disabled={uploading}
-                  className="text-sm"
-                />
-                {uploading && <span className="text-xs text-slate-400">Uploading…</span>}
-              </div>
-            </Field>
-
-            <Field label="Tags (comma-separated)">
-              <input
-                value={editing.tagsText}
-                onChange={(e) => setEditing({ ...editing, tagsText: e.target.value })}
-                className={inputClass}
-                placeholder="React, TypeScript, TailwindCSS"
-              />
-            </Field>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Field label="Category">
-                <input
-                  value={editing.category}
-                  onChange={(e) => setEditing({ ...editing, category: e.target.value })}
-                  required
-                  className={inputClass}
-                  placeholder="Fullstack Project"
-                />
-              </Field>
-              <Field label="Live Link (# to hide the button)">
-                <input
-                  value={editing.link}
-                  onChange={(e) => setEditing({ ...editing, link: e.target.value })}
-                  className={inputClass}
-                />
-              </Field>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Field label="Year">
-                <input
-                  value={editing.year}
-                  onChange={(e) => setEditing({ ...editing, year: e.target.value })}
-                  required
-                  className={inputClass}
-                />
-              </Field>
-              <Field label="Client">
-                <input
-                  value={editing.client}
-                  onChange={(e) => setEditing({ ...editing, client: e.target.value })}
-                  required
-                  className={inputClass}
-                />
-              </Field>
-              <Field label="Your Role">
-                <input
-                  value={editing.role}
-                  onChange={(e) => setEditing({ ...editing, role: e.target.value })}
-                  required
-                  className={inputClass}
-                />
-              </Field>
-            </div>
-
-            <div className="flex gap-3 pt-2">
-              <AdminButton type="submit" disabled={saving || uploading}>
-                {saving ? 'Saving…' : 'Save Project'}
-              </AdminButton>
-              <AdminButton variant="secondary" onClick={() => setEditing(null)}>
-                Cancel
-              </AdminButton>
-            </div>
-          </form>
-        </Card>
-      )}
-
-      {SECTIONS.map(({ key, label }) => {
-        const items = projects.filter((p) => p.section === key).sort((a, b) => a.displayOrder - b.displayOrder);
-        return (
-          <div key={key} className="mb-8">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-bold text-slate-900">{label}</h2>
-              <AdminButton variant="secondary" onClick={() => startCreate(key)}>
-                <span className="flex items-center gap-1.5">
-                  <Plus className="w-4 h-4" /> Add Project
+      <div className="space-y-6">
+        {SECTIONS.map(({ key, label, hint }) => {
+          const items = projects.filter((p) => p.section === key).sort((a, b) => a.displayOrder - b.displayOrder);
+          return (
+            <Card
+              key={key}
+              title={
+                <span className="flex items-center gap-2">
+                  {label}
+                  <Badge>{items.length}</Badge>
                 </span>
-              </AdminButton>
-            </div>
-            <Card>
+              }
+              description={hint}
+              actions={
+                <Button variant="secondary" size="sm" icon={Plus} onClick={() => startCreate(key)}>
+                  Add
+                </Button>
+              }
+              flush
+            >
               {items.length === 0 ? (
-                <p className="text-sm text-slate-400">No projects in this section yet.</p>
+                <EmptyState
+                  icon={FolderKanban}
+                  title="Nothing here yet"
+                  description="Projects you add to this section appear on the home page in this order."
+                  action={
+                    <Button variant="secondary" size="sm" icon={Plus} onClick={() => startCreate(key)}>
+                      Add a project
+                    </Button>
+                  }
+                  className="py-8"
+                />
               ) : (
                 <ul className="divide-y divide-slate-100">
                   {items.map((p, i) => (
-                    <li key={p.id} className="py-3 flex items-center gap-3">
-                      <img src={p.image} alt="" className="w-12 h-12 object-cover rounded-md flex-shrink-0" />
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-slate-900 truncate">{p.title}</p>
-                        <p className="text-xs text-slate-400">{p.category}</p>
+                    <li key={p.id} className={`flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:px-6 ${busyId === p.id ? 'opacity-60' : ''}`}>
+                      <div className="flex min-w-0 flex-1 items-center gap-4">
+                        <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-slate-100 text-[11px] font-semibold tabular-nums text-slate-500">
+                          {i + 1}
+                        </span>
+                        <img src={p.image} alt="" className="h-14 w-24 flex-shrink-0 rounded-lg border border-slate-200 bg-slate-100 object-cover" />
+                        <div className="min-w-0 flex-1">
+                          <p className="flex items-center gap-2 truncate font-semibold text-slate-900">
+                            <span className="truncate">{p.title}</span>
+                            {p.link && p.link !== '#' ? (
+                              <a
+                                href={p.link}
+                                target="_blank"
+                                rel="noreferrer"
+                                title={p.link}
+                                className="flex-shrink-0 text-slate-300 hover:text-emerald-600"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <ExternalLink className="h-3.5 w-3.5" />
+                              </a>
+                            ) : (
+                              <Link2 className="h-3.5 w-3.5 flex-shrink-0 text-slate-200" aria-label="No live link" />
+                            )}
+                          </p>
+                          <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
+                            <span>{p.category}</span>
+                            <span className="text-slate-300">·</span>
+                            <span>{p.year}</span>
+                            <span className="text-slate-300">·</span>
+                            <span className="font-mono text-[11px] text-slate-400">/project/{p.id}</span>
+                          </p>
+                          {p.tags.length > 0 && (
+                            <div className="mt-2 hidden sm:block">
+                              <Chips items={p.tags} max={5} />
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <button
-                        onClick={() => handleMove(p.id, 'up')}
-                        disabled={i === 0}
-                        className="p-1.5 text-slate-400 hover:text-emerald-600 disabled:opacity-30"
-                      >
-                        <ArrowUp className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => handleMove(p.id, 'down')}
-                        disabled={i === items.length - 1}
-                        className="p-1.5 text-slate-400 hover:text-emerald-600 disabled:opacity-30"
-                      >
-                        <ArrowDown className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => {
-                          setEditing(toFormState(p));
-                          setSuccess('');
-                        }}
-                        className="p-1.5 text-slate-400 hover:text-emerald-600"
-                      >
-                        <Pencil className="w-4 h-4" />
-                      </button>
-                      <button onClick={() => handleDelete(p.id)} className="p-1.5 text-slate-400 hover:text-red-600">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      <div className="flex flex-shrink-0 items-center gap-1 sm:pl-2">
+                        <ReorderButtons
+                          onUp={() => handleMove(p.id, 'up')}
+                          onDown={() => handleMove(p.id, 'down')}
+                          disableUp={i === 0}
+                          disableDown={i === items.length - 1}
+                          busy={busyId !== null}
+                        />
+                        <IconButton label="Edit project" icon={Pencil} onClick={() => setEditing(toFormState(p))} />
+                        <IconButton label="Delete project" icon={Trash2} tone="danger" onClick={() => handleDelete(p)} disabled={busyId !== null} />
+                      </div>
                     </li>
                   ))}
                 </ul>
               )}
             </Card>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
+
+      <Drawer
+        open={editing !== null}
+        onClose={closeDrawer}
+        title={editing?.isNew ? 'New project' : `Edit ${editing?.title || 'project'}`}
+        description={editing?.isNew ? 'Fill in the card and detail-page content.' : 'Changes go live as soon as you save.'}
+        wide
+        footer={
+          <>
+            <Button variant="secondary" onClick={closeDrawer} disabled={saving}>
+              Cancel
+            </Button>
+            <Button type="submit" form="project-form" loading={saving} disabled={uploading}>
+              {editing?.isNew ? 'Create project' : 'Save changes'}
+            </Button>
+          </>
+        }
+      >
+        {editing && (
+          <form id="project-form" onSubmit={handleSave} className="space-y-8">
+            <section className="space-y-4">
+              <SectionLabel>Basics</SectionLabel>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <Field label="Title" required>
+                  <Input
+                    value={editing.title}
+                    onChange={(e) =>
+                      setEditing({
+                        ...editing,
+                        title: e.target.value,
+                        id: editing.isNew && !editing.slugTouched ? slugify(e.target.value) : editing.id,
+                      })
+                    }
+                    required
+                    autoFocus
+                    placeholder="Zion Shop"
+                  />
+                </Field>
+                <Field label="ID (URL slug)" required hint={editing.isNew ? 'Generated from the title — becomes /project/<id>. Fixed after creation.' : 'Cannot be changed after creation.'}>
+                  <Input
+                    value={editing.id}
+                    onChange={(e) => setEditing({ ...editing, id: slugify(e.target.value).replace(/-$/, '') || e.target.value.toLowerCase(), slugTouched: true })}
+                    disabled={!editing.isNew}
+                    required
+                    placeholder="my-project-slug"
+                    className="font-mono text-xs"
+                  />
+                </Field>
+                <Field label="Section" required>
+                  <Select value={editing.section} onChange={(e) => setEditing({ ...editing, section: e.target.value as Project['section'] })}>
+                    {SECTIONS.map((s) => (
+                      <option key={s.key} value={s.key}>
+                        {s.label}
+                      </option>
+                    ))}
+                  </Select>
+                </Field>
+                <Field label="Card title" hint="Optional shorter title for the card, e.g. an acronym.">
+                  <Input value={editing.cardTitle} onChange={(e) => setEditing({ ...editing, cardTitle: e.target.value })} placeholder="DAMS" />
+                </Field>
+              </div>
+            </section>
+
+            <section className="space-y-4">
+              <SectionLabel>Media</SectionLabel>
+              <ImageUpload
+                label="Cover image"
+                value={editing.image}
+                onChange={(url) => setEditing((prev) => (prev ? { ...prev, image: url } : prev))}
+                folder="projects"
+                onUploadingChange={setUploading}
+                hint="Shown at 16:10 on cards and 16:9 on the detail page — a 1600×1000 screenshot works well."
+              />
+            </section>
+
+            <section className="space-y-4">
+              <SectionLabel>Copy</SectionLabel>
+              <Field label="Short description" required hint="One or two sentences shown on the card and in search previews.">
+                <Textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} required rows={2} />
+              </Field>
+              <Field label="Full description" required hint="The “About the project” body on the detail page.">
+                <Textarea value={editing.fullDescription} onChange={(e) => setEditing({ ...editing, fullDescription: e.target.value })} required rows={6} />
+              </Field>
+              <Field label="Technologies & skills" hint="Comma-separated. Rendered as tag pills.">
+                <Input value={editing.tagsText} onChange={(e) => setEditing({ ...editing, tagsText: e.target.value })} placeholder="React, TypeScript, Supabase" />
+                <div className="mt-2">
+                  <Chips items={splitList(editing.tagsText)} max={12} />
+                </div>
+              </Field>
+            </section>
+
+            <section className="space-y-4">
+              <SectionLabel>Details</SectionLabel>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <Field label="Category" required hint="Groups related projects on the detail page.">
+                  <Input value={editing.category} onChange={(e) => setEditing({ ...editing, category: e.target.value })} required placeholder="Fullstack Project" />
+                </Field>
+                <Field label="Live link" hint='Use "#" to hide the "View Live Project" button.'>
+                  <Input value={editing.link} onChange={(e) => setEditing({ ...editing, link: e.target.value })} placeholder="https://…" />
+                </Field>
+              </div>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <Field label="Year" required>
+                  <Input value={editing.year} onChange={(e) => setEditing({ ...editing, year: e.target.value })} required inputMode="numeric" />
+                </Field>
+                <Field label="Client" required>
+                  <Input value={editing.client} onChange={(e) => setEditing({ ...editing, client: e.target.value })} required placeholder="Personal Project" />
+                </Field>
+                <Field label="Your role" required>
+                  <Input value={editing.role} onChange={(e) => setEditing({ ...editing, role: e.target.value })} required placeholder="Fullstack Developer" />
+                </Field>
+              </div>
+            </section>
+          </form>
+        )}
+      </Drawer>
     </div>
   );
 };

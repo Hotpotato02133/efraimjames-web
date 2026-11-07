@@ -1,15 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
-import { ArrowUp, ArrowDown, Pencil, Trash2, Plus, X } from 'lucide-react';
-import {
-  adminListWorkHistory,
-  adminSaveWorkHistory,
-  adminDeleteWorkHistory,
-  adminMoveWorkHistory,
-  uploadAsset,
-} from '../../lib/adminApi';
+import { Briefcase, MapPin, Pencil, Plus, Trash2 } from 'lucide-react';
+import { adminListWorkHistory, adminSaveWorkHistory, adminDeleteWorkHistory, adminMoveWorkHistory } from '../../lib/adminApi';
 import type { WorkHistoryEntry } from '../../lib/types';
-import { Field, Card, AdminButton, ErrorBanner, SuccessBanner, inputClass } from '../components/Field';
+import {
+  Badge,
+  Button,
+  Card,
+  Chips,
+  EmptyState,
+  Field,
+  IconButton,
+  Input,
+  PageHeader,
+  PageSkeleton,
+  ReorderButtons,
+  SectionLabel,
+  Textarea,
+  splitList,
+} from '../components/ui';
+import { Drawer } from '../components/Drawer';
+import { ImageUpload } from '../components/ImageUpload';
+import { useToast, errorMessage } from '../components/Toast';
+import { useConfirm } from '../components/ConfirmDialog';
 
 interface LinkFormState {
   name: string;
@@ -50,317 +63,303 @@ function toFormState(e: WorkHistoryEntry): FormState {
 }
 
 function emptyFormState(nextOrder: number): FormState {
-  return {
-    period: '',
-    role: '',
-    company: '',
-    location: '',
-    description: '',
-    skillsText: '',
-    links: [],
-    displayOrder: nextOrder,
-  };
+  return { period: '', role: '', company: '', location: '', description: '', skillsText: '', links: [], displayOrder: nextOrder };
 }
 
 const WorkHistoryAdmin = () => {
+  const toast = useToast();
+  const confirm = useConfirm();
   const [entries, setEntries] = useState<WorkHistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const [editing, setEditing] = useState<FormState | null>(null);
   const [saving, setSaving] = useState(false);
-  const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [busyId, setBusyId] = useState<string | null>(null);
 
-  const load = async () => {
-    setLoading(true);
+  const load = useCallback(async () => {
     try {
       setEntries(await adminListWorkHistory());
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load work history.');
+      toast.error('Failed to load work history.', errorMessage(e));
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
+  }, [toast]);
 
   useEffect(() => {
     load();
-  }, []);
+  }, [load]);
 
-  const handleLogoUpload = async (index: number, file: File | undefined) => {
-    if (!file || !editing) return;
-    setUploadingIndex(index);
-    setError('');
-    try {
-      const url = await uploadAsset(file, 'logos');
-      setEditing((prev) => {
-        if (!prev) return prev;
-        const links = [...prev.links];
-        links[index] = { ...links[index], logo: url };
-        return { ...prev, links };
-      });
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Upload failed.');
-    }
-    setUploadingIndex(null);
+  const closeDrawer = useCallback(() => setEditing(null), []);
+
+  const updateLink = (index: number, patch: Partial<LinkFormState>) => {
+    setEditing((prev) => {
+      if (!prev) return prev;
+      const links = [...prev.links];
+      links[index] = { ...links[index], ...patch };
+      return { ...prev, links };
+    });
   };
 
   const handleSave = async (e: FormEvent) => {
     e.preventDefault();
     if (!editing) return;
+    const incomplete = editing.links.find((l) => !l.name.trim() || !l.url.trim() || !l.logo);
+    if (incomplete) {
+      toast.error('Finish every project link.', 'Each link needs a name, a URL and a logo — or remove it.');
+      return;
+    }
     setSaving(true);
-    setError('');
     try {
       await adminSaveWorkHistory({
         id: editing.id,
-        period: editing.period,
-        role: editing.role,
-        company: editing.company,
-        location: editing.location,
-        description: editing.description,
-        skills: editing.skillsText.split(',').map((s) => s.trim()).filter(Boolean),
-        projectLinks: editing.links
-          .filter((l) => l.name && l.url && l.logo)
-          .map((l) => ({
-            name: l.name,
-            url: l.url,
-            logo: l.logo,
-            logoScale: l.logoScale ? Number(l.logoScale) : undefined,
-          })),
+        period: editing.period.trim(),
+        role: editing.role.trim(),
+        company: editing.company.trim(),
+        location: editing.location.trim(),
+        description: editing.description.trim(),
+        skills: splitList(editing.skillsText),
+        projectLinks: editing.links.map((l) => ({
+          name: l.name.trim(),
+          url: l.url.trim(),
+          logo: l.logo,
+          logoScale: l.logoScale ? Number(l.logoScale) : undefined,
+        })),
         displayOrder: editing.displayOrder,
       });
-      setSuccess('Work history entry saved.');
+      toast.success(editing.id ? 'Entry saved.' : 'Entry added.');
       setEditing(null);
       await load();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to save.');
+      toast.error('Failed to save entry.', errorMessage(e));
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!window.confirm('Delete this work history entry?')) return;
-    setError('');
+  const handleDelete = async (entry: WorkHistoryEntry) => {
+    const ok = await confirm({
+      title: `Delete "${entry.role} · ${entry.company}"?`,
+      description: 'The entry disappears from the timeline on the live site. This cannot be undone.',
+      confirmLabel: 'Delete entry',
+      danger: true,
+    });
+    if (!ok) return;
+    setBusyId(entry.id);
     try {
-      await adminDeleteWorkHistory(id);
+      await adminDeleteWorkHistory(entry.id);
+      toast.success('Entry deleted.');
       await load();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to delete.');
+      toast.error('Failed to delete.', errorMessage(e));
+    } finally {
+      setBusyId(null);
     }
   };
 
   const handleMove = async (id: string, direction: 'up' | 'down') => {
-    setError('');
+    setBusyId(id);
     try {
       await adminMoveWorkHistory(entries, id, direction);
       await load();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to reorder.');
+      toast.error('Failed to reorder.', errorMessage(e));
+    } finally {
+      setBusyId(null);
     }
   };
 
-  if (loading) return <p className="text-slate-500">Loading…</p>;
+  if (loading) return <PageSkeleton rows={4} />;
 
   const sorted = [...entries].sort((a, b) => a.displayOrder - b.displayOrder);
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900 mb-6">Work History</h1>
-      {error && <ErrorBanner message={error} />}
-      {success && <SuccessBanner message={success} />}
+      <PageHeader
+        eyebrow="Content"
+        title="Work History"
+        description="The timeline on the home page, top to bottom. Put your most recent role first."
+        actions={
+          <Button icon={Plus} onClick={() => setEditing(emptyFormState(entries.length))}>
+            Add entry
+          </Button>
+        }
+      />
 
-      {editing && (
-        <Card className="mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold text-slate-900">{editing.id ? `Edit: ${editing.role}` : 'New Entry'}</h2>
-            <button onClick={() => setEditing(null)} className="text-slate-400 hover:text-slate-600">
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          <form onSubmit={handleSave} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Field label="Period" hint="e.g. Mar 2026 - Sep 2026">
-                <input
-                  value={editing.period}
-                  onChange={(e) => setEditing({ ...editing, period: e.target.value })}
-                  required
-                  className={inputClass}
-                />
-              </Field>
-              <Field label="Location">
-                <input
-                  value={editing.location}
-                  onChange={(e) => setEditing({ ...editing, location: e.target.value })}
-                  required
-                  className={inputClass}
-                />
-              </Field>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Field label="Role">
-                <input
-                  value={editing.role}
-                  onChange={(e) => setEditing({ ...editing, role: e.target.value })}
-                  required
-                  className={inputClass}
-                />
-              </Field>
-              <Field label="Company">
-                <input
-                  value={editing.company}
-                  onChange={(e) => setEditing({ ...editing, company: e.target.value })}
-                  required
-                  className={inputClass}
-                />
-              </Field>
-            </div>
-
-            <Field label="Description">
-              <textarea
-                value={editing.description}
-                onChange={(e) => setEditing({ ...editing, description: e.target.value })}
-                required
-                rows={3}
-                className={inputClass}
-              />
-            </Field>
-
-            <Field label="Skills (comma-separated)">
-              <input
-                value={editing.skillsText}
-                onChange={(e) => setEditing({ ...editing, skillsText: e.target.value })}
-                className={inputClass}
-                placeholder="Frontend Dev, React, Git"
-              />
-            </Field>
-
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm font-medium text-slate-700">Project Links</label>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setEditing({ ...editing, links: [...editing.links, { name: '', url: '', logo: '', logoScale: '' }] })
-                  }
-                  className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1"
-                >
-                  <Plus className="w-3.5 h-3.5" /> Add link
-                </button>
-              </div>
-              <div className="space-y-3">
-                {editing.links.map((link, i) => (
-                  <div key={i} className="p-3 border border-slate-200 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-2">
-                    <input
-                      value={link.name}
-                      onChange={(e) => {
-                        const links = [...editing.links];
-                        links[i] = { ...links[i], name: e.target.value };
-                        setEditing({ ...editing, links });
-                      }}
-                      placeholder="Project name"
-                      className={inputClass}
-                    />
-                    <input
-                      value={link.url}
-                      onChange={(e) => {
-                        const links = [...editing.links];
-                        links[i] = { ...links[i], url: e.target.value };
-                        setEditing({ ...editing, links });
-                      }}
-                      placeholder="https://..."
-                      className={inputClass}
-                    />
-                    <div className="flex items-center gap-2 col-span-1 md:col-span-2">
-                      {link.logo && <img src={link.logo} alt="" className="w-8 h-8 object-contain" />}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleLogoUpload(i, e.target.files?.[0])}
-                        disabled={uploadingIndex === i}
-                        className="text-sm flex-1"
-                      />
-                      <input
-                        value={link.logoScale}
-                        onChange={(e) => {
-                          const links = [...editing.links];
-                          links[i] = { ...links[i], logoScale: e.target.value };
-                          setEditing({ ...editing, links });
-                        }}
-                        placeholder="Zoom (optional)"
-                        className={inputClass + ' w-32'}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setEditing({ ...editing, links: editing.links.filter((_, idx) => idx !== i) })}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
+      <Card flush>
+        {sorted.length === 0 ? (
+          <EmptyState
+            icon={Briefcase}
+            title="No work history yet"
+            description="Add your roles and the products you shipped at each one."
+            action={
+              <Button variant="secondary" size="sm" icon={Plus} onClick={() => setEditing(emptyFormState(0))}>
+                Add your first entry
+              </Button>
+            }
+          />
+        ) : (
+          <ul className="divide-y divide-slate-100">
+            {sorted.map((entry, i) => (
+              <li key={entry.id} className={`flex flex-col gap-4 px-5 py-5 sm:flex-row sm:px-6 ${busyId === entry.id ? 'opacity-60' : ''}`}>
+                <div className="flex flex-shrink-0 items-start gap-3 sm:w-44 sm:flex-col sm:gap-1.5">
+                  <Badge tone="emerald" className="whitespace-nowrap">
+                    {entry.period}
+                  </Badge>
+                  <span className="inline-flex items-center gap-1 text-xs text-slate-400">
+                    <MapPin className="h-3 w-3" /> {entry.location}
+                  </span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold text-slate-900">
+                    {entry.role} <span className="font-normal text-slate-400">at</span> {entry.company}
+                  </p>
+                  <p className="mt-1 line-clamp-2 text-sm text-slate-500">{entry.description}</p>
+                  <div className="mt-3 flex flex-wrap items-center gap-3">
+                    {entry.projectLinks && entry.projectLinks.length > 0 && (
+                      <div className="flex items-center -space-x-1.5">
+                        {entry.projectLinks.map((link) => (
+                          <span
+                            key={link.url}
+                            title={link.name}
+                            className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-full border-2 border-white bg-slate-100 ring-1 ring-slate-200"
+                          >
+                            <img src={link.logo} alt={link.name} className="h-full w-full object-contain" style={link.logoScale ? { transform: `scale(${link.logoScale})` } : undefined} />
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    <Chips items={entry.skills} max={6} />
                   </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex gap-3 pt-2">
-              <AdminButton type="submit" disabled={saving}>
-                {saving ? 'Saving…' : 'Save Entry'}
-              </AdminButton>
-              <AdminButton variant="secondary" onClick={() => setEditing(null)}>
-                Cancel
-              </AdminButton>
-            </div>
-          </form>
-        </Card>
-      )}
-
-      <div className="flex justify-end mb-3">
-        <AdminButton variant="secondary" onClick={() => setEditing(emptyFormState(entries.length))}>
-          <span className="flex items-center gap-1.5">
-            <Plus className="w-4 h-4" /> Add Entry
-          </span>
-        </AdminButton>
-      </div>
-      <Card>
-        <ul className="divide-y divide-slate-100">
-          {sorted.map((entry, i) => (
-            <li key={entry.id} className="py-3 flex items-center gap-3">
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold text-slate-900">
-                  {entry.role} · {entry.company}
-                </p>
-                <p className="text-xs text-slate-400">{entry.period}</p>
-              </div>
-              <button
-                onClick={() => handleMove(entry.id, 'up')}
-                disabled={i === 0}
-                className="p-1.5 text-slate-400 hover:text-emerald-600 disabled:opacity-30"
-              >
-                <ArrowUp className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => handleMove(entry.id, 'down')}
-                disabled={i === sorted.length - 1}
-                className="p-1.5 text-slate-400 hover:text-emerald-600 disabled:opacity-30"
-              >
-                <ArrowDown className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => {
-                  setEditing(toFormState(entry));
-                  setSuccess('');
-                }}
-                className="p-1.5 text-slate-400 hover:text-emerald-600"
-              >
-                <Pencil className="w-4 h-4" />
-              </button>
-              <button onClick={() => handleDelete(entry.id)} className="p-1.5 text-slate-400 hover:text-red-600">
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </li>
-          ))}
-        </ul>
+                </div>
+                <div className="flex flex-shrink-0 items-center gap-1 self-start">
+                  <ReorderButtons
+                    onUp={() => handleMove(entry.id, 'up')}
+                    onDown={() => handleMove(entry.id, 'down')}
+                    disableUp={i === 0}
+                    disableDown={i === sorted.length - 1}
+                    busy={busyId !== null}
+                  />
+                  <IconButton label="Edit entry" icon={Pencil} onClick={() => setEditing(toFormState(entry))} />
+                  <IconButton label="Delete entry" icon={Trash2} tone="danger" onClick={() => handleDelete(entry)} disabled={busyId !== null} />
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
       </Card>
+
+      <Drawer
+        open={editing !== null}
+        onClose={closeDrawer}
+        title={editing?.id ? `Edit ${editing.role || 'entry'}` : 'New work history entry'}
+        description="Keep the description to one short paragraph so cards line up."
+        wide
+        footer={
+          <>
+            <Button variant="secondary" onClick={closeDrawer} disabled={saving}>
+              Cancel
+            </Button>
+            <Button type="submit" form="work-history-form" loading={saving} disabled={uploading}>
+              {editing?.id ? 'Save changes' : 'Add entry'}
+            </Button>
+          </>
+        }
+      >
+        {editing && (
+          <form id="work-history-form" onSubmit={handleSave} className="space-y-8">
+            <section className="space-y-4">
+              <SectionLabel>Role</SectionLabel>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <Field label="Role" required>
+                  <Input value={editing.role} onChange={(e) => setEditing({ ...editing, role: e.target.value })} required autoFocus placeholder="Software Engineer" />
+                </Field>
+                <Field label="Company" required>
+                  <Input value={editing.company} onChange={(e) => setEditing({ ...editing, company: e.target.value })} required placeholder="Acme Inc." />
+                </Field>
+                <Field label="Period" required hint="e.g. Mar 2026 – Sep 2026">
+                  <Input value={editing.period} onChange={(e) => setEditing({ ...editing, period: e.target.value })} required placeholder="Jan 2025 – Present" />
+                </Field>
+                <Field label="Location" required hint="e.g. Remote · New York, USA">
+                  <Input value={editing.location} onChange={(e) => setEditing({ ...editing, location: e.target.value })} required placeholder="Remote · Manila, PH" />
+                </Field>
+              </div>
+              <Field label="Description" required>
+                <Textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} required rows={4} />
+              </Field>
+              <Field label="Skills" hint="Comma-separated. Rendered as tags under the card.">
+                <Input value={editing.skillsText} onChange={(e) => setEditing({ ...editing, skillsText: e.target.value })} placeholder="Frontend Dev, React, Git" />
+                <div className="mt-2">
+                  <Chips items={splitList(editing.skillsText)} max={12} />
+                </div>
+              </Field>
+            </section>
+
+            <section className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <SectionLabel>Project links</SectionLabel>
+                  <p className="mt-1 text-xs text-slate-400">Logo tiles under the card that open the live product.</p>
+                </div>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  icon={Plus}
+                  onClick={() => setEditing({ ...editing, links: [...editing.links, { name: '', url: '', logo: '', logoScale: '' }] })}
+                >
+                  Add link
+                </Button>
+              </div>
+
+              {editing.links.length === 0 ? (
+                <p className="rounded-xl border border-dashed border-slate-200 px-4 py-6 text-center text-sm text-slate-400">No links yet.</p>
+              ) : (
+                <div className="space-y-3">
+                  {editing.links.map((link, i) => (
+                    <div key={i} className="rounded-xl border border-slate-200 bg-slate-50/60 p-4">
+                      <div className="mb-3 flex items-center justify-between">
+                        <p className="text-sm font-semibold text-slate-700">Link {i + 1}</p>
+                        <IconButton
+                          label="Remove link"
+                          icon={Trash2}
+                          tone="danger"
+                          onClick={() => setEditing({ ...editing, links: editing.links.filter((_, idx) => idx !== i) })}
+                        />
+                      </div>
+                      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                        <Field label="Name" required>
+                          <Input value={link.name} onChange={(e) => updateLink(i, { name: e.target.value })} placeholder="Yolk" />
+                        </Field>
+                        <Field label="URL" required>
+                          <Input value={link.url} onChange={(e) => updateLink(i, { url: e.target.value })} placeholder="https://…" type="url" />
+                        </Field>
+                        <div className="md:col-span-2 grid grid-cols-1 gap-3 md:grid-cols-[1fr_9rem]">
+                          <ImageUpload
+                            label="Logo"
+                            value={link.logo}
+                            onChange={(url) => updateLink(i, { logo: url })}
+                            folder="logos"
+                            shape="square"
+                            onUploadingChange={setUploading}
+                          />
+                          <Field label="Zoom" hint="Crops padded logos. 1 = none.">
+                            <Input
+                              value={link.logoScale}
+                              onChange={(e) => updateLink(i, { logoScale: e.target.value })}
+                              placeholder="1.3"
+                              inputMode="decimal"
+                            />
+                          </Field>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+          </form>
+        )}
+      </Drawer>
     </div>
   );
 };

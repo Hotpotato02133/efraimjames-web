@@ -1,5 +1,5 @@
 -- Admin dashboard / CMS / analytics schema for efraimjames-web.
--- Run this once against a fresh Supabase project (SQL Editor, or `supabase db push`).
+-- Idempotent schema definition: safe to run multiple times in the Supabase SQL Editor or via CLI.
 -- See C:\Users\windows11\.claude\plans\lovely-crafting-wilkinson.md for the full plan this implements.
 
 create extension if not exists pgcrypto;
@@ -8,7 +8,7 @@ create extension if not exists pgcrypto;
 -- Content tables
 -- ---------------------------------------------------------------------------
 
-create table projects (
+create table if not exists projects (
   id              text primary key,
   title           text not null,
   card_title      text,
@@ -26,7 +26,7 @@ create table projects (
   created_at      timestamptz not null default now()
 );
 
-create table work_history (
+create table if not exists work_history (
   id             uuid primary key default gen_random_uuid(),
   period         text not null,
   role           text not null,
@@ -40,7 +40,7 @@ create table work_history (
   created_at     timestamptz not null default now()
 );
 
-create table hero_toolkit (
+create table if not exists hero_toolkit (
   id             uuid primary key default gen_random_uuid(),
   name           text not null,
   -- key into a curated whitelist mapped in code to an actual icon component + color.
@@ -49,7 +49,7 @@ create table hero_toolkit (
   display_order  integer not null default 0
 );
 
-create table hero_content (
+create table if not exists hero_content (
   id                 smallint primary key default 1 check (id = 1),
   badge_text         text not null,
   heading_line1      text not null,
@@ -59,14 +59,14 @@ create table hero_content (
   cta_secondary_label text not null
 );
 
-create table about_content (
+create table if not exists about_content (
   id           smallint primary key default 1 check (id = 1),
   paragraph_1  text not null,
   paragraph_2  text not null,
   tags         text[] not null default '{}'
 );
 
-create table site_settings (
+create table if not exists site_settings (
   id                      smallint primary key default 1 check (id = 1),
   contact_email           text not null,
   contact_phone_display   text not null,
@@ -82,7 +82,7 @@ create table site_settings (
 
 -- Fixed set of 6 — each id maps to a hand-built "visual" mini-animation in code
 -- (CodeVisual, ChartVisual, ...). Only the copy/CTA fields are CMS-editable.
-create table capabilities (
+create table if not exists capabilities (
   id          smallint primary key check (id between 1 and 6),
   title       text not null,
   description text not null,
@@ -91,7 +91,7 @@ create table capabilities (
 );
 
 -- Generic "add a new section" content block (heading + markdown + optional image/button).
-create table custom_sections (
+create table if not exists custom_sections (
   id             uuid primary key default gen_random_uuid(),
   slug           text not null unique,
   title          text not null,
@@ -105,7 +105,7 @@ create table custom_sections (
 
 -- Single ordered list driving the home page: one row per fixed section component
 -- (block_key = 'hero', 'projects', ...) or per custom section (block_key = 'custom:<uuid>').
-create table page_blocks (
+create table if not exists page_blocks (
   id             uuid primary key default gen_random_uuid(),
   block_key      text not null unique,
   enabled        boolean not null default true,
@@ -116,7 +116,7 @@ create table page_blocks (
 -- Analytics
 -- ---------------------------------------------------------------------------
 
-create table analytics_events (
+create table if not exists analytics_events (
   id          bigint generated always as identity primary key,
   session_id  text not null,
   event_type  text not null check (event_type in ('pageview', 'resume_download', 'contact_submit', 'project_click')),
@@ -130,9 +130,9 @@ create table analytics_events (
   created_at  timestamptz not null default now()
 );
 
-create index analytics_events_created_at_idx on analytics_events (created_at);
-create index analytics_events_event_type_idx on analytics_events (event_type);
-create index analytics_events_path_idx on analytics_events (path);
+create index if not exists analytics_events_created_at_idx on analytics_events (created_at);
+create index if not exists analytics_events_event_type_idx on analytics_events (event_type);
+create index if not exists analytics_events_path_idx on analytics_events (path);
 
 -- ---------------------------------------------------------------------------
 -- Row Level Security
@@ -154,9 +154,13 @@ begin
   ])
   loop
     execute format('alter table %I enable row level security', t);
+    execute format('drop policy if exists "public read" on %I', t);
     execute format('create policy "public read" on %I for select using (true)', t);
+    execute format('drop policy if exists "authenticated insert" on %I', t);
     execute format('create policy "authenticated insert" on %I for insert to authenticated with check (true)', t);
+    execute format('drop policy if exists "authenticated update" on %I', t);
     execute format('create policy "authenticated update" on %I for update to authenticated using (true) with check (true)', t);
+    execute format('drop policy if exists "authenticated delete" on %I', t);
     execute format('create policy "authenticated delete" on %I for delete to authenticated using (true)', t);
   end loop;
 end $$;
@@ -178,7 +182,8 @@ insert into page_blocks (block_key, display_order, enabled) values
   ('lets-talk', 5, true),
   ('about', 6, true),
   ('work-history', 7, true),
-  ('contact', 8, true);
+  ('contact', 8, true)
+on conflict (block_key) do nothing;
 
 insert into capabilities (id, title, description, cta_label, cta_target) values
   (1, 'Frontend Engineering',
@@ -198,32 +203,39 @@ insert into capabilities (id, title, description, cta_label, cta_target) values
       'See my work', '#projects'),
   (6, 'AI-Assisted Development',
       'I use Claude Code and Codex to ship faster, then review, test and polish everything by hand so quality never slips.',
-      'Let''s talk', '#contact');
+      'Let''s talk', '#contact')
+on conflict (id) do nothing;
 
-insert into hero_content (badge_text, heading_line1, heading_line2, subheading, cta_primary_label, cta_secondary_label) values (
+insert into hero_content (id, badge_text, heading_line1, heading_line2, subheading, cta_primary_label, cta_secondary_label) values (
+  1,
   'Available for Work',
   'Frontend ',
   'Engineer',
   'Three years of building fast and responsive web apps with React, and NextJS, combining strong UI/UX with AI-driven development.',
   'View My Work',
   'Download Resume'
-);
+)
+on conflict (id) do nothing;
 
-insert into about_content (paragraph_1, paragraph_2, tags) values (
+insert into about_content (id, paragraph_1, paragraph_2, tags) values (
+  1,
   'I''m a Frontend Engineer with a background in UI/UX design. I build responsive, accessible web applications with React and TypeScript from creator analytics dashboards and reporting tools to booking platforms and marketing sites.',
   'Having designed interfaces before building them, I bring a designer''s eye to the code: clear information hierarchy, reusable component patterns, and polished interactions backed by thorough QA and close collaboration with product and engineering teams.',
   array['Frontend Development', 'React & TypeScript', 'Dashboards & Web Apps', 'UI/UX Design']
-);
+)
+on conflict (id) do nothing;
 
 -- Reconciles the three conflicting copies found in Contact.tsx / ContactPage.tsx /
 -- Footer.tsx into one canonical row. Edit via the CMS after seeding if these
 -- aren't the values you want to keep.
 insert into site_settings (
+  id,
   contact_email, contact_phone_display, contact_whatsapp_digits,
   contact_location_short, contact_location_full,
   social_github, social_linkedin, social_behance,
   footer_tagline, copyright_text
 ) values (
+  1,
   'efraimjamestalucod88@gmail.com',
   '(+63) 965 639 4996',
   '639656394996',
@@ -234,4 +246,5 @@ insert into site_settings (
   'https://www.behance.net/efraimjames',
   'Creating digital experiences that blend innovation with aesthetics. Let''s build something extraordinary together.',
   '© 2026 Efraim James Portfolio.'
-);
+)
+on conflict (id) do nothing;
