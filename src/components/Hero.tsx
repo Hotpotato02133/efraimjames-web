@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { ArrowDown, Download, ArrowRight } from "lucide-react";
 import InfiniteMarquee from "./InfiniteMarquee";
 import { useContent } from "../hooks/useContent";
-import { getHeroToolkit } from "../lib/content";
-import { fallbackHeroToolkit } from "../data/fallback";
+import { getHeroToolkit, getHeroContent } from "../lib/content";
+import { fallbackHeroToolkit, fallbackHeroContent } from "../data/fallback";
 import { ICON_REGISTRY } from "../lib/iconRegistry";
 import { trackEvent } from "../lib/analytics";
 import heroBg from "../assets/hero-bg.png";
@@ -12,6 +12,7 @@ import jamesPhoto from "../assets/2X2JAMES.jpg";
 
 const Hero = () => {
   const heroToolkit = useContent(getHeroToolkit, fallbackHeroToolkit);
+  const heroContent = useContent(getHeroContent, fallbackHeroContent);
   const [isVisible, setIsVisible] = useState(false);
   const [philippineTime, setPhilippineTime] = useState<string>("");
 
@@ -113,7 +114,7 @@ const Hero = () => {
               >
                 <span className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-emerald-100/80 text-xs sm:text-sm font-medium text-slate-600 shadow-sm whitespace-nowrap">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  Available for Work
+                  {heroContent.badgeText}
                 </span>
               </div>
 
@@ -123,9 +124,9 @@ const Hero = () => {
                   }`}
               >
                 <h1 className="text-5xl sm:text-6xl lg:text-[4rem] xl:text-[4.75rem] 2xl:text-[5.25rem] font-extrabold tracking-tight text-slate-900 leading-[1.1] mb-6">
-                  Frontend{" "}
+                  {heroContent.headingLine1}
                   <span className="relative inline-block pb-2 pr-1 font-extrabold italic bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 bg-clip-text text-transparent">
-                    Engineer
+                    {heroContent.headingLine2}
                     {/* Modern highlight accent underline */}
                     <svg
                       className="absolute -bottom-1 sm:-bottom-1.5 left-0 w-full h-2.5 sm:h-3.5 text-emerald-400/70 -z-10 pointer-events-none"
@@ -144,8 +145,7 @@ const Hero = () => {
                   </span>
                 </h1>
                 <p className="text-lg sm:text-xl lg:text-[1.25rem] xl:text-[1.35rem] text-slate-600 leading-relaxed font-normal sm:font-medium max-w-xl">
-                  Three years of building fast and responsive web apps with React, and NextJS,
-                  combining strong UI/UX with AI-driven development.
+                  {heroContent.subheading}
                 </p>
               </div>
 
@@ -158,7 +158,7 @@ const Hero = () => {
                   onClick={handleScrollToProjects}
                   className="group relative px-8 sm:px-9 py-3.5 sm:py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white rounded-full font-semibold text-base sm:text-[1.05rem] transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-green-500/25 hover:-translate-y-0.5 w-full sm:w-auto flex items-center justify-center gap-2.5"
                 >
-                  View My Work
+                  {heroContent.ctaPrimaryLabel}
                   <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button
@@ -166,7 +166,7 @@ const Hero = () => {
                   className="group px-8 sm:px-9 py-3.5 sm:py-4 bg-white text-slate-700 border border-slate-200 rounded-full font-semibold text-base sm:text-[1.05rem] hover:border-slate-300 hover:bg-slate-50 transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 w-full sm:w-auto flex items-center justify-center gap-2.5"
                 >
                   <Download className="w-4 h-4 sm:w-5 sm:h-5" />
-                  Download Resume
+                  {heroContent.ctaSecondaryLabel}
                 </button>
               </div>
             </div>

@@ -22,10 +22,14 @@ function vercelApiDev(): Plugin {
     config(_config, { mode }) {
       // api/*.ts reads its secrets from process.env (never from the client
       // bundle). Vite only exposes VITE_* to the browser, so load the full .env
-      // into the dev-server process here, without overriding real env vars.
+      // into the dev-server process here. This hook reruns whenever Vite
+      // restarts its internal server (e.g. on an .env edit), but it's still
+      // the same Node process — always re-assign so an edited .env actually
+      // takes effect instead of leaving the first-boot value stuck for the
+      // life of `npm run dev`.
       const env = loadEnv(mode, process.cwd(), '');
       for (const [key, value] of Object.entries(env)) {
-        if (process.env[key] === undefined) process.env[key] = value;
+        process.env[key] = value;
       }
     },
     configResolved(config) {
