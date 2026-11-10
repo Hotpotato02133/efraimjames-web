@@ -62,20 +62,23 @@ const Hero = () => {
   // Resume download function with mobile support
   const handleDownloadResume = async () => {
     trackEvent("resume_download");
+    const resumeUrl = heroContent.resumeUrl || resumePdf;
+    const downloadName = heroContent.resumeFilename || "CV-EFRAIM-JAMES-2026.pdf";
     try {
-      const response = await fetch(resumePdf);
+      const response = await fetch(resumeUrl, { cache: "no-cache" });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const blob = await response.blob();
       const blobUrl = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = blobUrl;
-      link.download = "CV-EFRAIM-JAMES-2026.pdf";
+      link.download = downloadName;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
       console.error("Download failed:", error);
-      window.open(resumePdf, "_blank");
+      window.open(resumeUrl, "_blank");
     }
   };
 

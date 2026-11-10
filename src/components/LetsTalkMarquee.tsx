@@ -1,4 +1,3 @@
-import React from 'react';
 import InfiniteMarquee from './InfiniteMarquee';
 
 const LetsTalkMarquee = () => {

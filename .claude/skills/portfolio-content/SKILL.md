@@ -29,7 +29,7 @@ Stick to the green/emerald/teal accent and slate/stone neutrals; extend `tailwin
 Run `npm run lint`, `npx tsc -b` (the build doesn't type-check; `api/*.ts` and `vite.config.ts` are covered via `tsconfig.node.json`), and `npm run build`. Admin pages must use the shared kit in `src/admin/components/ui.tsx` (plus `useToast`/`useConfirm`/`Drawer`/`ImageUpload`) rather than ad-hoc inputs or `window.confirm`. Visually check the change at mobile (<640px), tablet (`md`), and desktop (`lg+`) — the header switches to the hamburger below `lg` (1024px). For admin-page changes, also check the admin UI at mobile width — it's used less often but should still not break.
 
 ## Updating the resume
-Replace the PDF in `src/assets/`, then update the import and the `link.download` filename in `Hero.tsx`.
+Upload a new resume PDF or document via the admin CMS at `/admin` → **Hero & About** → **Hero** tab under **Resume / CV Document**. You can upload a new file, preview it, customize the downloaded filename, or remove it to revert to the default bundled resume (`CV-EFRAIM-JAMES-2026.pdf`). Changes are persisted to Supabase Storage and `hero_content`.
 
 ## Configuring Web3Forms
 1. Obtain a free key at web3forms.com by entering `efraimjamestalucod88@gmail.com`.

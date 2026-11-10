@@ -127,8 +127,17 @@ function mapPageBlockRow(row: Record<string, unknown>): PageBlock {
 // Memoizes each getter's in-flight/resolved promise so the several components
 // that need the same table (e.g. projects, site_settings) share one network
 // request per page load instead of each firing their own.
+const cacheResetters: Array<() => void> = [];
+
+export function clearContentCache(): void {
+  for (const reset of cacheResetters) reset();
+}
+
 function cached<T>(fn: () => Promise<T>): () => Promise<T> {
   let promise: Promise<T> | null = null;
+  cacheResetters.push(() => {
+    promise = null;
+  });
   return () => {
     if (!promise) promise = fn();
     return promise;
@@ -195,6 +204,38 @@ export const getHeroContent = cached(async (): Promise<HeroContent> => {
   try {
     const { data, error } = await supabase.from('hero_content').select('*').eq('id', 1).single();
     if (error || !data) throw error ?? new Error('No hero_content row returned');
+
+    let resumeUrl = (data.resume_url as string | null) ?? undefined;
+    let resumeFilename = (data.resume_filename as string | null) ?? undefined;
+
+    // Fallback: If resume_url column does not exist on hero_content table yet,
+    // read the latest versioned metadata file in portfolio-assets/resumes-meta.
+    // Using storage.list() (a POST query to storage.objects) + a unique filename
+    // per save bypasses Cloudflare Smart CDN's 1-hour object path caching.
+    if (resumeUrl === undefined) {
+      try {
+        const { data: metaFiles } = await supabase.storage.from('portfolio-assets').list('resumes-meta', {
+          sortBy: { column: 'name', order: 'desc' },
+          limit: 1,
+        });
+        if (metaFiles && metaFiles.length > 0) {
+          const { data: urlData } = supabase.storage
+            .from('portfolio-assets')
+            .getPublicUrl(`resumes-meta/${metaFiles[0].name}`);
+          if (urlData?.publicUrl) {
+            const res = await fetch(urlData.publicUrl, { cache: 'no-store' });
+            if (res.ok) {
+              const meta = await res.json();
+              resumeUrl = meta?.resumeUrl || undefined;
+              resumeFilename = meta?.resumeFilename || resumeFilename;
+            }
+          }
+        }
+      } catch {
+        // ignore fallback error
+      }
+    }
+
     return {
       badgeText: data.badge_text,
       headingLine1: data.heading_line1,
@@ -202,6 +243,8 @@ export const getHeroContent = cached(async (): Promise<HeroContent> => {
       subheading: data.subheading,
       ctaPrimaryLabel: data.cta_primary_label,
       ctaSecondaryLabel: data.cta_secondary_label,
+      resumeUrl,
+      resumeFilename,
     };
   } catch {
     return fallbackHeroContent;

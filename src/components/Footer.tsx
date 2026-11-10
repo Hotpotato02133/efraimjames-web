@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Github, Linkedin, Palette } from 'lucide-react';
 import { useContent } from '../hooks/useContent';

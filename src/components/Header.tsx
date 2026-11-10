@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X, Mail, Github } from 'lucide-react';
 import { useContent } from '../hooks/useContent';

@@ -56,7 +56,9 @@ create table if not exists hero_content (
   heading_line2      text not null,
   subheading         text not null,
   cta_primary_label  text not null,
-  cta_secondary_label text not null
+  cta_secondary_label text not null,
+  resume_url         text,
+  resume_filename    text default 'CV-EFRAIM-JAMES-2026.pdf'
 );
 
 create table if not exists about_content (

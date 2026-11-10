@@ -44,6 +44,8 @@ export interface HeroContent {
   subheading: string;
   ctaPrimaryLabel: string;
   ctaSecondaryLabel: string;
+  resumeUrl?: string;
+  resumeFilename?: string;
 }
 
 export interface AboutContent {

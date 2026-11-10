@@ -91,7 +91,7 @@ Rendered inside `bg-stone-50 text-gray-900` with a fixed, faint green dot-patter
 ### `Hero.tsx`
 - Badge pill "React · TypeScript · UI/UX Background", then headline **"Frontend / *Developer*"** ("Developer" on its own line, italic emerald→teal gradient). The subtitle is about building React/TypeScript apps with a UI/UX eye.
 - Buttons: **View My Work** (smooth-scroll to `#projects`) and **Download Resume**.
-- Resume download: imports `../assets/CV-EFRAIM-JAMES-2026.pdf`, fetches it as a blob and triggers a download named `CV-EFRAIM-JAMES-2026.pdf`; on failure falls back to `window.open` in a new tab (mobile-friendly approach).
+- Resume download: downloads `heroContent.resumeUrl` (managed via `/admin` → Hero & About) or falls back to bundled `../assets/CV-EFRAIM-JAMES-2026.pdf`. Fetches as a blob and triggers a download named `heroContent.resumeFilename || 'CV-EFRAIM-JAMES-2026.pdf'`; on failure falls back to `window.open` in a new tab (mobile-friendly approach).
 - **"My Toolkit"** marquee (`InfiniteMarquee`, speed 80), ordered frontend → backend/services → design: React, Next.js, TypeScript, JavaScript, Tailwind CSS, HTML5, CSS3, Git, Supabase, Convex, MySQL, Clerk, Figma, Canva. Icons come from `react-icons`, except Convex, which is an inline SVG component (`ConvexIcon`) in the same file.
 - Staggered entrance via an `isVisible` flag set after 300 ms and Tailwind `transition-all delay-*` classes. Bouncing `ArrowDown` scroll indicator.
 
@@ -295,7 +295,7 @@ Imported via ES modules from `src/assets/` (Vite fingerprints them). `public/` f
 
 Several project images are large PNGs (e.g. `Leafly-cover.png` ≈ 1.3 MB) — converting to WebP/AVIF would help load time.
 
-**Updating the resume**: replace the PDF in `src/assets/`, then update the import and the `link.download` filename in `Hero.tsx`.
+**Updating the resume**: upload a new resume via `/admin` → **Hero & About** → **Hero** tab under **Resume / CV Document** (saved to Supabase Storage and `hero_content`). To replace the bundled fallback, replace the PDF in `src/assets/`.
 
 ---
 
@@ -422,7 +422,7 @@ Storage (`portfolio-assets` bucket, public-read): the bucket's `{ public: true }
 - **CMS pages** (`src/admin/pages/`):
   - `ProjectsAdmin.tsx` — three section cards with numbered, reorderable rows; Drawer form with auto-slug from title, cover upload, tag chip preview; delete via confirm dialog.
   - `WorkHistoryAdmin.tsx` — timeline-style list (period badge, logo stack, skill chips); Drawer form with a project-links editor (logo upload + zoom).
-  - `HeroAboutAdmin.tsx` — tabs: Hero (with headline preview), About, Toolkit (Drawer add/edit), Capabilities (six cards). Save buttons stay disabled until the form is dirty.
+  - `HeroAboutAdmin.tsx` — tabs: Hero (with headline preview and Resume upload/replacement dropzone), About, Toolkit (Drawer add/edit), Capabilities (six cards). Save buttons stay disabled until the form is dirty.
   - `SiteSettingsAdmin.tsx` — Contact / Social / Footer cards with a floating "Unsaved changes" save bar; WhatsApp digits are normalised on save.
   - `SectionsAdmin.tsx` — page-order list with `Switch` toggles (optimistic), Built-in/Custom badges, live-site anchor links; Drawer form for custom sections.
 - **`WhatICanDo.tsx` cards are only partially CMS-editable** — `title`/`description`/`cta_label`/`cta_target` come from `capabilities`, but each card's hand-built mini-animation stays hardcoded in the component (not worth generalizing for 6 fixed visuals).

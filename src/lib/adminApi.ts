@@ -6,6 +6,7 @@
 // actually allow these writes.
 
 import { supabase } from './supabaseClient';
+import { clearContentCache } from './content';
 import type {
   Project,
   WorkHistoryEntry,
@@ -25,13 +26,32 @@ function client() {
 
 const BUCKET = 'portfolio-assets';
 
-export async function uploadAsset(file: File, folder: 'projects' | 'logos'): Promise<string> {
+export async function uploadAsset(file: File, folder: 'projects' | 'logos' | 'resumes'): Promise<string> {
   const ext = file.name.split('.').pop() || 'png';
   const path = `${folder}/${crypto.randomUUID()}.${ext}`;
   const { error } = await client().storage.from(BUCKET).upload(path, file, { contentType: file.type });
   if (error) throw error;
   const { data } = client().storage.from(BUCKET).getPublicUrl(path);
   return data.publicUrl;
+}
+
+export async function uploadResumeAsset(file: File): Promise<{ url: string; filename: string }> {
+  const ext = file.name.split('.').pop() || 'pdf';
+  const cleanBase = file.name
+    .replace(/\.[^/.]+$/, '')
+    .replace(/[^a-zA-Z0-9_-]/g, '_');
+  const path = `resumes/${Date.now()}-${cleanBase}.${ext}`;
+  const contentType = file.type || 'application/pdf';
+  const { error } = await client().storage.from(BUCKET).upload(path, file, {
+    contentType,
+    upsert: true,
+  });
+  if (error) throw error;
+  const { data } = client().storage.from(BUCKET).getPublicUrl(path);
+  return {
+    url: data.publicUrl,
+    filename: file.name,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -286,9 +306,76 @@ export async function adminMoveToolkitItem(
 // Hero / About / Site settings (singleton rows)
 // ---------------------------------------------------------------------------
 
+async function syncResumeStorageMeta(resumeUrl?: string, resumeFilename?: string): Promise<void> {
+  const storage = client().storage.from(BUCKET);
+  const { data: existingMeta } = await storage.list('resumes-meta');
+
+  const meta = JSON.stringify({
+    resumeUrl: resumeUrl || '',
+    resumeFilename: resumeFilename || 'CV-EFRAIM-JAMES-2026.pdf',
+  });
+  const fileName = `meta-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.json`;
+  const { error: uploadErr } = await storage.upload(`resumes-meta/${fileName}`, meta, {
+    contentType: 'application/json',
+    cacheControl: '0',
+    upsert: false,
+  });
+  if (uploadErr) throw uploadErr;
+
+  if (existingMeta && existingMeta.length > 0) {
+    await storage.remove(existingMeta.map((f) => `resumes-meta/${f.name}`));
+  }
+
+  // Clean up any replaced or removed PDF files in `resumes/` so only the active file remains
+  try {
+    const { data: resumeFiles } = await storage.list('resumes');
+    if (resumeFiles && resumeFiles.length > 0) {
+      const activeFileName = resumeUrl ? resumeUrl.split('/').pop()?.split('?')[0] : null;
+      const stalePaths = resumeFiles
+        .filter((f) => f.name !== activeFileName)
+        .map((f) => `resumes/${f.name}`);
+      if (stalePaths.length > 0) {
+        await storage.remove(stalePaths);
+      }
+    }
+  } catch {
+    // ignore cleanup errors
+  }
+}
+
 export async function adminGetHeroContent(): Promise<HeroContent> {
   const { data, error } = await client().from('hero_content').select('*').eq('id', 1).single();
   if (error) throw error;
+
+  let resumeUrl = (data.resume_url as string | null) ?? undefined;
+  let resumeFilename = (data.resume_filename as string | null) ?? undefined;
+
+  // Fallback: If migration 0003 hasn't been applied yet, read the latest
+  // versioned metadata file in resumes-meta (storage.list() is a POST query
+  // to Postgres storage.objects and never cached by Cloudflare Smart CDN).
+  if (resumeUrl === undefined) {
+    try {
+      const storage = client().storage.from(BUCKET);
+      const { data: metaFiles } = await storage.list('resumes-meta', {
+        sortBy: { column: 'name', order: 'desc' },
+        limit: 1,
+      });
+      if (metaFiles && metaFiles.length > 0) {
+        const { data: urlData } = storage.getPublicUrl(`resumes-meta/${metaFiles[0].name}`);
+        if (urlData?.publicUrl) {
+          const res = await fetch(urlData.publicUrl, { cache: 'no-store' });
+          if (res.ok) {
+            const meta = await res.json();
+            resumeUrl = meta?.resumeUrl || undefined;
+            resumeFilename = meta?.resumeFilename || resumeFilename;
+          }
+        }
+      }
+    } catch {
+      // ignore fallback error
+    }
+  }
+
   return {
     badgeText: data.badge_text,
     headingLine1: data.heading_line1,
@@ -296,22 +383,50 @@ export async function adminGetHeroContent(): Promise<HeroContent> {
     subheading: data.subheading,
     ctaPrimaryLabel: data.cta_primary_label,
     ctaSecondaryLabel: data.cta_secondary_label,
+    resumeUrl,
+    resumeFilename,
   };
 }
 
 export async function adminSaveHeroContent(input: HeroContent): Promise<void> {
+  const updatePayload: Record<string, unknown> = {
+    badge_text: input.badgeText,
+    heading_line1: input.headingLine1,
+    heading_line2: input.headingLine2,
+    subheading: input.subheading,
+    cta_primary_label: input.ctaPrimaryLabel,
+    cta_secondary_label: input.ctaSecondaryLabel,
+    resume_url: input.resumeUrl || null,
+    resume_filename: input.resumeFilename || null,
+  };
+
   const { error } = await client()
     .from('hero_content')
-    .update({
-      badge_text: input.badgeText,
-      heading_line1: input.headingLine1,
-      heading_line2: input.headingLine2,
-      subheading: input.subheading,
-      cta_primary_label: input.ctaPrimaryLabel,
-      cta_secondary_label: input.ctaSecondaryLabel,
-    })
+    .update(updatePayload)
     .eq('id', 1);
-  if (error) throw error;
+
+  if (error) {
+    // If column resume_url does not exist on hero_content table yet:
+    if (error.code === 'PGRST204' || error.message?.includes('resume_url')) {
+      delete updatePayload.resume_url;
+      delete updatePayload.resume_filename;
+      const { error: retryError } = await client().from('hero_content').update(updatePayload).eq('id', 1);
+      if (retryError) throw retryError;
+
+      await syncResumeStorageMeta(input.resumeUrl, input.resumeFilename);
+      clearContentCache();
+      return;
+    }
+    throw error;
+  }
+
+  // Also sync versioned storage metadata and clean up old files
+  try {
+    await syncResumeStorageMeta(input.resumeUrl, input.resumeFilename);
+  } catch {
+    // ignore
+  }
+  clearContentCache();
 }
 
 export async function adminGetAboutContent(): Promise<AboutContent> {

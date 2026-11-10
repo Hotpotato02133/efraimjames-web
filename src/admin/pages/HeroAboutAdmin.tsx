@@ -33,6 +33,7 @@ import {
   splitList,
 } from '../components/ui';
 import { Drawer } from '../components/Drawer';
+import { ResumeUpload } from '../components/ResumeUpload';
 import { useToast, errorMessage } from '../components/Toast';
 import { useConfirm } from '../components/ConfirmDialog';
 
@@ -64,6 +65,7 @@ const HeroAboutAdmin = () => {
 
   const [loading, setLoading] = useState(true);
   const [savingHero, setSavingHero] = useState(false);
+  const [uploadingResume, setUploadingResume] = useState(false);
   const [savingAbout, setSavingAbout] = useState(false);
   const [savingToolkit, setSavingToolkit] = useState(false);
   const [savingCapId, setSavingCapId] = useState<number | null>(null);
@@ -104,6 +106,18 @@ const HeroAboutAdmin = () => {
     } finally {
       setSavingHero(false);
     }
+  };
+
+  const handlePersistResume = async (url: string, filename: string) => {
+    if (!hero) return;
+    const nextHero: HeroContent = {
+      ...hero,
+      resumeUrl: url || undefined,
+      resumeFilename: filename,
+    };
+    setHero(nextHero);
+    await adminSaveHeroContent(nextHero);
+    setHeroSaved(nextHero);
   };
 
   const aboutDraft: AboutContent | null = about ? { ...about, tags: splitList(aboutTagsText) } : null;
@@ -245,8 +259,19 @@ const HeroAboutAdmin = () => {
                 <Input value={hero.ctaSecondaryLabel} onChange={(e) => setHero({ ...hero, ctaSecondaryLabel: e.target.value })} />
               </Field>
             </div>
+            <div className="pt-2 border-t border-slate-100">
+              <ResumeUpload
+                value={hero.resumeUrl}
+                filename={hero.resumeFilename}
+                onUploadingChange={setUploadingResume}
+                onPersist={handlePersistResume}
+                onChange={(url, filename) =>
+                  setHero((prev) => (prev ? { ...prev, resumeUrl: url || undefined, resumeFilename: filename } : null))
+                }
+              />
+            </div>
             <div className="flex items-center gap-3 pt-2">
-              <Button type="submit" icon={Save} loading={savingHero} disabled={!heroDirty}>
+              <Button type="submit" icon={Save} loading={savingHero} disabled={!heroDirty || uploadingResume}>
                 Save hero
               </Button>
               {heroDirty && (

@@ -377,6 +377,8 @@ export const fallbackHeroContent: HeroContent = {
   subheading: 'Three years of building fast and responsive web apps with React, and NextJS, combining strong UI/UX with AI-driven development.',
   ctaPrimaryLabel: 'View My Work',
   ctaSecondaryLabel: 'Download Resume',
+  resumeUrl: '',
+  resumeFilename: 'CV-EFRAIM-JAMES-2026.pdf',
 };
 
 export const fallbackAboutContent: AboutContent = {
