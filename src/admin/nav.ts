@@ -32,7 +32,7 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     label: 'Content',
     items: [
-      { to: '/admin/projects', label: 'Projects', icon: FolderKanban, description: 'Featured, collaborative and exploration project cards.' },
+      { to: '/admin/projects', label: 'Projects', icon: FolderKanban, description: 'Personal, team and exploration project cards.' },
       { to: '/admin/work-history', label: 'Work History', icon: Briefcase, description: 'The timeline of roles, companies and shipped products.' },
       { to: '/admin/hero-about', label: 'Hero & About', icon: Sparkles, description: 'Headline, intro copy, toolkit marquee and capability cards.' },
       { to: '/admin/sections', label: 'Sections', icon: Layers, description: 'Reorder or hide home-page sections and add custom blocks.' },
@@ -69,7 +69,7 @@ export const CREATOR_TIPS: Record<string, string[]> = {
     'The order of cards inside a section here is the order visitors see on the home page.',
     'Set the live link to "#" to hide the "View Live Project" button on a project page.',
     'A project\'s ID becomes its URL (/project/your-slug) and cannot be changed after it is created.',
-    'Featured shows up to three cards and Collaborative two — put your strongest work first.',
+    'Personal Projects shows up to three cards and Team Projects two — put your strongest work first.',
   ],
   '/admin/work-history': [
     'Keep each description to one short paragraph so the timeline cards stay the same height.',

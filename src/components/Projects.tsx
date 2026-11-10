@@ -15,26 +15,26 @@ const Projects = () => {
   return (
     <section id="projects" className="py-24 lg:py-32 bg-white overflow-hidden">
       <div className="container mx-auto px-4 md:px-6 !overflow-visible">
-        
+
         {/* Header */}
         <div className="max-w-3xl mx-auto text-center mb-16 md:mb-24">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
             className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-gray-900 via-emerald-700 to-green-700 bg-clip-text text-transparent px-2"
           >
-            Featured Projects
+            Personal Projects
           </motion.h2>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-lg md:text-xl text-slate-600 leading-relaxed"
           >
-            A curated selection of personal solo projects — each one crafted with clean code, modern architecture, and a strong eye for user experience.
+            A curated selection of personal solo projects each one crafted with clean code, modern architecture, and a strong eye for user experience.
           </motion.p>
         </div>
 
@@ -48,9 +48,8 @@ const Projects = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className={`group relative h-[400px] w-full overflow-hidden rounded-3xl cursor-pointer shadow-sm hover:shadow-xl transition-shadow duration-500 ${
-                  index === 2 ? 'md:col-span-2 lg:col-span-1' : ''
-                }`}
+                className={`group relative h-[400px] w-full overflow-hidden rounded-3xl cursor-pointer shadow-sm hover:shadow-xl transition-shadow duration-500 ${index === 2 ? 'md:col-span-2 lg:col-span-1' : ''
+                  }`}
               >
                 <Link
                   to={`/project/${project.id}`}
@@ -59,8 +58,8 @@ const Projects = () => {
                 >
                   {/* Background Image */}
                   <div className="absolute inset-0">
-                    <img 
-                      src={project.image} 
+                    <img
+                      src={project.image}
                       alt={project.title}
                       className="h-full w-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
                     />

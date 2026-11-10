@@ -34,8 +34,8 @@ import { useConfirm } from '../components/ConfirmDialog';
 const FIXED_SECTIONS: Record<string, { label: string; description: string }> = {
   hero: { label: 'Hero', description: 'Headline, intro and toolkit marquee' },
   'what-i-can-do': { label: 'What I Can Do', description: 'Six capability cards' },
-  projects: { label: 'Featured Projects', description: 'Solo project cards' },
-  'collaborative-projects': { label: 'Collaborative Projects', description: 'Team project cards' },
+  projects: { label: 'Personal Projects', description: 'Solo project cards' },
+  'collaborative-projects': { label: 'Team Projects', description: 'Team project cards' },
   'other-projects': { label: 'Explorations', description: 'Everything else, behind a toggle' },
   'lets-talk': { label: "Let's Talk Marquee", description: 'Decorative scrolling text' },
   about: { label: 'About', description: 'Intro paragraphs and tags' },

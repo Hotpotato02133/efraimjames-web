@@ -27,8 +27,8 @@ import { useToast, errorMessage } from '../components/Toast';
 import { useConfirm } from '../components/ConfirmDialog';
 
 const SECTIONS: { key: Project['section']; label: string; hint: string }[] = [
-  { key: 'featured', label: 'Featured Projects', hint: 'Solo work shown first on the home page — up to three cards.' },
-  { key: 'collaborative', label: 'Collaborative Projects', hint: 'Work shipped with a team — two cards side by side.' },
+  { key: 'featured', label: 'Personal Projects', hint: 'Solo work shown first on the home page — up to three cards.' },
+  { key: 'collaborative', label: 'Team Projects', hint: 'Work shipped with a team — two cards side by side.' },
   { key: 'other', label: 'Explorations', hint: 'Everything else, revealed by the "View all projects" toggle.' },
 ];
 

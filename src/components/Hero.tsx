@@ -196,7 +196,7 @@ const Hero = () => {
                     <div className="absolute bottom-3.5 inset-x-3.5 sm:bottom-4.5 sm:inset-x-4.5 z-10">
                       <div className="bg-[#18181b]/95 backdrop-blur-md rounded-full border border-white/10 shadow-2xl py-2.5 px-4 sm:py-3 sm:px-5 flex items-center justify-between gap-2.5 transition-all duration-300 hover:border-white/20">
                         <span className="text-xs sm:text-sm font-semibold text-white tracking-tight whitespace-nowrap">
-                          Frontend Engineer
+                          Fullstack Developer
                         </span>
                         <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-zinc-300 font-medium whitespace-nowrap">
                           <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />

@@ -25,7 +25,7 @@ const CollaborativeProjects = () => {
             transition={{ duration: 0.5 }}
             className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-gray-900 via-emerald-700 to-green-700 bg-clip-text text-transparent px-2"
           >
-            Collaborative Projects
+            Team Projects
           </motion.h2>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}

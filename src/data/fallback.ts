@@ -21,7 +21,7 @@ import facundoProject from '../assets/Facundo-cover.png';
 import leaflyProject from '../assets/Leafly-cover.png';
 import damsProject from '../assets/DAMS Project.jpg';
 import zionShopProject from '../assets/Zion Shop.jpg';
-import quantyxProject from '../assets/Quantyx Trading Journal.jpg';
+import portfolioProject from '../assets/portfolio.jpg';
 
 import yolkLogo from '../assets/yolk-logo.png';
 import inspoLogo from '../assets/inspo-logo.png';
@@ -74,14 +74,15 @@ export const fallbackProjects: Project[] = [
     displayOrder: 1,
   },
   {
-    id: 'quantyx-trading-journal',
-    title: 'Quantyx Trading Journal',
-    description: 'A high-density trading journal & performance analytics terminal built with React, TanStack Table, Supabase RLS, and Clerk.',
-    fullDescription: 'Quantyx Trading Journal is a high-density trading journal and performance analytics terminal built with React, TanStack Table, Supabase RLS, and Clerk. Developed as a solo project for disciplined market participants, it provides comprehensive trade logging, risk-to-reward analytics, interactive high-density data tables, and granular Row Level Security for private execution data.',
-    image: quantyxProject,
-    tags: ['React', 'TanStack Table', 'Supabase RLS', 'Clerk', 'TypeScript', 'Data Analytics'],
+    id: 'personal-website',
+    title: 'Personal Website',
+    cardTitle: 'Portfolio',
+    description: 'A modern fullstack developer portfolio and CMS platform featuring an admin control center, custom dashboard analytics, live content management, and responsive bento architecture.',
+    fullDescription: 'Personal Website is a modern fullstack developer portfolio and headless CMS platform designed and built from the ground up to showcase engineering and UI/UX capabilities. It features a secure authenticated admin panel (/admin), a custom privacy-friendly analytics dashboard tracking traffic, sessions, referrers, and conversion metrics via Vercel serverless functions, and a live CMS for managing projects, work history timeline, hero toolkit marquee, and custom page sections with Supabase Postgres, Auth, and Storage. Designed with React 18, TypeScript, Tailwind CSS, and Framer Motion, it delivers high performance, zero layout shift, and resilient offline fallback architecture.',
+    image: portfolioProject,
+    tags: ['React', 'TypeScript', 'TailwindCSS', 'Supabase', 'CMS Admin Panel', 'Analytics Dashboard', 'Vercel Functions'],
     category: 'Fullstack Project',
-    link: '#',
+    link: 'https://efraimjames-web.vercel.app/',
     year: '2026',
     client: 'Personal Project',
     role: 'Fullstack Developer',
