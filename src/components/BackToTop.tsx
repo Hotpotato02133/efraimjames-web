@@ -74,7 +74,7 @@ const BackToTop: React.FC = () => {
             stiffness: 400,
             damping: 25,
           }}
-          className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50 group"
+          className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-30 group"
         >
           {/* Tooltip */}
           <div

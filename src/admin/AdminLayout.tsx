@@ -81,6 +81,37 @@ const AdminLayout = () => {
     document.title = `${current?.label ?? 'Admin'} · Efraim James Studio`;
   }, [location.pathname, current?.label]);
 
+  // Auto-close mobile drawer when switching to desktop breakpoint
+  useEffect(() => {
+    if (isDesktop && mobileOpen) {
+      setMobileOpen(false);
+    }
+  }, [isDesktop, mobileOpen]);
+
+  // Prevent background scrolling when mobile sidebar is open
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileOpen(false);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+
+    return () => {
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [mobileOpen]);
+
   const toggleSidebar = useCallback(() => {
     if (isDesktop) {
       setCollapsedPref((prev) => {

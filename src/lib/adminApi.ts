@@ -343,10 +343,13 @@ async function syncResumeStorageMeta(resumeUrl?: string, resumeFilename?: string
   }
 }
 
+let hasResumeColumnsInDb: boolean | null = null;
+
 export async function adminGetHeroContent(): Promise<HeroContent> {
   const { data, error } = await client().from('hero_content').select('*').eq('id', 1).single();
   if (error) throw error;
 
+  hasResumeColumnsInDb = 'resume_url' in data;
   let resumeUrl = (data.resume_url as string | null) ?? undefined;
   let resumeFilename = (data.resume_filename as string | null) ?? undefined;
 
@@ -389,6 +392,12 @@ export async function adminGetHeroContent(): Promise<HeroContent> {
 }
 
 export async function adminSaveHeroContent(input: HeroContent): Promise<void> {
+  // Check once safely without causing any HTTP 400 errors if not yet inspected:
+  if (hasResumeColumnsInDb === null) {
+    const { data } = await client().from('hero_content').select('*').eq('id', 1).single();
+    hasResumeColumnsInDb = data ? 'resume_url' in data : false;
+  }
+
   const updatePayload: Record<string, unknown> = {
     badge_text: input.badgeText,
     heading_line1: input.headingLine1,
@@ -396,9 +405,14 @@ export async function adminSaveHeroContent(input: HeroContent): Promise<void> {
     subheading: input.subheading,
     cta_primary_label: input.ctaPrimaryLabel,
     cta_secondary_label: input.ctaSecondaryLabel,
-    resume_url: input.resumeUrl || null,
-    resume_filename: input.resumeFilename || null,
   };
+
+  // Only include resume_url and resume_filename if the columns exist in Postgres table,
+  // preventing PostgREST HTTP 400 Bad Request error from ever firing in browser DevTools.
+  if (hasResumeColumnsInDb) {
+    updatePayload.resume_url = input.resumeUrl || null;
+    updatePayload.resume_filename = input.resumeFilename || null;
+  }
 
   const { error } = await client()
     .from('hero_content')
@@ -406,21 +420,19 @@ export async function adminSaveHeroContent(input: HeroContent): Promise<void> {
     .eq('id', 1);
 
   if (error) {
-    // If column resume_url does not exist on hero_content table yet:
+    // Safety fallback in case schema changed:
     if (error.code === 'PGRST204' || error.message?.includes('resume_url')) {
+      hasResumeColumnsInDb = false;
       delete updatePayload.resume_url;
       delete updatePayload.resume_filename;
       const { error: retryError } = await client().from('hero_content').update(updatePayload).eq('id', 1);
       if (retryError) throw retryError;
-
-      await syncResumeStorageMeta(input.resumeUrl, input.resumeFilename);
-      clearContentCache();
-      return;
+    } else {
+      throw error;
     }
-    throw error;
   }
 
-  // Also sync versioned storage metadata and clean up old files
+  // Always sync versioned storage metadata and clean up old files
   try {
     await syncResumeStorageMeta(input.resumeUrl, input.resumeFilename);
   } catch {
