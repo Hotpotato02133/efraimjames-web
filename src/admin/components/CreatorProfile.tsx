@@ -92,8 +92,10 @@ export const CreatorProfile = ({
             exit={{ opacity: 0, y: isCard ? 6 : -6, scale: 0.98 }}
             transition={{ duration: 0.16 }}
             className={cn(
-              'absolute z-50 w-72 overflow-hidden rounded-2xl border border-slate-200 bg-white text-slate-900 shadow-xl shadow-slate-900/15',
-              isCard ? (compact ? 'bottom-0 left-full ml-3' : 'bottom-full left-0 mb-2') : 'right-0 top-full mt-2'
+              'absolute z-50 overflow-hidden rounded-2xl border border-slate-200 bg-white text-slate-900 shadow-xl shadow-slate-900/15 max-h-[calc(100vh-5rem)] overflow-y-auto overscroll-contain',
+              isCard
+                ? (compact ? 'bottom-0 left-full ml-3 w-72' : 'bottom-full left-0 mb-2 w-full min-w-[240px]')
+                : 'right-0 top-full mt-2 w-72'
             )}
           >
             <div className="relative overflow-hidden bg-slate-950 px-4 pb-4 pt-5 text-white">
@@ -137,8 +139,9 @@ export const CreatorProfile = ({
                 <Github className="h-4 w-4 text-slate-400" /> GitHub profile
               </a>
               <div className="flex items-center justify-between gap-3 rounded-lg px-2.5 py-2 text-sm text-slate-700">
-                <span className="flex items-center gap-2.5">
-                  <Lightbulb className="h-4 w-4 text-slate-400" /> Creator tips
+                <span className="flex items-center gap-2.5 min-w-0">
+                  <Lightbulb className="h-4 w-4 flex-shrink-0 text-slate-400" />
+                  <span className="truncate">Creator tips</span>
                 </span>
                 <Switch checked={tipsEnabled} onChange={onToggleTips} label="Show creator tips" />
               </div>
