@@ -418,7 +418,7 @@ export const fallbackPageBlocks: PageBlock[] = [
   { id: 'what-i-can-do', blockKey: 'what-i-can-do', enabled: true, displayOrder: 1 },
   { id: 'projects', blockKey: 'projects', enabled: true, displayOrder: 2 },
   { id: 'collaborative-projects', blockKey: 'collaborative-projects', enabled: true, displayOrder: 3 },
-  { id: 'other-projects', blockKey: 'other-projects', enabled: true, displayOrder: 4 },
+  { id: 'other-projects', blockKey: 'other-projects', enabled: false, displayOrder: 4 },
   { id: 'lets-talk', blockKey: 'lets-talk', enabled: true, displayOrder: 5 },
   { id: 'about', blockKey: 'about', enabled: true, displayOrder: 6 },
   { id: 'work-history', blockKey: 'work-history', enabled: true, displayOrder: 7 },

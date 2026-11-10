@@ -165,13 +165,14 @@ export function getRelatedProjects(
   category: string,
   limit: number = 3
 ): Project[] {
-  const primaryMatches = projects.filter(
+  const visibleProjects = projects.filter((project) => project.section !== 'other');
+  const primaryMatches = visibleProjects.filter(
     (project) => project.id !== currentId && project.category === category
   );
   if (primaryMatches.length >= limit) {
     return primaryMatches.slice(0, limit);
   }
-  const fallbackProjectsList = projects.filter(
+  const fallbackProjectsList = visibleProjects.filter(
     (project) => project.id !== currentId && project.category !== category
   );
   return [...primaryMatches, ...fallbackProjectsList].slice(0, limit);

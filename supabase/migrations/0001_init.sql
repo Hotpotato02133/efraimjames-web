@@ -180,7 +180,7 @@ insert into page_blocks (block_key, display_order, enabled) values
   ('what-i-can-do', 1, true),
   ('projects', 2, true),
   ('collaborative-projects', 3, true),
-  ('other-projects', 4, true),
+  ('other-projects', 4, false),
   ('lets-talk', 5, true),
   ('about', 6, true),
   ('work-history', 7, true),

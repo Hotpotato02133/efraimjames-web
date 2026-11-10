@@ -14,6 +14,10 @@ const OtherProjects = () => {
     .filter((p) => p.section === 'other')
     .sort((a, b) => a.displayOrder - b.displayOrder);
 
+  if (otherProjects.length === 0) {
+    return null;
+  }
+
   // 4 projects are visible at first; the rest are revealed when clicking "View All Projects"
   const displayedProjects = showAllProjects ? otherProjects : otherProjects.slice(0, 4);
 

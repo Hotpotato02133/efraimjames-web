@@ -20,7 +20,7 @@ const ProjectDetails = () => {
     window.scrollTo(0, 0);
   }, [id]);
 
-  if (!project) { 
+  if (!project || project.section === 'other') { 
     return (
       <div className="min-h-screen bg-stone-50 flex items-center justify-center">
         <div className="text-center">
