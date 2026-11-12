@@ -328,29 +328,13 @@ const PersonalGlideCard = ({ project, index, total }: PersonalGlideCardProps) =>
 };
 
 const Projects = () => {
-  const sectionRef = useRef<HTMLElement | null>(null);
   const projects = useContent(getProjects, fallbackProjects);
   const displayedProjects = projects
     .filter((p) => p.section === 'featured')
     .sort((a, b) => a.displayOrder - b.displayOrder);
 
-  // Section-wide scroll progress for the header progress bar & ambient glow
-  const { scrollYProgress: sectionProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start 80%', 'end 20%'],
-  });
-
-  const smoothSectionProgress = useSpring(sectionProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
-  const progressWidth = useTransform(smoothSectionProgress, [0, 1], ['0%', '100%']);
-
   return (
     <section
-      ref={sectionRef}
       id="projects"
       className="relative py-24 lg:py-32 bg-white overflow-hidden"
     >
@@ -404,22 +388,6 @@ const Projects = () => {
             A curated selection of personal solo projects — each one crafted with clean code,
             modern architecture, and a strong eye for user experience.
           </motion.p>
-
-          {/* Scroll-driven section progress bar */}
-          <div className="mt-8 flex items-center justify-center gap-3">
-            <span className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
-              Scroll Glide
-            </span>
-            <div className="h-1.5 w-28 sm:w-36 overflow-hidden rounded-full bg-slate-100">
-              <motion.div
-                style={{ width: progressWidth }}
-                className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-500"
-              />
-            </div>
-            <span className="text-[11px] font-bold tabular-nums text-emerald-600">
-              {String(displayedProjects.length).padStart(2, '0')} Works
-            </span>
-          </div>
         </div>
 
         {/* Scroll-Driven Editorial Glide Stack */}
